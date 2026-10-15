@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#141617">
+    <title>Julynight Creator OS</title>
+    <style>
+        :root {
+            --bg-dark: #121415;
+            --card-bg: #1c1f21;
+            --panel-bg: #262a2d;
+            --text-main: #f1f5f9;
+            --text-sub: #94a3b8;
+            --mint: #98e6be;
+            --mint-dark: #6bc497;
+            --border: #33383c;
+            --accent-warn: #fbbf24;
+            --danger: #f87171;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            line-height: 1.55;
+            padding: 16px 14px 90px 14px; /* 모바일 하단 네비게이션 여백 */
+            max-width: 680px;
+            margin: 0 auto;
+        }
+
+        /* 상단 헤더 & D-Day 배너 */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .brand-title {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--mint);
+            letter-spacing: -0.3px;
+        }
+
+        .brand-sub {
+            font-size: 0.76rem;
+            color: var(--text-sub);
+        }
+
+        .settings-btn {
+            background: var(--panel-bg);
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            padding: 7px 11px;
+            border-radius: 8px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        /* 강제 마감 D-Day 카운터 카드 */
+        .dday-banner {
+            background: linear-gradient(135deg, rgba(152, 230, 190, 0.14), rgba(28, 31, 33, 0.95));
+            border: 1px solid rgba(152, 230, 190, 0.4);
+            border-radius: 14px;
+            padding: 16px;
+            margin-bottom: 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .dday-info h2 {
+            font-size: 0.98rem;
+            color: var(--text-main);
+            margin-bottom: 4px;
+        }
+
+        .dday-info p {
+            font-size: 0.78rem;
+            color: var(--text-sub);
+        }
+
+        .dday-badge {
+            background-color: var(--mint);
+            color: #111415;
+            font-weight: 900;
+            font-size: 1.15rem;
+            padding: 8px 14px;
+            border-radius: 10px;
+            white-space: nowrap;
+            text-align: center;
+        }
+
+        /* 공통 카드 스타일 */
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 20px 18px;
+            margin-bottom: 18px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+        }
+
+        .section-title {
+            font-size: 1.02rem;
+            font-weight: 700;
+            color: var(--mint);
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .section-desc {
+            font-size: 0.8rem;
+            color: var(--text-sub);
+            margin-bottom: 14px;
+        }
+
+        input[type="text"], input[type="password"], input[type="date"], textarea, select {
+            width: 100%;
+            background-color: var(--bg-dark);
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 0.92rem;
+            outline: none;
+            font-family: inherit;
+        }
+
+        input:focus, textarea:focus, select:focus { border-color: var(--mint); }
+
+        textarea {
+            resize: vertical;
+            min-height: 120px;
+            line-height: 1.6;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 14px;
+            border-radius: 10px;
+            border: none;
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.15s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .btn-primary {
+            background-color: var(--mint);
+            color: #111415;
+        }
+
+        .btn-primary:active { transform: scale(0.98); background-color: var(--mint-dark); }
+
+        .btn-sub {
+            background-color: var(--panel-bg);
+            color: var(--text-main);
+            border: 1px solid var(--border);
+            font-size: 0.82rem;
+            padding: 10px 12px;
+        }
+
+        /* 음성 버튼 & 입력 바 */
+        .voice-toolbar {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .mic-btn {
+            flex: 1;
+            background-color: rgba(248, 113, 113, 0.15);
+            color: #fca5a5;
+            border: 1px solid rgba(248, 113, 113, 0.4);
+            padding: 10px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            cursor: pointer;
+        }
+
+        .mic-btn.recording {
+            background-color: #ef4444;
+            color: #fff;
+            animation: pulse 1.2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.65; }
+            100% { opacity: 1; }
+        }
+
+        /* 3채널 결과물 탭 */
+        .output-tabs {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 6px;
+            margin-top: 16px;
+            margin-bottom: 10px;
+        }
+
+        .tab-btn {
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            color: var(--text-sub);
+            padding: 10px 6px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .tab-btn.active {
+            background: rgba(152, 230, 190, 0.15);
+            border-color: var(--mint);
+            color: var(--mint);
+        }
+
+        .output-box {
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 14px;
+            font-size: 0.88rem;
+            white-space: pre-wrap;
+            min-height: 180px;
+            max-height: 380px;
+            overflow-y: auto;
+            margin-bottom: 10px;
+            line-height: 1.65;
+        }
+
+        /* 스프린트 보드 (3가지 핵심 목표만 집중) */
+        .progress-bar-bg {
+            width: 100%;
+            height: 8px;
+            background: var(--bg-dark);
+            border-radius: 99px;
+            overflow: hidden;
+            margin-bottom: 16px;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: var(--mint);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .sprint-category {
+            margin-bottom: 16px;
+        }
+
+        .sprint-cat-header {
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: var(--text-sub);
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .task-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            padding: 12px;
+            border-radius: 10px;
+            margin-bottom: 8px;
+            transition: border-color 0.2s;
+        }
+
+        .task-item.done {
+            opacity: 0.55;
+            border-color: rgba(152, 230, 190, 0.3);
+        }
+
+        .task-item.done input[type="text"] {
+            text-decoration: line-through;
+            color: var(--text-sub);
+        }
+
+        .task-checkbox {
+            width: 22px;
+            height: 22px;
+            accent-color: var(--mint);
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .task-input {
+            border: none !important;
+            background: transparent !important;
+            padding: 2px 4px !important;
+            font-size: 0.9rem !important;
+        }
+
+        .del-btn {
+            background: none;
+            border: none;
+            color: var(--text-sub);
+            font-size: 1rem;
+            cursor: pointer;
+            padding: 4px;
+        }
+
+        /* 비스포크 DM 대기자 메모 */
+        .dm-row {
+            display: grid;
+            grid-template-columns: 1fr 1.2fr 90px 30px;
+            gap: 6px;
+            margin-bottom: 8px;
+            align-items: center;
+        }
+
+        .dm-row input, .dm-row select {
+            padding: 8px;
+            font-size: 0.8rem;
+        }
+
+        /* 설정 모달 영역 */
+        #settingsPanel { display: none; }
+
+        .status-toast {
+            position: fixed;
+            bottom: 82px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1f2427;
+            border: 1px solid var(--mint);
+            color: var(--mint);
+            padding: 10px 18px;
+            border-radius: 99px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+            display: none;
+            z-index: 999;
+            white-space: nowrap;
+        }
+
+        /* 모바일 하단 고정 네비게이션 탭바 */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(20, 22, 23, 0.95);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-around;
+            padding: 8px 6px 14px 6px;
+            z-index: 900;
+            max-width: 680px;
+            margin: 0 auto;
+        }
+
+        .nav-item {
+            background: none;
+            border: none;
+            color: var(--text-sub);
+            font-size: 0.72rem;
+            font-weight: 600;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3px;
+            cursor: pointer;
+            text-decoration: none;
+            padding: 4px 8px;
+        }
+
+        .nav-item.active { color: var(--mint); }
+        .nav-icon { font-size: 1.15rem; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div>
+            <div class="brand-title">JULYNIGHT CREATOR OS</div>
+            <div class="brand-sub">MYOG · Long-Distance · Strength (@camper_julynight)</div>
+        </div>
+        <button class="settings-btn" onclick="toggleSettings()">⚙️ API / 기기동기화</button>
+    </header>
+
+    <!-- 설정 & PC↔폰 동기화 패널 (토글) -->
+    <div id="settingsPanel" class="card">
+        <div class="section-title">
+            <span>⚙️ 시스템 설정 및 PC ↔ 휴대폰 동기화</span>
+            <button class="del-btn" onclick="toggleSettings()">✕</button>
+        </div>
+        <p class="section-desc">API 키와 할 일 데이터는 브라우저에 자동 저장됩니다. PC와 폰의 데이터를 맞추려면 아래 백업 코드 복사를 사용하세요.</p>
+
+        <div style="margin-bottom: 12px;">
+            <label style="font-size:0.78rem; color:var(--text-sub); display:block; margin-bottom:4px;">🔑 Gemini API Key</label>
+            <input type="password" id="apiKey" placeholder="AQ.Ab8... 키 입력 (blog.html과 공유됨)" oninput="saveConfig()">
+        </div>
+
+        <div style="margin-bottom: 14px;">
+            <label style="font-size:0.78rem; color:var(--text-sub); display:block; margin-bottom:4px;">🤖 AI 모델명</label>
+            <input type="text" id="modelName" value="gemini-3.8-flash" oninput="saveConfig()">
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:12px;">
+            <div>
+                <label style="font-size:0.75rem; color:var(--text-sub);">📌 다음 강제 마감 이벤트명</label>
+                <input type="text" id="eventTitleInput" value="하이커스 나이트 (노을캠핑장)" oninput="updateDday()">
+            </div>
+            <div>
+                <label style="font-size:0.75rem; color:var(--text-sub);">📅 목표 날짜</label>
+                <input type="date" id="eventDateInput" value="2026-10-26" oninput="updateDday()">
+            </div>
+        </div>
+
+        <div style="display:flex; gap:8px;">
+            <button class="btn btn-sub" onclick="exportSyncData()">📤 현재 데이터 코드 복사 (카톡 나에게 보내기용)</button>
+            <button class="btn btn-sub" onclick="importSyncData()">📥 복사한 데이터 붙여넣기</button>
+        </div>
+    </div>
+
+    <!-- 강제 마감 D-Day 배너 -->
+    <div class="dday-banner" onclick="toggleSettings()" style="cursor:pointer;">
+        <div class="dday-info">
+            <h2 id="ddayTitleDisplay">🔥 하이커스 나이트 (노을캠핑장)</h2>
+            <p id="ddaySubDisplay">사람들과의 약속이 최고의 마감 강제성입니다. (터치하여 일정 변경)</p>
+        </div>
+        <div class="dday-badge" id="ddayCounter">D-Day</div>
+    </div>
+
+    <!-- [핵심 모듈 1] 말로 쓰는 3채널 콘텐츠 변환기 (아이디어 1) -->
+    <div id="sectionVoice" class="card">
+        <div class="section-title">
+            <span>🎙️ 1. 말로 쓰는 3채널 콘텐츠 엔진</span>
+        </div>
+        <p class="section-desc">
+            글 각 잡고 쓰지 마세요. 걷거나 운동 쉬는 시간에 휴대폰 자판의 <strong>[🎤 마이크]</strong>를 켜고 친구에게 설명하듯 편하게 말한 뒤 변환 버튼만 누르세요.
+        </p>
+
+        <div class="voice-toolbar">
+            <button type="button" id="webSpeechBtn" class="mic-btn" onclick="toggleSpeechRecognition()">
+                🎙️ 브라우저 음성 인식 시작 (또는 자판 마이크 사용)
+            </button>
+            <button type="button" class="btn-sub" style="width:auto;" onclick="clearVoiceInput()">지우기</button>
+        </div>
+
+        <div style="margin-bottom:10px;">
+            <select id="voiceContextSelect">
+                <option value="myog">🧵 [MYOG 제작/기어 토크] 내가 만든 텐트·배낭·샌들 원단 및 디테일 이야기</option>
+                <option value="hike">🥾 [장거리/무차량 하이킹] 대중교통 접근 + 하루 40km 트레킹 현장 생각</option>
+                <option value="strength">🏋️ [피지컬 & 하이킹] 3대 500 스트렝스 훈련과 장거리 보행 밸런스 팁</option>
+                <option value="free">💬 [자유 주제] 일상적인 생각이나 장비 리뷰, 오프라인 모임 공지</option>
+            </select>
+        </div>
+
+        <textarea id="rawVoiceText" placeholder="예시: 오늘 비브람 8860 아웃솔로 샌들 프로토타입 하나 더 만들었는데 아치 쪽 테이퍼링을 2cm 주니까 확실히 발에 감기는 맛이 다르네. 주말에 기차 타고 장거리 걸으러 갈 때 이거 신고 40키로 테스트해볼 생각이다... (이처럼 두서없이 편하게 말하거나 적어보세요)"></textarea>
+
+        <button class="btn btn-primary" style="margin-top:10px;" onclick="convertVoiceToContents()">
+            ⚡ 내 말투 그대로 유튜브·인스타·블로그 3종 변환하기
+        </button>
+
+        <!-- 변환 결과 탭 -->
+        <div class="output-tabs">
+            <button class="tab-btn active" id="tabBtn_yt" onclick="switchOutputTab('yt')">🎬 유튜브 원테이크 대본</button>
+            <button class="tab-btn" id="tabBtn_ig" onclick="switchOutputTab('ig')">📱 인스타 캡션/스토리</button>
+            <button class="tab-btn" id="tabBtn_blog" onclick="switchOutputTab('blog')">📝 블로그 아카이브 초안</button>
+        </div>
+
+        <div class="output-box" id="aiOutputBox" contenteditable="true">여기에 서준 님의 화술을 살린 3가지 채널별 맞춤 원고가 생성됩니다.</div>
+
+        <button class="btn btn-sub" onclick="copyCurrentOutput()">
+            📋 현재 탭 내용 클립보드에 복사하기
+        </button>
+    </div>
+
+    <!-- [핵심 모듈 2] 무계획형 인간을 위한 '3-Focus 스프린트 보드' (아이디어 2) -->
+    <div id="sectionSprint" class="card">
+        <div class="section-title">
+            <span>🎯 2. 이번 주 딱 3가지만 끝내는 스프린트 보드</span>
+            <span id="sprintPercent" style="font-size:0.85rem;">0%</span>
+        </div>
+        <p class="section-desc">
+            매일 빽빽한 계획표는 지칩니다. 카테고리별로 <strong>지금 당장 끝낼 가장 중요한 할 일</strong>만 적어두고, 생각날 때 하나씩만 지우세요.
+        </p>
+
+        <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="sprintProgressBar"></div>
+        </div>
+
+        <!-- 카테고리 1: MYOG & 기어 제작 -->
+        <div class="sprint-category">
+            <div class="sprint-cat-header">
+                <span>🧵 [MYOG & 기어 제작]</span>
+                <button class="del-btn" style="color:var(--mint); font-size:0.78rem;" onclick="addTask('myog')">+ 할 일 추가</button>
+            </div>
+            <div id="taskList_myog"></div>
+        </div>
+
+        <!-- 카테고리 2: 콘텐츠 & 브랜드커넥트 -->
+        <div class="sprint-category">
+            <div class="sprint-cat-header">
+                <span>🎬 [유튜브 / 인스타 / 블로그]</span>
+                <button class="del-btn" style="color:var(--mint); font-size:0.78rem;" onclick="addTask('content')">+ 할 일 추가</button>
+            </div>
+            <div id="taskList_content"></div>
+        </div>
+
+        <!-- 카테고리 3: 하이킹 & 스트렝스 & 오프라인 모임 -->
+        <div class="sprint-category">
+            <div class="sprint-cat-header">
+                <span>🥾 [트레일 & 피지컬 & 하이커스 나이트]</span>
+                <button class="del-btn" style="color:var(--mint); font-size:0.78rem;" onclick="addTask('field')">+ 할 일 추가</button>
+            </div>
+            <div id="taskList_field"></div>
+        </div>
+    </div>
+
+    <!-- [핵심 모듈 3] 비스포크(DM/직거래) 소량 제작 노트 (상황 7번 대응) -->
+    <div id="sectionBespoke" class="card">
+        <div class="section-title">
+            <span>🤝 3. 비스포크(Bespoke) DM 테스터 & 제작 노트</span>
+            <button class="del-btn" style="color:var(--mint); font-size:0.78rem;" onclick="addBespokeRow()">+ 인원 추가</button>
+        </div>
+        <p class="section-desc">
+            사업자/스마트스토어 없이 DM이나 오프라인 모임으로 연결된 소수 정예 테스터 및 직거래 대기자 명단입니다. (한 달 3~5명 한정 전략)
+        </p>
+        <div id="bespokeList"></div>
+    </div>
+
+    <!-- 상태 알림 토스트 -->
+    <div class="status-toast" id="toastMsg">알림 메시지</div>
+
+    <!-- 모바일 하단 고정 네비게이션 -->
+    <nav class="bottom-nav">
+        <button class="nav-item active" onclick="scrollToSection('sectionVoice', this)">
+            <span class="nav-icon">🎙️</span>
+            <span>말로 글쓰기</span>
+        </button>
+        <button class="nav-item" onclick="scrollToSection('sectionSprint', this)">
+            <span class="nav-icon">🎯</span>
+            <span>스프린트</span>
+        </button>
+        <button class="nav-item" onclick="scrollToSection('sectionBespoke', this)">
+            <span class="nav-icon">🤝</span>
+            <span>DM제작노트</span>
+        </button>
+        <a class="nav-item" href="blog.html">
+            <span class="nav-icon">📝</span>
+            <span>블로그스튜디오</span>
+        </a>
+        <a class="nav-item" href="index.html">
+            <span class="nav-icon">👣</span>
+            <span>샌들패턴</span>
+        </a>
+    </nav>
+
+    <script>
+        // 기본 초기 상태 데이터 (서준 님 맞춤 세팅)
+        const DEFAULT_STATE = {
+            eventTitle: "하이커스 나이트 (노을캠핑장)",
+            eventDate: "2026-10-26",
+            tasks: {
+                myog: [
+                    { text: "베어풋 샌들 비브람 8860 + EVA 폼 키트 재료 재단하기", done: false },
+                    { text: "멀티캠 메쉬 베스트형 배낭 어깨끈 프로토타입 점검", done: false }
+                ],
+                content: [
+                    { text: "유튜브: 내 장비 원단/구조 원테이크 토크 10분 촬영", done: false },
+                    { text: "블로그 스튜디오로 브랜드커넥트 포스팅 1건 올리기", done: false }
+                ],
+                field: [
+                    { text: "대중교통 장거리 하이킹 루트 기차/버스 시간표 체크", done: false },
+                    { text: "스트렝스 루틴 & 비타민D/아연/마그네슘 프로토콜 유지", done: true }
+                ]
+            },
+            bespoke: [
+                { name: "@hiker_sample", item: "베어풋 샌들 (265/102mm)", status: "제작중" },
+                { name: "하이커스나이트 참가자", item: "MYOG 샌들 키트", status: "대기" }
+            ],
+            generatedOutputs: {
+                yt: "상단에서 음성이나 메모를 입력하고 [3종 변환하기]를 누르면, 카메라 앞에서 친구에게 말하듯 막힘없이 이야기할 수 있는 '원테이크 토크 큐시트 & 대본'이 생성됩니다.",
+                ig: "인스타그램 릴스/피드용 감도 높은 캡션과, 팔로워들의 댓글/DM 반응을 유도하는 '스토리 질문 스티커 문구'가 여기에 생성됩니다.",
+                blog: "칠월밤 블로그 특유의 담백하고 분석적인 어투(~합니다, ~입니다)로 정리된 제작기 및 필드 테스트 기록 초안이 여기에 생성됩니다."
+            }
+        };
+
+        let appState = JSON.parse(localStorage.getItem('julynight_os_state')) || DEFAULT_STATE;
+        let currentTab = 'yt';
+        let recognition = null;
+        let isRecording = false;
+
+        window.onload = () => {
+            // 기존 blog.html에서 저장한 API 키와 자동 연동
+            const savedKey = localStorage.getItem('julynight_gemini_key') || '';
+            document.getElementById('apiKey').value = savedKey;
+
+            const savedModel = localStorage.getItem('julynight_gemini_model') || 'gemini-3.8-flash';
+            document.getElementById('modelName').value = savedModel;
+
+            document.getElementById('eventTitleInput').value = appState.eventTitle || "하이커스 나이트";
+            document.getElementById('eventDateInput').value = appState.eventDate || "2026-10-26";
+
+            updateDday();
+            renderTasks();
+            renderBespoke();
+            switchOutputTab('yt');
+        };
+
+        function showToast(msg) {
+            const t = document.getElementById('toastMsg');
+            t.textContent = msg;
+            t.style.display = 'block';
+            setTimeout(() => { t.style.display = 'none'; }, 2600);
+        }
+
+        function toggleSettings() {
+            const p = document.getElementById('settingsPanel');
+            p.style.display = (p.style.display === 'block') ? 'none' : 'block';
+        }
+
+        function saveConfig() {
+            const key = document.getElementById('apiKey').value.trim();
+            const model = document.getElementById('modelName').value.trim();
+            localStorage.setItem('julynight_gemini_key', key);
+            localStorage.setItem('julynight_gemini_model', model);
+        }
+
+        function saveState() {
+            localStorage.setItem('julynight_os_state', JSON.stringify(appState));
+        }
+
+        // D-Day 계산 업데이트
+        function updateDday() {
+            const title = document.getElementById('eventTitleInput').value.trim() || "다음 프로젝트 마감";
+            const dateStr = document.getElementById('eventDateInput').value;
+            appState.eventTitle = title;
+            appState.eventDate = dateStr;
+            saveState();
+
+            document.getElementById('ddayTitleDisplay').textContent = `🔥 ${title}`;
+            if (!dateStr) {
+                document.getElementById('ddayCounter').textContent = "D-?";
+                return;
+            }
+            const today = new Date();
+            today.setHours(0,0,0,0);
+            const target = new Date(dateStr + "T00:00:00");
+            const diffDays = Math.ceil((target - today) / (1000 * 60 * 60 * 24));
+
+            const badge = document.getElementById('ddayCounter');
+            if (diffDays === 0) badge.textContent = "D-DAY";
+            else if (diffDays > 0) badge.textContent = `D-${diffDays}`;
+            else badge.textContent = `D+${Math.abs(diffDays)}`;
+        }
+
+        // 웹 음성 인식(Web Speech API) 작동
+        function toggleSpeechRecognition() {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (!SpeechRecognition) {
+                alert("현재 브라우저에서는 직접 음성 인식이 지원되지 않습니다. 스마트폰 키보드 자판의 [🎤 마이크] 버튼을 눌러 말씀해 주세요!");
+                return;
+            }
+
+            const btn = document.getElementById('webSpeechBtn');
+
+            if (isRecording && recognition) {
+                recognition.stop();
+                isRecording = false;
+                btn.classList.remove('recording');
+                btn.textContent = "🎙️ 브라우저 음성 인식 시작 (또는 자판 마이크 사용)";
+                return;
+            }
+
+            recognition = new SpeechRecognition();
+            recognition.lang = 'ko-KR';
+            recognition.interimResults = false;
+            recognition.continuous = true;
+
+            recognition.onstart = () => {
+                isRecording = true;
+                btn.classList.add('recording');
+                btn.textContent = "🛑 말하기 종료하려면 터치 (듣고 있습니다...)";
+            };
+
+            recognition.onresult = (event) => {
+                let transcript = '';
+                for (let i = event.resultIndex; i < event.results.length; i++) {
+                    transcript += event.results[i][0].transcript + ' ';
+                }
+                const box = document.getElementById('rawVoiceText');
+                box.value = (box.value ? box.value + ' ' : '') + transcript.trim();
+            };
+
+            recognition.onerror = () => {
+                isRecording = false;
+                btn.classList.remove('recording');
+                btn.textContent = "🎙️ 브라우저 음성 인식 시작 (또는 자판 마이크 사용)";
+            };
+
+            recognition.onend = () => {
+                isRecording = false;
+                btn.classList.remove('recording');
+                btn.textContent = "🎙️ 브라우저 음성 인식 시작 (또는 자판 마이크 사용)";
+            };
+
+            recognition.start();
+        }
+
+        function clearVoiceInput() {
+            document.getElementById('rawVoiceText').value = '';
+        }
+
+        /**
+         * 핵심: 서준 님의 두서없는 구어체 메모 -> 3개 채널 맞춤 콘텐츠 변환
+         */
+        async function convertVoiceToContents() {
+            const apiKey = document.getElementById('apiKey').value.trim();
+            const modelName = document.getElementById('modelName').value.trim() || 'gemini-3.8-flash';
+            const rawText = document.getElementById('rawVoiceText').value.trim();
+            const contextType = document.getElementById('voiceContextSelect').value;
+
+            if (!rawText) {
+                showToast("⚠️ 먼저 음성이나 텍스트로 떠오른 생각을 입력해 주세요!");
+                return;
+            }
+
+            if (!apiKey) {
+                showToast("⚠️ 우측 상단 [⚙️ API] 버튼을 눌러 Gemini API 키를 넣어주세요!");
+                toggleSettings();
+                return;
+            }
+
+            const outBox = document.getElementById('aiOutputBox');
+            outBox.textContent = "⏳ 서준 님의 말투와 캐릭터(MYOG 디자이너 + 3대 500 피지컬 + 장거리 하이커)를 반영해 3가지 채널 원고로 다듬고 있습니다...";
+
+            const prompt = `
+당신은 아웃도어 크리에이터이자 MYOG(Make Your Own Gear) 디자이너 '칠월밤(이서준, @camper_julynight)'의 전담 콘텐츠 디렉터입니다.
+
+[크리에이터 '칠월밤' 핵심 페르소나]
+1. 텐트, 배낭, 침낭, 의류, 베어풋 샌들을 직접 설계·제작(MYOG)하여 사용하는 기술자.
+2. 170cm/78kg, 골격근량 38kg, 3대 중량 500에 육박하는 탄탄한 스트렝스를 가졌으면서도, 3~5kg의 경량 패킹으로 하루 42km씩 17박 18일을 걷는 장거리 하이커.
+3. 차량 없이 대중교통과 두 발로 이동하는 날것의 하이킹을 즐김.
+4. 사람들과 대화할 때 상대를 빨려들게 만드는 친절하고 흡입력 있는 설명 능력을 가짐.
+
+[사용자가 방금 음성/메모로 툭 던진 날것의 생각]
+"${rawText}"
+(카테고리 맥락: ${contextType})
+
+위 메모를 바탕으로 아래 3가지 채널용 원고를 JSON 형식으로 작성하세요.
+
+1. "yt" (유튜브 원테이크 토크 대본 & 현장 연출 큐시트):
+   - 화려한 자막 없이 카메라 앞에서 친구에게 이야기하듯 술술 말할 수 있는 구어체 토크 스크립트.
+   - [도입부 훅(Hook)] -> [핵심 디테일/스토리 설명] -> [현장 브이로그 연결 멘트] 구조로 작성.
+2. "ig" (인스타그램 피드/릴스 캡션 + 스토리 소통 질문):
+   - 감도 높고 인간적인 매력이 드러나는 캡션 + 팔로워들이 DM이나 댓글을 달고 싶게 만드는 질문 1~2개 + 핵심 해시태그 10개.
+3. "blog" (네이버 블로그 아카이브 초안):
+   - 과장 없이 담백하고 정제된 문체(~합니다, ~입니다, ~편입니다)로 정리한 기술/경험 아카이브 포스팅 본문.
+
+반드시 순수 JSON 형식으로만 응답하세요 (코드블록 없이 { 로 시작해서 } 로 끝낼 것):
+{
+  "yt": "유튜브 대본 전체 텍스트",
+  "ig": "인스타그램 캡션 전체 텍스트",
+  "blog": "블로그 초안 전체 텍스트"
+}
+            `;
+
+            try {
+                const cleanModel = modelName.replace(/^models\//, '');
+                const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${cleanModel}:generateContent?key=${encodeURIComponent(apiKey)}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'x-goog-api-key': apiKey
+                    },
+                    body: JSON.stringify({
+                        contents: [{ parts: [{ text: prompt }] }],
+                        generationConfig: { responseMimeType: "application/json" }
+                    })
+                });
+
+                const data = await res.json();
+                if (data.error) throw new Error(data.error.message);
+
+                const text = data.candidates[0].content.parts.map(p => p.text || "").join("");
+                const match = text.match(/\{[\s\S]*\}/);
+                if (!match) throw new Error("JSON 파싱 실패");
+
+                const parsed = JSON.parse(match[0]);
+                appState.generatedOutputs = parsed;
+                saveState();
+                switchOutputTab(currentTab);
+                showToast("✅ 유튜브·인스타·블로그 3종 원고 변환 완료!");
+            } catch (err) {
+                console.error(err);
+                outBox.textContent = `❌ 변환 중 오류 발생: ${err.message}\n(우측 상단 ⚙️ 버튼에서 API 키와 모델명을 확인해 주세요.)`;
+            }
+        }
+
+        function switchOutputTab(tab) {
+            currentTab = tab;
+            ['yt', 'ig', 'blog'].forEach(t => {
+                document.getElementById(`tabBtn_${t}`).classList.toggle('active', t === tab);
+            });
+            document.getElementById('aiOutputBox').textContent = appState.generatedOutputs[tab] || "";
+        }
+
+        function copyCurrentOutput() {
+            const text = document.getElementById('aiOutputBox').innerText;
+            navigator.clipboard.writeText(text);
+            showToast("✅ 클립보드에 복사되었습니다!");
+        }
+
+        // 스프린트 보드 렌더링 및 조작
+        function renderTasks() {
+            let total = 0;
+            let doneCount = 0;
+
+            ['myog', 'content', 'field'].forEach(cat => {
+                const container = document.getElementById(`taskList_${cat}`);
+                container.innerHTML = '';
+                (appState.tasks[cat] || []).forEach((task, idx) => {
+                    total++;
+                    if (task.done) doneCount++;
+
+                    const div = document.createElement('div');
+                    div.className = `task-item ${task.done ? 'done' : ''}`;
+                    div.innerHTML = `
+                        <input type="checkbox" class="task-checkbox" ${task.done ? 'checked' : ''} onchange="toggleTask('${cat}', ${idx})">
+                        <input type="text" class="task-input" value="${task.text.replace(/"/g, '&quot;')}" oninput="editTask('${cat}', ${idx}, this.value)">
+                        <button class="del-btn" onclick="deleteTask('${cat}', ${idx})">✕</button>
+                    `;
+                    container.appendChild(div);
+                });
+            });
+
+            const pct = total === 0 ? 0 : Math.round((doneCount / total) * 100);
+            document.getElementById('sprintPercent').textContent = `${pct}% 완료`;
+            document.getElementById('sprintProgressBar').style.width = `${pct}%`;
+        }
+
+        function toggleTask(cat, idx) {
+            appState.tasks[cat][idx].done = !appState.tasks[cat][idx].done;
+            saveState();
+            renderTasks();
+        }
+
+        function editTask(cat, idx, val) {
+            appState.tasks[cat][idx].text = val;
+            saveState();
+        }
+
+        function addTask(cat) {
+            appState.tasks[cat].push({ text: "새로운 핵심 할 일 입력...", done: false });
+            saveState();
+            renderTasks();
+        }
+
+        function deleteTask(cat, idx) {
+            appState.tasks[cat].splice(idx, 1);
+            saveState();
+            renderTasks();
+        }
+
+        // 비스포크 DM 테스터 리스트 관리
+        function renderBespoke() {
+            const container = document.getElementById('bespokeList');
+            container.innerHTML = '';
+            (appState.bespoke || []).forEach((row, idx) => {
+                const div = document.createElement('div');
+                div.className = 'dm-row';
+                div.innerHTML = `
+                    <input type="text" placeholder="인스타ID/이름" value="${row.name}" oninput="updateBespoke(${idx}, 'name', this.value)">
+                    <input type="text" placeholder="제작 기어 & 사이즈" value="${row.item}" oninput="updateBespoke(${idx}, 'item', this.value)">
+                    <select onchange="updateBespoke(${idx}, 'status', this.value)">
+                        <option value="대기" ${row.status === '대기' ? 'selected' : ''}>⏳ 대기</option>
+                        <option value="제작중" ${row.status === '제작중' ? 'selected' : ''}>🧵 제작중</option>
+                        <option value="전달완료" ${row.status === '전달완료' ? 'selected' : ''}>✅ 완료</option>
+                    </select>
+                    <button class="del-btn" onclick="deleteBespoke(${idx})">✕</button>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function addBespokeRow() {
+            appState.bespoke.push({ name: "", item: "", status: "대기" });
+            saveState();
+            renderBespoke();
+        }
+
+        function updateBespoke(idx, key, val) {
+            appState.bespoke[idx][key] = val;
+            saveState();
+        }
+
+        function deleteBespoke(idx) {
+            appState.bespoke.splice(idx, 1);
+            saveState();
+            renderBespoke();
+        }
+
+        // PC <-> 스마트폰 1초 데이터 동기화 (클립보드 JSON 복사/붙여넣기)
+        function exportSyncData() {
+            const dataStr = JSON.stringify(appState);
+            navigator.clipboard.writeText(dataStr);
+            showToast("📤 데이터가 복사되었습니다! 카톡 '나에게 보내기'에 붙여넣으세요.");
+        }
+
+        function importSyncData() {
+            const input = prompt("카카오톡 등에 복사해둔 백업 데이터 코드를 여기에 붙여넣으세요:");
+            if (!input) return;
+            try {
+                const parsed = JSON.parse(input);
+                if (parsed && parsed.tasks) {
+                    appState = parsed;
+                    saveState();
+                    location.reload();
+                } else {
+                    alert("올바른 데이터 형식이 아닙니다.");
+                }
+            } catch (e) {
+                alert("데이터 코드를 읽는 중 오류가 발생했습니다.");
+            }
+        }
+
+        function scrollToSection(id, btnEl) {
+            document.querySelectorAll('.bottom-nav .nav-item').forEach(el => el.classList.remove('active'));
+            btnEl.classList.add('active');
+            document.getElementById(id).scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    </script>
+</body>
+</html>
