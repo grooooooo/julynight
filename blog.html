@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Julynight BrandConnect Post Studio</title>
+    <style>
+        :root {
+            --bg-dark: #141617;
+            --card-bg: #1f2224;
+            --panel-bg: #282c2f;
+            --text-main: #f1f5f9;
+            --text-sub: #94a3b8;
+            --mint: #98e6be;
+            --mint-dark: #6bc497;
+            --border: #363b3f;
+            --danger: #f87171;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding: 24px 16px;
+        }
+
+        .layout {
+            max-width: 1180px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 420px 1fr;
+            gap: 24px;
+        }
+
+        @media (max-width: 960px) {
+            .layout { grid-template-columns: 1fr; }
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+        }
+
+        header {
+            max-width: 1180px;
+            margin: 0 auto 20px auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 16px;
+        }
+
+        header h1 {
+            font-size: 1.35rem;
+            color: var(--mint);
+            font-weight: 700;
+        }
+
+        header p {
+            font-size: 0.85rem;
+            color: var(--text-sub);
+        }
+
+        .form-group { margin-bottom: 16px; }
+
+        label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.84rem;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: var(--text-main);
+        }
+
+        label a {
+            color: var(--mint);
+            font-size: 0.76rem;
+            text-decoration: none;
+        }
+
+        input[type="text"], input[type="password"], input[type="url"], textarea {
+            width: 100%;
+            background-color: var(--bg-dark);
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            padding: 11px 13px;
+            border-radius: 8px;
+            font-size: 0.92rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        input:focus, textarea:focus { border-color: var(--mint); }
+
+        textarea { resize: vertical; min-height: 85px; font-family: inherit; }
+
+        .btn {
+            width: 100%;
+            padding: 13px 16px;
+            border-radius: 10px;
+            border: none;
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .btn-primary {
+            background-color: var(--mint);
+            color: #111415;
+            margin-bottom: 10px;
+        }
+
+        .btn-primary:hover { background-color: var(--mint-dark); }
+
+        .btn-secondary {
+            background-color: var(--panel-bg);
+            color: var(--text-main);
+            border: 1px solid var(--border);
+            font-size: 0.85rem;
+            padding: 10px;
+        }
+
+        .btn-secondary:hover { border-color: var(--mint); color: var(--mint); }
+
+        .status-msg {
+            margin-top: 12px;
+            font-size: 0.82rem;
+            padding: 10px 12px;
+            border-radius: 8px;
+            background-color: rgba(152, 230, 190, 0.08);
+            border-left: 3px solid var(--mint);
+            color: var(--text-sub);
+            display: none;
+        }
+
+        /* 우측 결과 영역 */
+        .action-bar {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
+        .action-bar .btn { width: auto; flex: 1; min-width: 180px; }
+
+        .image-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+            gap: 12px;
+            margin-bottom: 22px;
+            padding: 14px;
+            background-color: var(--bg-dark);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+        }
+
+        .img-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 8px;
+            text-align: center;
+        }
+
+        .img-card canvas {
+            width: 100%;
+            height: auto;
+            border-radius: 6px;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .img-card button {
+            width: 100%;
+            padding: 6px;
+            font-size: 0.76rem;
+            background-color: var(--panel-bg);
+            color: var(--mint);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .img-card button:hover { background-color: rgba(152, 230, 190, 0.12); }
+
+        /* 네이버 블로그 에디터 미리보기 창 (복사 대상) */
+        .naver-preview-wrapper {
+            background-color: #ffffff;
+            color: #222222;
+            border-radius: 12px;
+            padding: 36px 28px;
+            max-height: 780px;
+            overflow-y: auto;
+            box-shadow: inset 0 0 0 1px #e2e8f0;
+        }
+
+        .helper-badge {
+            display: inline-block;
+            background: rgba(152, 230, 190, 0.15);
+            color: var(--mint);
+            font-size: 0.75rem;
+            padding: 2px 8px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+
+        .file-upload-box {
+            border: 1px dashed var(--border);
+            border-radius: 8px;
+            padding: 10px;
+            text-align: center;
+            font-size: 0.8rem;
+            color: var(--text-sub);
+            cursor: pointer;
+        }
+        .file-upload-box:hover { border-color: var(--mint); color: var(--mint); }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div>
+            <h1>Julynight BrandConnect Post Studio</h1>
+            <p>브랜드커넥트 링크 분석 · 소구점 원고 & 스펙 카드 이미지 자동 생성기 (@camper_julynight)</p>
+        </div>
+        <div style="font-size:0.8rem; color:var(--text-sub);">
+            문체: <strong>담백/간결 (~합니다, ~입니다)</strong> | 기술·소재 중심 분석
+        </div>
+    </header>
+
+    <div class="layout">
+        <!-- 좌측: 입력 컨트롤 패널 -->
+        <div class="card">
+            <span class="helper-badge">STEP 1. 링크 및 정보 입력</span>
+
+            <div class="form-group">
+                <label>
+                    <span>Gemini API Key (무료 발급 후 자동 저장)</span>
+                    <a href="https://aistudio.google.com/app/apikey" target="_blank">🔑 무료 키 발급받기 ↗</a>
+                </label>
+                <input type="password" id="apiKey" placeholder="AIzaSy... (한 번 입력하면 브라우저에 저장됩니다)" oninput="saveApiKey()">
+            </div>
+
+            <div class="form-group">
+                <label><span>브랜드커넥트 / 제품 링크</span></label>
+                <input type="url" id="productUrl" value="https://naver.me/Fdq6YcfS" placeholder="https://naver.me/... 또는 상품 URL">
+            </div>
+
+            <div class="form-group">
+                <label>
+                    <span>제품명 / 핵심 스펙 메모 (선택사항)</span>
+                    <span style="font-size:0.72rem; color:var(--text-sub);">네이버 보안 차단 시 활용</span>
+                </label>
+                <textarea id="manualInfo" placeholder="링크에서 정보를 자동으로 읽어오지만, 네이버 보안(캡챠)으로 막힐 경우 여기에 '제품명'이나 상세페이지 텍스트를 복사해 넣어주시면 100% 정확하게 분석합니다."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label><span>제품 실제 사진 첨부 (선택 - 카드 배경 합성용)</span></label>
+                <input type="file" id="productImageInput" accept="image/*" class="file-upload-box" onchange="handleImageUpload(event)">
+            </div>
+
+            <button class="btn btn-primary" onclick="generatePost()">
+                🚀 링크 분석 및 블로그 원고 + 이미지 생성
+            </button>
+            <button class="btn btn-secondary" onclick="runDemoSample()">
+                ⚡ API 키 없이 예시(https://naver.me/Fdq6YcfS) 즉시 체험하기
+            </button>
+
+            <div id="statusBox" class="status-msg"></div>
+        </div>
+
+        <!-- 우측: 생성된 이미지 & 네이버 블로그 복사 영역 -->
+        <div class="card">
+            <span class="helper-badge">STEP 2. 소구점별 자동 생성 이미지 (클릭하여 저장/복사)</span>
+            <p style="font-size:0.8rem; color:var(--text-sub); margin-bottom:10px;">
+                * 각 소구점에 맞춰 자동 디자인된 스펙 카드입니다. <strong>[이미지 복사]</strong>를 눌러 네이버 블로그 본문 사이사이에 바로 붙여넣기(Ctrl+V) 하세요.
+            </p>
+
+            <div class="image-gallery" id="imageGallery">
+                <!-- 4개의 Canvas 카드가 생성됨 -->
+                <div class="img-card">
+                    <canvas id="cardCanvas0" width="800" height="800"></canvas>
+                    <button onclick="copyCanvasImage('cardCanvas0')">📋 썸네일 이미지 복사</button>
+                </div>
+                <div class="img-card">
+                    <canvas id="cardCanvas1" width="800" height="800"></canvas>
+                    <button onclick="copyCanvasImage('cardCanvas1')">📋 소구점 1 이미지 복사</button>
+                </div>
+                <div class="img-card">
+                    <canvas id="cardCanvas2" width="800" height="800"></canvas>
+                    <button onclick="copyCanvasImage('cardCanvas2')">📋 소구점 2 이미지 복사</button>
+                </div>
+                <div class="img-card">
+                    <canvas id="cardCanvas3" width="800" height="800"></canvas>
+                    <button onclick="copyCanvasImage('cardCanvas3')">📋 소구점 3 이미지 복사</button>
+                </div>
+            </div>
+
+            <span class="helper-badge">STEP 3. 네이버 블로그 원고 (서식 포함 1클릭 복사)</span>
+            <div class="action-bar">
+                <button class="btn btn-primary" onclick="copyRichBlogContent()">
+                    📋 네이버 블로그 서식 통째로 복사하기 (Ctrl+V 바로 가능)
+                </button>
+                <button class="btn btn-secondary" onclick="copyHashtagsOnly()">
+                    #️⃣ 해시태그만 따로 복사
+                </button>
+            </div>
+
+            <!-- 실제 복사될 리치 텍스트 컨테이너 -->
+            <div class="naver-preview-wrapper" id="blogPostContainer" contenteditable="true">
+                <!-- 초기 안내 또는 생성된 원고가 들어가는 영역 -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let uploadedBgImage = null;
+
+        // 페이지 로드 시 저장된 API 키 복원 및 기본 샘플 렌더링
+        window.onload = () => {
+            const savedKey = localStorage.getItem('julynight_gemini_key');
+            if (savedKey) document.getElementById('apiKey').value = savedKey;
+            runDemoSample(true); // 초기 화면에 예시 링크 결과 바로 표시
+        };
+
+        function saveApiKey() {
+            const key = document.getElementById('apiKey').value.trim();
+            localStorage.setItem('julynight_gemini_key', key);
+        }
+
+        function showStatus(msg, isError = false) {
+            const box = document.getElementById('statusBox');
+            box.style.display = 'block';
+            box.style.borderLeftColor = isError ? '#f87171' : '#98e6be';
+            box.innerHTML = msg;
+        }
+
+        function handleImageUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = new Image();
+                img.onload = function() {
+                    uploadedBgImage = img;
+                    showStatus("✅ 제품 사진이 로드되었습니다. 생성 시 카드 배경에 반영됩니다.");
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        /**
+         * 1. 외부 URL 내용 스크래핑 시도 (무료 Jina Reader API 활용)
+         */
+        async function fetchUrlMetadata(targetUrl) {
+            try {
+                const response = await fetch(`https://r.jina.ai/${targetUrl}`, {
+                    headers: { 'Accept': 'text/plain' }
+                });
+                if (!response.ok) throw new Error("페이지 접근 제한");
+                const text = await response.text();
+                return text.slice(0, 5000); // 핵심 상단 5000자 추출
+            } catch (err) {
+                console.warn("자동 스크래핑 제한됨:", err);
+                return "";
+            }
+        }
+
+        /**
+         * 2. AI 분석 및 블로그 포스트 생성 실행
+         */
+        async function generatePost() {
+            const apiKey = document.getElementById('apiKey').value.trim();
+            const productUrl = document.getElementById('productUrl').value.trim();
+            const manualInfo = document.getElementById('manualInfo').value.trim();
+
+            if (!productUrl) {
+                showStatus("⚠️ 브랜드커넥트 또는 상품 링크를 입력해 주세요.", true);
+                return;
+            }
+
+            if (!apiKey) {
+                showStatus("💡 Gemini API 키가 입력되지 않아 <strong>[예시 시뮬레이션 모드]</strong>로 작동합니다. 다른 링크를 실시간 AI로 분석하려면 상단에서 무료 API 키를 발급받아 넣어주세요.");
+                runDemoSample();
+                return;
+            }
+
+            showStatus("🔍 1/3. 상품 링크에서 제품 스펙과 메타데이터를 추출하고 있습니다...");
+            const scrapedText = await fetchUrlMetadata(productUrl);
+
+            // 네이버 캡챠 차단 등으로 텍스트가 너무 짧고 수동 입력도 없을 때 안내
+            if ((!scrapedText || scrapedText.includes("보안 확인") || scrapedText.length < 100) && !manualInfo) {
+                showStatus("⚠️ 네이버 보안 정책으로 인해 단축링크 내부 텍스트 직접 접근이 일부 제한되었습니다. <strong>[제품명 / 핵심 스펙 메모]</strong> 칸에 제품명이나 주요 특징을 한 줄만 적어주시면 훨씬 정확한 글이 작성됩니다! (현재는 링크 기반 추정 모드로 작성합니다.)");
+            } else {
+                showStatus("✍️ 2/3. 칠월밤(Julynight)의 담백한 기술 분석 톤앤매너로 소구점과 원고를 작성 중입니다...");
+            }
+
+            const prompt = `
+당신은 아웃도어 기어 디자이너이자 울트라라이트 백패커 블로거 '칠월밤(Julynight)'입니다.
+다음 브랜드커넥트 제품 정보와 링크를 바탕으로 네이버 블로그 추천 포스팅을 JSON 형식으로 작성하세요.
+
+[문체 및 톤앤매너 규칙 - 매우 중요]
+1. 반드시 담백하고 간결한 어투(~합니다, ~입니다)만 사용하세요.
+2. 과장된 홈쇼핑식 표현(대박, 무조건 사세요, 인생템 등)이나 이모지 남발을 엄격히 배제하세요.
+3. 실사용자 및 소재/구조/스펙/기능성 중심의 분석적인 시각으로 신뢰감 있게 서술하세요.
+
+[입력 데이터]
+- 제품 링크: ${productUrl}
+- 사용자 입력 스펙/제품명: ${manualInfo || "별도 입력 없음"}
+- 링크에서 추출된 데이터: ${scrapedText || "추출 데이터 없음 (사용자 입력값 또는 아웃도어/라이프스타일 추천 기어로 구성)"}
+
+반드시 아래 JSON 구조로만 응답하세요 (마크다운 코드블록 없이 순수 JSON만 출력):
+{
+  "productName": "정확한 제품명",
+  "category": "카테고리 영문 대문자 (예: OUTDOOR GEAR / TECH SPEC)",
+  "title": "네이버 검색 유입에 유리하고 담백한 블로그 제목",
+  "intro": "도입부 문단 (제품을 살펴보게 된 계기와 핵심 요약 3~4문장)",
+  "points": [
+    {
+      "badge": "POINT 01",
+      "shortTitle": "카드 이미지에 들어갈 핵심 소구점 제목 (18자 이내)",
+      "keySpec": "핵심 소재 또는 스펙 한 줄 요약 (25자 이내)",
+      "subHeading": "본문 소제목 1",
+      "body": "소구점 1에 대한 상세하고 분석적인 설명 (4~5문장, ~합니다/입니다 체)"
+    },
+    {
+      "badge": "POINT 02",
+      "shortTitle": "카드 이미지에 들어갈 핵심 소구점 제목 (18자 이내)",
+      "keySpec": "핵심 구조 또는 무게/기능 요약 (25자 이내)",
+      "subHeading": "본문 소제목 2",
+      "body": "소구점 2에 대한 상세하고 분석적인 설명 (4~5문장, ~합니다/입니다 체)"
+    },
+    {
+      "badge": "POINT 03",
+      "shortTitle": "카드 이미지에 들어갈 핵심 소구점 제목 (18자 이내)",
+      "keySpec": "실사용 활용도 및 디테일 요약 (25자 이내)",
+      "subHeading": "본문 소제목 3",
+      "body": "소구점 3에 대한 상세하고 분석적인 설명 (4~5문장, ~합니다/입니다 체)"
+    }
+  ],
+  "conclusion": "총평 및 어떤 사용자에게 적합한지 정리하는 마무리 문단 (3~4문장)",
+  "hashtags": ["#해시태그1", "#해시태그2", "총 15개의 검색 유입용 핵심 태그 배열"]
+}
+            `;
+
+            try {
+                const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{ parts: [{ text: prompt }] }],
+                        generationConfig: { responseMimeType: "application/json" }
+                    })
+                });
+
+                const data = await res.json();
+                if (data.error) throw new Error(data.error.message);
+
+                const rawJson = data.candidates[0].content.parts[0].text;
+                const parsed = JSON.parse(rawJson);
+
+                renderOutput(parsed, productUrl);
+                showStatus("✅ 3/3. 원고 작성 및 소구점별 스펙 카드 이미지 4장 생성이 완료되었습니다!");
+            } catch (error) {
+                console.error(error);
+                showStatus(`❌ AI 호출 중 오류가 발생했습니다: ${error.message} (기본 예시 데이터로 대체 표시합니다)`, true);
+                runDemoSample();
+            }
+        }
+
+        /**
+         * 3. API 키 없이도 즉시 확인 가능한 고품질 샘플 데이터 (https://naver.me/Fdq6YcfS 대응)
+         */
+        function runDemoSample(isInitial = false) {
+            const productUrl = document.getElementById('productUrl').value.trim() || "https://naver.me/Fdq6YcfS";
+            const manualTitle = document.getElementById('manualInfo').value.trim();
+
+            const sampleData = {
+                productName: manualTitle ? manualTitle.split('\n')[0] : "고밀도 경량 아웃도어 기어 & 필드 시스템",
+                category: "FIELD GEAR SPEC ANALYSIS",
+                title: manualTitle 
+                    ? `${manualTitle.split('\n')[0]} 주요 소재 및 실사용 소구점 분석`
+                    : "경량 아웃도어 활동을 위한 핵심 스펙 및 구조적 특징 정리",
+                intro: "장거리 트레킹과 아웃도어 환경에서는 장비 하나가 가진 무게 대비 내구성과 직관적인 구조가 전체 운행의 피로도를 결정합니다. 오늘은 실제 필드 환경에서 요구되는 소재적 특성과 설계 디테일을 중심으로 해당 제품의 3가지 핵심 소구점을 살펴보겠습니다.",
+                points: [
+                    {
+                        badge: "POINT 01",
+                        shortTitle: "고밀도 원단과 내구성 밸런스",
+                        keySpec: "경량성 확보 및 내마모성 강화 설계",
+                        subHeading: "1. 무게 대비 뛰어난 내구성과 소재의 신뢰도",
+                        body: "아웃도어 장비를 선택할 때 가장 먼저 확인해야 할 부분은 외피와 주요 프레임의 소재 스펙입니다. 불필요한 부피와 무게는 줄이면서도 마찰이 잦은 구간의 인열 강도를 확보하여 거친 필드 환경에서도 안정적인 컨디션을 유지합니다. 장시간 노출되는 우천이나 습기 환경에서도 변형이 적어 관리가 수월합니다."
+                    },
+                    {
+                        badge: "POINT 02",
+                        shortTitle: "직관적인 수납과 하중 분산 구조",
+                        keySpec: "흔들림을 줄이는 인체공학적 피팅감",
+                        subHeading: "2. 실사용자 동선을 고려한 구조적 디테일",
+                        body: "단순히 스펙상의 무게가 가벼운 것보다 실제 착용하거나 패킹했을 때 체감되는 밸런스가 중요합니다. 중심부가 흔들리지 않도록 잡아주는 비례감과 직관적인 조작계를 갖추고 있어 운행 중에도 빠르게 장비를 다루기 좋습니다. 군더더기 없는 미니멀한 디자인 안에 실질적인 기능성이 잘 녹아들어 있습니다."
+                    },
+                    {
+                        badge: "POINT 03",
+                        shortTitle: "올라운드 필드 활용성과 범용성",
+                        keySpec: "백패킹·트레일·일상을 아우르는 구성",
+                        subHeading: "3. 계절과 코스에 구애받지 않는 높은 활용도",
+                        body: "특정 환경에만 국한되지 않고 가벼운 당일 하이킹부터 장거리 백패킹, 그리고 일상적인 아웃도어 라이프스타일까지 폭넓게 대응합니다. 함께 사용하는 기존 장비들과도 톤앤매너가 자연스럽게 어우러지며, 초기 세팅 후 별도의 복잡한 조작 없이 즉시 필드에 투입할 수 있는 실용적인 구성을 갖추고 있습니다."
+                    }
+                ],
+                conclusion: "과장된 기능보다는 기본기에 충실한 소재 선택과 정제된 마감 처리가 돋보이는 제품입니다. 무게와 실용성 사이의 합리적인 타협점을 찾고 계신 분들에게 균형 잡힌 선택지가 될 것으로 보입니다. 상세 스펙과 현재 조건은 아래 공식 링크를 통해 직접 확인해 보시기 바랍니다.",
+                hashtags: [
+                    "#아웃도어기어", "#백패킹장비", "#경량백패킹", "#UL백패킹", "#트레킹장비",
+                    "#하이킹기어", "#캠핑장비추천", "#아웃도어용품", "#기어리뷰", "#장비분석",
+                    "#트레일러닝", "#노지캠핑", "#백패커", "#산행장비", "#브랜드커넥트"
+                ]
+            };
+
+            renderOutput(sampleData, productUrl);
+            if (!isInitial) {
+                showStatus("⚡ 예시 데이터 기반 원고와 소구점 스펙 카드 4장이 생성되었습니다. 우측에서 [서식 통째로 복사하기]를 눌러 테스트해 보세요!");
+            }
+        }
+
+        /**
+         * 4. 소구점별 스펙 카드 이미지 자동 드로잉 (Canvas 800x800 고해상도)
+         */
+        function drawSpecCard(canvasId, badgeText, mainTitle, subSpec, productName, index) {
+            const canvas = document.getElementById(canvasId);
+            const ctx = canvas.getContext('2d');
+            const W = canvas.width;
+            const H = canvas.height;
+
+            // 1. 배경 (다크 차콜 그라데이션)
+            const grad = ctx.createLinearGradient(0, 0, W, H);
+            grad.addColorStop(0, "#181a1b");
+            grad.addColorStop(1, "#24282b");
+            ctx.fillStyle = grad;
+            ctx.fillRect(0, 0, W, H);
+
+            // 사용자가 업로드한 제품 사진이 있다면 은은하게 오버레이
+            if (uploadedBgImage) {
+                ctx.save();
+                ctx.globalAlpha = 0.28;
+                const scale = Math.max(W / uploadedBgImage.width, H / uploadedBgImage.height);
+                const nw = uploadedBgImage.width * scale;
+                const nh = uploadedBgImage.height * scale;
+                ctx.drawImage(uploadedBgImage, (W - nw) / 2, (H - nh) / 2, nw, nh);
+                ctx.restore();
+            }
+
+            // 2. 테크니컬 그리드 라인 장식
+            ctx.strokeStyle = "rgba(152, 230, 190, 0.07)";
+            ctx.lineWidth = 1;
+            for (let x = 80; x < W; x += 80) {
+                ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke();
+            }
+            for (let y = 80; y < H; y += 80) {
+                ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
+            }
+
+            // 3. 외곽 프레임 보더
+            ctx.strokeStyle = "rgba(152, 230, 190, 0.35)";
+            ctx.lineWidth = 3;
+            ctx.strokeRect(44, 44, W - 88, H - 88);
+
+            // 4. 상단 뱃지 박스
+            ctx.fillStyle = "#98e6be";
+            ctx.fillRect(84, 92, 180, 44);
+            ctx.fillStyle = "#141617";
+            ctx.font = "800 22px -apple-system, BlinkMacSystemFont, sans-serif";
+            ctx.textAlign = "center";
+            ctx.fillText(badgeText, 84 + 90, 122);
+
+            // 5. 제품명 서브 헤더
+            ctx.fillStyle = "#94a3b8";
+            ctx.font = "600 24px -apple-system, BlinkMacSystemFont, sans-serif";
+            ctx.textAlign = "left";
+            ctx.fillText(productName.slice(0, 26), 84, 195);
+
+            // 6. 메인 소구점 타이틀 (줄바꿈 처리)
+            ctx.fillStyle = "#f1f5f9";
+            ctx.font = "800 52px -apple-system, BlinkMacSystemFont, sans-serif";
+            wrapText(ctx, mainTitle, 84, 290, W - 168, 68);
+
+            // 7. 중앙 포인트 디바이더
+            ctx.fillStyle = "#98e6be";
+            ctx.fillRect(84, 460, 90, 6);
+
+            // 8. 하단 스펙 요약 박스
+            ctx.fillStyle = "rgba(20, 22, 23, 0.78)";
+            ctx.fillRect(84, 510, W - 168, 130);
+            ctx.strokeStyle = "rgba(152, 230, 190, 0.3)";
+            ctx.lineWidth = 1.5;
+            ctx.strokeRect(84, 510, W - 168, 130);
+
+            ctx.fillStyle = "#98e6be";
+            ctx.font = "700 22px -apple-system, BlinkMacSystemFont, sans-serif";
+            ctx.fillText("KEY SPECIFICATION", 114, 555);
+
+            ctx.fillStyle = "#e2e8f0";
+            ctx.font = "500 28px -apple-system, BlinkMacSystemFont, sans-serif";
+            ctx.fillText(subSpec, 114, 602);
+
+            // 9. 하단 워터마크 크레딧
+            ctx.fillStyle = "#64748b";
+            ctx.font = "600 20px -apple-system, BlinkMacSystemFont, sans-serif";
+            ctx.textAlign = "right";
+            ctx.fillText("JULYNIGHT GEAR ARCHIVE  |  @camper_julynight", W - 84, H - 78);
+        }
+
+        function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
+            const words = text.split(' ');
+            let line = '';
+            for (let n = 0; n < words.length; n++) {
+                const testLine = line + words[n] + ' ';
+                const metrics = ctx.measureText(testLine);
+                if (metrics.width > maxWidth && n > 0) {
+                    ctx.fillText(line, x, y);
+                    line = words[n] + ' ';
+                    y += lineHeight;
+                } else {
+                    line = testLine;
+                }
+            }
+            ctx.fillText(line, x, y);
+        }
+
+        /**
+         * 5. 생성된 데이터를 화면(Canvas + 네이버 블로그 에디터 호환 HTML)에 렌더링
+         */
+        function renderOutput(data, productUrl) {
+            // (1) 4장의 스펙 카드 이미지 렌더링 (썸네일 1 + 소구점 3)
+            drawSpecCard('cardCanvas0', 'GEAR REVIEW', data.productName, data.category || 'SPEC & FIELD ANALYSIS', 'JULYNIGHT PICK', 0);
+            data.points.forEach((pt, idx) => {
+                drawSpecCard(`cardCanvas${idx + 1}`, pt.badge, pt.shortTitle, pt.keySpec, data.productName, idx + 1);
+            });
+
+            // (2) 네이버 스마트에디터 붙여넣기 최적화 HTML 생성
+            const hashtagString = data.hashtags.join(' ');
+            window.currentHashtags = hashtagString;
+
+            const blogHtml = `
+                <div style="font-family: 'Nanum Gothic', 'Malgun Gothic', sans-serif; color: #222; line-height: 1.8; font-size: 16px;">
+                    <p style="font-size: 13px; color: #666; background: #f8f9fa; padding: 10px 14px; border-left: 4px solid #2b2d30; margin-bottom: 24px;">
+                        ※ 본 포스팅은 네이버 브랜드커넥트 활동을 통해 일정액의 수수료를 제공받을 수 있습니다.
+                    </p>
+
+                    <h2 style="font-size: 24px; font-weight: 800; color: #111; margin-bottom: 18px; line-height: 1.4;">
+                        ${data.title}
+                    </h2>
+
+                    <p style="margin-bottom: 24px; color: #333;">
+                        ${data.intro}
+                    </p>
+
+                    <p style="color: #0f766e; font-size: 13px; font-weight: bold; margin-bottom: 28px;">
+                        [💡 여기에 상단 '썸네일 이미지'를 복사해 붙여넣으세요]
+                    </p>
+
+                    <hr style="border: 0; height: 1px; background: #e5e7eb; margin: 30px 0;">
+
+                    ${data.points.map((pt, i) => `
+                        <div style="margin-bottom: 34px;">
+                            <div style="background: #1f2224; color: #98e6be; display: inline-block; padding: 4px 10px; font-size: 12px; font-weight: 700; border-radius: 4px; margin-bottom: 8px;">
+                                ${pt.badge}
+                            </div>
+                            <h3 style="font-size: 19px; font-weight: 700; color: #111; margin-bottom: 10px; border-left: 4px solid #98e6be; padding-left: 10px;">
+                                ${pt.subHeading}
+                            </h3>
+                            <p style="font-size: 14px; color: #555; font-weight: 600; margin-bottom: 12px;">
+                                핵심 스펙: ${pt.keySpec}
+                            </p>
+                            <p style="margin-bottom: 16px; color: #333;">
+                                ${pt.body}
+                            </p>
+                            <p style="color: #0f766e; font-size: 13px; font-weight: bold;">
+                                [💡 여기에 '소구점 ${i + 1} 이미지'를 복사해 붙여넣으세요]
+                            </p>
+                        </div>
+                    `).join('')}
+
+                    <hr style="border: 0; height: 1px; background: #e5e7eb; margin: 30px 0;">
+
+                    <h3 style="font-size: 19px; font-weight: 700; color: #111; margin-bottom: 12px;">
+                        총평 및 상세 스펙 확인
+                    </h3>
+                    <p style="margin-bottom: 26px; color: #333;">
+                        ${data.conclusion}
+                    </p>
+
+                    <div style="background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 10px; padding: 20px; text-align: center; margin-bottom: 30px;">
+                        <p style="font-size: 15px; font-weight: 700; color: #1e293b; margin-bottom: 10px;">
+                            📦 ${data.productName} 공식 상세 페이지 바로가기
+                        </p>
+                        <a href="${productUrl}" target="_blank" style="display: inline-block; background: #181a1b; color: #98e6be; text-decoration: none; font-weight: 700; padding: 12px 24px; border-radius: 6px; font-size: 15px;">
+                            제품 상세 스펙 및 최저가 확인하기 ↗
+                        </a>
+                        <p style="font-size: 12px; color: #64748b; margin-top: 8px;">
+                            링크: <a href="${productUrl}" target="_blank" style="color: #475569;">${productUrl}</a>
+                        </p>
+                    </div>
+
+                    <div style="background: #f8fafc; padding: 16px; border-radius: 8px; color: #0284c7; font-size: 14px; font-weight: 600; line-height: 1.9;">
+                        ${hashtagString}
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('blogPostContainer').innerHTML = blogHtml;
+        }
+
+        /**
+         * 6. 네이버 블로그 에디터용 서식 통째 복사 함수
+         */
+        async function copyRichBlogContent() {
+            const container = document.getElementById('blogPostContainer');
+            try {
+                const htmlBlob = new Blob([container.innerHTML], { type: 'text/html' });
+                const textBlob = new Blob([container.innerText], { type: 'text/plain' });
+                const item = new ClipboardItem({
+                    'text/html': htmlBlob,
+                    'text/plain': textBlob
+                });
+                await navigator.clipboard.write([item]);
+                showStatus("✅ <strong>서식 포함 원고가 클립보드에 복사되었습니다!</strong> 네이버 블로그 글쓰기 화면에서 그대로 붙여넣기(Ctrl+V) 하세요.");
+            } catch (err) {
+                // 구형 브라우저 폴백
+                const range = document.createRange();
+                range.selectNodeContents(container);
+                const sel = window.getSelection();
+                sel.removeAllRanges();
+                sel.addRange(range);
+                document.execCommand('copy');
+                sel.removeAllRanges();
+                showStatus("✅ 원고가 복사되었습니다! 네이버 블로그에 붙여넣기(Ctrl+V) 하세요.");
+            }
+        }
+
+        function copyHashtagsOnly() {
+            if (!window.currentHashtags) return;
+            navigator.clipboard.writeText(window.currentHashtags);
+            showStatus("✅ 해시태그 15개가 클립보드에 복사되었습니다!");
+        }
+
+        /**
+         * 7. 캔버스 이미지를 클립보드에 직접 복사 (네이버 에디터에 바로 Ctrl+V 가능)
+         */
+        function copyCanvasImage(canvasId) {
+            const canvas = document.getElementById(canvasId);
+            canvas.toBlob(async (blob) => {
+                try {
+                    const item = new ClipboardItem({ 'image/png': blob });
+                    await navigator.clipboard.write([item]);
+                    showStatus("✅ <strong>스펙 카드 이미지가 복사되었습니다!</strong> 네이버 블로그 본문에 바로 붙여넣기(Ctrl+V) 하세요.");
+                } catch (err) {
+                    // 클립보드 이미지 복사가 지원되지 않는 환경일 경우 파일 다운로드로 자동 전환
+                    const link = document.createElement('a');
+                    link.download = `${canvasId}.png`;
+                    link.href = canvas.toDataURL();
+                    link.click();
+                    showStatus("💾 이미지가 파일로 다운로드되었습니다. 블로그에 첨부해 주세요.");
+                }
+            });
+        }
+    </script>
+</body>
+</html>
