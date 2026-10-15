@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Julynight BrandConnect Post Studio V2.3</title>
+    <title>Julynight BrandConnect Post Studio V3.0</title>
     <style>
         :root {
             --bg-dark: #141617;
@@ -14,6 +14,7 @@
             --mint: #98e6be;
             --mint-dark: #6bc497;
             --border: #363b3f;
+            --red-alert: #ef4444;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -27,14 +28,14 @@
         }
 
         .layout {
-            max-width: 1200px;
+            max-width: 1280px;
             margin: 0 auto;
             display: grid;
-            grid-template-columns: 420px 1fr;
+            grid-template-columns: 410px 1fr;
             gap: 24px;
         }
 
-        @media (max-width: 960px) {
+        @media (max-width: 980px) {
             .layout { grid-template-columns: 1fr; }
         }
 
@@ -47,7 +48,7 @@
         }
 
         header {
-            max-width: 1200px;
+            max-width: 1280px;
             margin: 0 auto 20px auto;
             display: flex;
             justify-content: space-between;
@@ -69,7 +70,7 @@
             color: var(--text-sub);
         }
 
-        .form-group { margin-bottom: 15px; }
+        .form-group { margin-bottom: 16px; }
 
         label {
             display: flex;
@@ -87,7 +88,7 @@
             text-decoration: none;
         }
 
-        input[type="text"], input[type="password"], input[type="url"], select, textarea {
+        input[type="text"], input[type="password"], select, textarea {
             width: 100%;
             background-color: var(--bg-dark);
             border: 1px solid var(--border);
@@ -97,11 +98,12 @@
             font-size: 0.9rem;
             outline: none;
             transition: border-color 0.2s;
+            font-family: inherit;
         }
 
         input:focus, select:focus, textarea:focus { border-color: var(--mint); }
 
-        textarea { resize: vertical; min-height: 75px; font-family: inherit; }
+        textarea { resize: vertical; min-height: 115px; line-height: 1.5; }
 
         .btn {
             width: 100%;
@@ -126,8 +128,8 @@
             background-color: var(--panel-bg);
             color: var(--text-main);
             border: 1px solid var(--border);
-            font-size: 0.85rem;
-            padding: 10px 14px;
+            font-size: 0.84rem;
+            padding: 9px 14px;
         }
 
         .btn-secondary:hover { border-color: var(--mint); color: var(--mint); }
@@ -153,23 +155,30 @@
 
         .action-bar .btn { width: auto; flex: 1; min-width: 160px; }
 
+        /* 2x2 개별 카드 편집 그리드 */
         .image-gallery {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
-            gap: 12px;
-            margin-bottom: 22px;
-            padding: 14px;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+            padding: 16px;
             background-color: var(--bg-dark);
             border: 1px solid var(--border);
             border-radius: 12px;
         }
 
+        @media (max-width: 680px) {
+            .image-gallery { grid-template-columns: 1fr; }
+        }
+
         .img-card {
             background-color: var(--card-bg);
             border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 8px;
-            text-align: center;
+            border-radius: 10px;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
         }
 
         .img-card canvas {
@@ -177,29 +186,70 @@
             height: auto;
             border-radius: 6px;
             display: block;
-            margin-bottom: 8px;
         }
 
-        .img-card button {
+        .card-edit-inputs {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            background: var(--bg-dark);
+            padding: 8px;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+        }
+
+        .card-edit-inputs input {
+            padding: 6px 9px;
+            font-size: 0.8rem;
+            border-radius: 5px;
+            background: var(--card-bg);
+        }
+
+        .card-edit-label {
+            font-size: 0.72rem;
+            color: var(--text-sub);
+            font-weight: 600;
+        }
+
+        .card-btn-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px;
+        }
+
+        .img-card button, .img-card .upload-label-btn {
             width: 100%;
-            padding: 7px;
+            padding: 7px 6px;
             font-size: 0.76rem;
             background-color: var(--panel-bg);
-            color: var(--mint);
+            color: var(--text-main);
             border: 1px solid var(--border);
             border-radius: 6px;
             cursor: pointer;
             font-weight: 600;
+            text-align: center;
+            display: inline-block;
         }
 
-        .img-card button:hover { background-color: rgba(152, 230, 190, 0.15); }
+        .img-card button.copy-btn {
+            background-color: rgba(152, 230, 190, 0.14);
+            color: var(--mint);
+            border-color: rgba(152, 230, 190, 0.4);
+            font-size: 0.8rem;
+            padding: 9px;
+        }
+
+        .img-card button:hover, .img-card .upload-label-btn:hover {
+            border-color: var(--mint);
+            color: var(--mint);
+        }
 
         .naver-preview-wrapper {
             background-color: #ffffff;
             color: #222222;
             border-radius: 12px;
             padding: 36px 28px;
-            max-height: 780px;
+            max-height: 800px;
             overflow-y: auto;
             box-shadow: inset 0 0 0 1px #e2e8f0;
         }
@@ -219,8 +269,8 @@
             width: 100%;
             border: 1px dashed var(--border);
             border-radius: 8px;
-            padding: 10px;
-            font-size: 0.8rem;
+            padding: 9px;
+            font-size: 0.78rem;
             color: var(--text-sub);
             cursor: pointer;
             background: var(--bg-dark);
@@ -234,37 +284,48 @@
             flex-wrap: wrap;
             gap: 8px;
         }
+
+        .fact-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 0.75rem;
+            color: #fbbf24;
+            background: rgba(251, 191, 36, 0.12);
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
     </style>
 </head>
 <body>
 
     <header>
         <div>
-            <h1>Julynight BrandConnect Post Studio V2.3</h1>
-            <p>실시간 제품 스펙 리서치 · 백패킹 자연 감성 카드 이미지 & 블로그 원고 생성기 (@camper_julynight)</p>
+            <h1>Julynight BrandConnect Post Studio V3.0</h1>
+            <p>2단계 교차검증(Fact-Check) · 대자연 배경 스펙 카드 개별 편집 & 원고 생성기 (@camper_julynight)</p>
         </div>
-        <div style="font-size:0.8rem; color:var(--mint); font-weight:700;">
-            ✅ V2.3 적용됨 (gemini-3.8-flash 탑재)
+        <div style="display:flex; gap:10px; align-items:center;">
+            <span class="fact-badge">🛡️ 2단계 교차검증 탑재</span>
+            <span style="font-size:0.8rem; color:var(--mint); font-weight:700;">✅ V3.0 적용됨</span>
         </div>
     </header>
 
     <div class="layout">
         <!-- 좌측: 입력 컨트롤 패널 -->
         <div class="card">
-            <span class="helper-badge">STEP 1. 제품명 및 옵션 입력</span>
+            <span class="helper-badge">STEP 1. 제품명 및 나만의 어투/방향성 설정</span>
 
             <div class="form-group">
                 <label>
-                    <span>🔑 Gemini API Key (AQ.Ab... 키 입력)</span>
+                    <span>🔑 Gemini API Key (자동 저장됨)</span>
                     <a href="https://aistudio.google.com/app/apikey" target="_blank">무료 키 발급받기 ↗</a>
                 </label>
-                <input type="password" id="apiKey" placeholder="AQ.Ab8... 키를 붙여넣으세요 (자동 저장됨)" oninput="saveApiKey()">
+                <input type="password" id="apiKey" placeholder="AQ.Ab8... 키를 붙여넣으세요" oninput="saveApiKey()">
             </div>
 
             <div class="form-group">
-                <label>
-                    <span>🤖 AI 모델명 (구글 권장 최신 모델 자동 세팅)</span>
-                </label>
+                <label><span>🤖 AI 모델명</span></label>
                 <input type="text" id="modelNameInput" value="gemini-3.8-flash">
             </div>
 
@@ -276,70 +337,128 @@
             </div>
 
             <div class="form-group">
-                <label><span>🔗 브랜드커넥트 링크 (선택 - 참고용)</span></label>
-                <input type="url" id="productUrl" placeholder="https://naver.me/... (비워두셔도 됩니다)">
-            </div>
-
-            <div class="form-group">
                 <label>
-                    <span>📝 추가 강조 포인트 또는 상세페이지 텍스트 복사 (선택)</span>
+                    <span>✍️ 희망하는 어투 · 글의 느낌 · 강조할 스펙 (자유 수정)</span>
+                    <span style="font-size:0.7rem; color:var(--mint);">자동 반영됨</span>
                 </label>
-                <textarea id="manualInfo" placeholder="비워두셔도 제품명으로 자동 검색합니다. 만약 신제품이거나 특정 스펙을 꼭 넣고 싶다면 여기에 적어주세요."></textarea>
+                <textarea id="toneAndPointInput">1. 어투: 칠월밤 블로그 특유의 담백하고 차분한 실사용자 분석 톤 (~합니다, ~입니다, ~편입니다). 과장된 수식어나 번역투 문장 배제.
+2. 방향성: 원단(소재), 무게, 패킹 부피, 실제 백패킹/트레킹 필드에서 체감되는 구조적 장점을 차분하게 짚어줄 것.
+3. 추가 강조 포인트: (특정 스펙이나 강조하고 싶은 내용이 있다면 여기에 추가로 적어주세요)</textarea>
             </div>
 
             <div class="form-group">
-                <label><span>🌲 소구점 이미지 배경 스타일</span></label>
-                <select id="bgThemeSelect" onchange="refreshCardBackgrounds()">
-                    <option value="nature">백패킹·트레일 자연 풍경 자동 매칭 (매번 새로운 사진 4장)</option>
-                    <option value="upload">내가 직접 첨부한 제품 사진 사용 (1~4장)</option>
+                <label><span>🏔️ 기본 카드 배경 스타일</span></label>
+                <select id="bgThemeSelect" onchange="refreshAllNatureBackgrounds()">
+                    <option value="nature">웅장한 대자연·산악·숲 풍경 위주 (인물 배제 24종)</option>
+                    <option value="upload">내가 첨부한 사진으로 일괄 적용</option>
                     <option value="minimal">다크 차콜 미니멀 그리드 (사진 없음)</option>
                 </select>
             </div>
 
             <div class="form-group">
-                <label><span>📷 실제 제품 사진 첨부 (선택 - 여러 장 선택 가능)</span></label>
-                <input type="file" id="productImageInput" accept="image/*" multiple class="file-upload-box" onchange="handleImageUpload(event)">
+                <label><span>📷 사진 일괄 첨부 (선택 - 개별 카드에서도 변경 가능)</span></label>
+                <input type="file" id="productImageInput" accept="image/*" multiple class="file-upload-box" onchange="handleBulkImageUpload(event)">
             </div>
 
             <button class="btn btn-primary" onclick="generatePost()">
-                🔍 제품 스펙 실시간 검색 + 원고 & 자연 이미지 생성
+                🔍 스펙 검색 + 🛡️ 교차검증 후 원고 생성하기
             </button>
 
             <div id="statusBox" class="status-msg"></div>
         </div>
 
-        <!-- 우측: 생성된 이미지 & 네이버 블로그 복사 영역 -->
+        <!-- 우측: 개별 카드 편집기 & 네이버 블로그 복사 영역 -->
         <div class="card">
             <div class="section-top-bar">
-                <span class="helper-badge" style="margin-bottom:0;">STEP 2. 소구점별 스펙 카드 이미지 (800x800)</span>
-                <button class="btn btn-secondary" style="width:auto; padding:6px 12px; font-size:0.78rem;" onclick="refreshCardBackgrounds()">
-                    🔄 배경 자연 사진 4장 다른 걸로 랜덤 변경
+                <span class="helper-badge" style="margin-bottom:0;">STEP 2. 소구점별 스펙 카드 개별 수정 & 복사</span>
+                <button class="btn btn-secondary" style="width:auto; padding:6px 12px; font-size:0.78rem;" onclick="refreshAllNatureBackgrounds()">
+                    🔄 4장 모두 다른 대자연 풍경으로 교체
                 </button>
             </div>
-            <p style="font-size:0.8rem; color:var(--text-sub); margin-bottom:10px;">
-                * <strong>[이미지 복사]</strong>를 눌러 네이버 블로그 본문에 바로 붙여넣기(Ctrl+V) 하세요.
+            <p style="font-size:0.8rem; color:var(--text-sub); margin-bottom:12px;">
+                * 각 카드 아래의 입력칸에서 <strong>문구를 직접 고치면 이미지에 실시간 반영</strong>됩니다. 카드별로 배경 사진을 따로 바꿀 수도 있습니다.
             </p>
 
+            <!-- 4개의 카드 개별 편집 그리드 -->
             <div class="image-gallery">
+                <!-- 카드 0: 썸네일 -->
                 <div class="img-card">
                     <canvas id="cardCanvas0" width="800" height="800"></canvas>
-                    <button onclick="copyCanvasImage('cardCanvas0')">📋 썸네일 이미지 복사</button>
+                    <div class="card-edit-inputs">
+                        <span class="card-edit-label">✏️ 썸네일 문구 직접 수정</span>
+                        <input type="text" id="cardBadge0" value="GEAR REVIEW" oninput="redrawSingleCard(0)" placeholder="상단 뱃지">
+                        <input type="text" id="cardTitle0" value="" oninput="redrawSingleCard(0)" placeholder="메인 타이틀">
+                        <input type="text" id="cardSpec0" value="" oninput="redrawSingleCard(0)" placeholder="하단 핵심 스펙">
+                    </div>
+                    <div class="card-btn-row">
+                        <button type="button" onclick="changeSingleNatureBg(0)">🔄 이 배경만 변경</button>
+                        <label class="upload-label-btn">
+                            📁 내 사진 넣기
+                            <input type="file" accept="image/*" style="display:none;" onchange="uploadSingleCardBg(event, 0)">
+                        </label>
+                    </div>
+                    <button type="button" class="copy-btn" onclick="copyCanvasImage('cardCanvas0')">📋 썸네일 이미지 복사</button>
                 </div>
+
+                <!-- 카드 1: 소구점 1 -->
                 <div class="img-card">
                     <canvas id="cardCanvas1" width="800" height="800"></canvas>
-                    <button onclick="copyCanvasImage('cardCanvas1')">📋 소구점 1 이미지 복사</button>
+                    <div class="card-edit-inputs">
+                        <span class="card-edit-label">✏️ 소구점 1 문구 직접 수정</span>
+                        <input type="text" id="cardBadge1" value="POINT 01" oninput="redrawSingleCard(1)" placeholder="상단 뱃지">
+                        <input type="text" id="cardTitle1" value="" oninput="redrawSingleCard(1)" placeholder="소구점 1 제목">
+                        <input type="text" id="cardSpec1" value="" oninput="redrawSingleCard(1)" placeholder="하단 핵심 스펙">
+                    </div>
+                    <div class="card-btn-row">
+                        <button type="button" onclick="changeSingleNatureBg(1)">🔄 이 배경만 변경</button>
+                        <label class="upload-label-btn">
+                            📁 내 사진 넣기
+                            <input type="file" accept="image/*" style="display:none;" onchange="uploadSingleCardBg(event, 1)">
+                        </label>
+                    </div>
+                    <button type="button" class="copy-btn" onclick="copyCanvasImage('cardCanvas1')">📋 소구점 1 이미지 복사</button>
                 </div>
+
+                <!-- 카드 2: 소구점 2 -->
                 <div class="img-card">
                     <canvas id="cardCanvas2" width="800" height="800"></canvas>
-                    <button onclick="copyCanvasImage('cardCanvas2')">📋 소구점 2 이미지 복사</button>
+                    <div class="card-edit-inputs">
+                        <span class="card-edit-label">✏️ 소구점 2 문구 직접 수정</span>
+                        <input type="text" id="cardBadge2" value="POINT 02" oninput="redrawSingleCard(2)" placeholder="상단 뱃지">
+                        <input type="text" id="cardTitle2" value="" oninput="redrawSingleCard(2)" placeholder="소구점 2 제목">
+                        <input type="text" id="cardSpec2" value="" oninput="redrawSingleCard(2)" placeholder="하단 핵심 스펙">
+                    </div>
+                    <div class="card-btn-row">
+                        <button type="button" onclick="changeSingleNatureBg(2)">🔄 이 배경만 변경</button>
+                        <label class="upload-label-btn">
+                            📁 내 사진 넣기
+                            <input type="file" accept="image/*" style="display:none;" onchange="uploadSingleCardBg(event, 2)">
+                        </label>
+                    </div>
+                    <button type="button" class="copy-btn" onclick="copyCanvasImage('cardCanvas2')">📋 소구점 2 이미지 복사</button>
                 </div>
+
+                <!-- 카드 3: 소구점 3 -->
                 <div class="img-card">
                     <canvas id="cardCanvas3" width="800" height="800"></canvas>
-                    <button onclick="copyCanvasImage('cardCanvas3')">📋 소구점 3 이미지 복사</button>
+                    <div class="card-edit-inputs">
+                        <span class="card-edit-label">✏️ 소구점 3 문구 직접 수정</span>
+                        <input type="text" id="cardBadge3" value="POINT 03" oninput="redrawSingleCard(3)" placeholder="상단 뱃지">
+                        <input type="text" id="cardTitle3" value="" oninput="redrawSingleCard(3)" placeholder="소구점 3 제목">
+                        <input type="text" id="cardSpec3" value="" oninput="redrawSingleCard(3)" placeholder="하단 핵심 스펙">
+                    </div>
+                    <div class="card-btn-row">
+                        <button type="button" onclick="changeSingleNatureBg(3)">🔄 이 배경만 변경</button>
+                        <label class="upload-label-btn">
+                            📁 내 사진 넣기
+                            <input type="file" accept="image/*" style="display:none;" onchange="uploadSingleCardBg(event, 3)">
+                        </label>
+                    </div>
+                    <button type="button" class="copy-btn" onclick="copyCanvasImage('cardCanvas3')">📋 소구점 3 이미지 복사</button>
                 </div>
             </div>
 
-            <span class="helper-badge">STEP 3. 네이버 블로그 원고 (광고문구 제거됨 · 하단 안내칸 적용)</span>
+            <span class="helper-badge">STEP 3. 네이버 블로그 원고 (빨간색 이미지 위치 표시 적용됨)</span>
             <div class="action-bar">
                 <button class="btn btn-primary" onclick="copyRichBlogContent()">
                     📋 네이버 블로그 서식 통째로 복사하기 (Ctrl+V)
@@ -354,26 +473,34 @@
     </div>
 
     <script>
-        const NATURE_PHOTO_POOL = [
-            "https://images.unsplash.com/photo-1501555088652-021faa106b9b?auto=format&fit=crop&w=900&q=80",
-            "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=900&q=80",
-            "https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?auto=format&fit=crop&w=900&q=80",
-            "https://images.unsplash.com/photo-1478131143081-80f7f84ca84d?auto=format&fit=crop&w=900&q=80",
-            "https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=900&q=80",
-            "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=900&q=80",
-            "https://images.unsplash.com/photo-1551632811-561732d1e306?auto=format&fit=crop&w=900&q=80",
-            "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=900&q=80",
-            "https://images.unsplash.com/photo-1510312305653-8ed496efae75?auto=format&fit=crop&w=900&q=80",
-            "https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=900&q=80",
-            "https://images.unsplash.com/photo-1520962880247-cfaf541c8724?auto=format&fit=crop&w=900&q=80",
-            "https://images.unsplash.com/photo-1454496522488-7a8e488e8606?auto=format&fit=crop&w=900&q=80",
-            "https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?auto=format&fit=crop&w=900&q=80",
-            "https://images.unsplash.com/photo-1533240332313-0db49b459ad6?auto=format&fit=crop&w=900&q=80",
-            "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=900&q=80",
-            "https://images.unsplash.com/photo-1465188162913-8fb5709d6d57?auto=format&fit=crop&w=900&q=80"
+        // 인물이 배제된 순수 대자연·산맥·원시림·능선·운해 고화질 풍경 24종
+        const PURE_NATURE_POOL = [
+            "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=900&q=80", // 웅장한 산맥
+            "https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=900&q=80", // 밤하늘 설산
+            "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=900&q=80", // 짙은 녹음 원시림
+            "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=900&q=80", // 새벽 안개 능선
+            "https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=900&q=80", // 대자연 계곡과 햇살
+            "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=900&q=80", // 요세미티 계곡과 침엽수
+            "https://images.unsplash.com/photo-1454496522488-7a8e488e8606?auto=format&fit=crop&w=900&q=80", // 고산 암릉 봉우리
+            "https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?auto=format&fit=crop&w=900&q=80", // 알파인 산악 지형
+            "https://images.unsplash.com/photo-1533240332313-0db49b459ad6?auto=format&fit=crop&w=900&q=80", // 고요한 숲속 트레일
+            "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?auto=format&fit=crop&w=900&q=80", // 소나무 숲과 안개
+            "https://images.unsplash.com/photo-1426604966848-d7adac402bff?auto=format&fit=crop&w=900&q=80", // 바위 절벽과 초록 숲
+            "https://images.unsplash.com/photo-1472214103451-9374bd1c798e?auto=format&fit=crop&w=900&q=80", // 고원 초원과 능선
+            "https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=900&q=80", // 일출 산능선 운해
+            "https://images.unsplash.com/photo-1439853949127-fa647821eba0?auto=format&fit=crop&w=900&q=80", // 맑은 산정 호수와 침엽수
+            "https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?auto=format&fit=crop&w=900&q=80", // 깊은 숲길 야생화
+            "https://images.unsplash.com/photo-1511497584788-876760111969?auto=format&fit=crop&w=900&q=80", // 피톤치드 침엽수림
+            "https://images.unsplash.com/photo-1493246507139-91e8fad9978e?auto=format&fit=crop&w=900&q=80", // 알프스 초원과 빙하산
+            "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=900&q=80", // 신비로운 이끼 숲
+            "https://images.unsplash.com/photo-1447752875215-b2761acb3c5d?auto=format&fit=crop&w=900&q=80", // 숲속 나무 다리와 계곡
+            "https://images.unsplash.com/photo-1418065460487-3e41a6c84dc5?auto=format&fit=crop&w=900&q=80", // 침엽수림 상공 뷰
+            "https://images.unsplash.com/photo-1475924156734-496f6cac6ec1?auto=format&fit=crop&w=900&q=80", // 새벽 해안과 산맥
+            "https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?auto=format&fit=crop&w=900&q=80", // 안개 자욱한 전나무 숲
+            "https://images.unsplash.com/photo-1483728642387-6c3bdd6c93e5?auto=format&fit=crop&w=900&q=80", // 구름 위 산봉우리
+            "https://images.unsplash.com/photo-1502082553048-f009c37129b9?auto=format&fit=crop&w=900&q=80"  // 거대한 숲속 나무와 빛
         ];
 
-        let uploadedImages = [];
         let activeBgImages = [null, null, null, null];
         let currentPostData = null;
 
@@ -383,6 +510,7 @@
 
             currentPostData = getInitialGuideData();
             await loadRandomNatureBackgrounds();
+            syncCardInputsFromData(currentPostData);
             renderAll();
         };
 
@@ -394,34 +522,8 @@
         function showStatus(msg, isError = false) {
             const box = document.getElementById('statusBox');
             box.style.display = 'block';
-            box.style.borderLeftColor = isError ? '#f87171' : '#98e6be';
+            box.style.borderLeftColor = isError ? '#ef4444' : '#98e6be';
             box.innerHTML = msg;
-        }
-
-        function handleImageUpload(event) {
-            const files = Array.from(event.target.files);
-            if (!files.length) return;
-
-            uploadedImages = [];
-            let loadedCount = 0;
-
-            files.forEach((file) => {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const img = new Image();
-                    img.onload = function() {
-                        uploadedImages.push(img);
-                        loadedCount++;
-                        if (loadedCount === files.length) {
-                            document.getElementById('bgThemeSelect').value = 'upload';
-                            refreshCardBackgrounds();
-                            showStatus(`✅ 제품 사진 ${uploadedImages.length}장이 적용되었습니다.`);
-                        }
-                    };
-                    img.src = e.target.result;
-                };
-                reader.readAsDataURL(file);
-            });
         }
 
         function loadImageAsync(url) {
@@ -435,51 +537,114 @@
         }
 
         async function loadRandomNatureBackgrounds() {
-            const shuffled = [...NATURE_PHOTO_POOL].sort(() => 0.5 - Math.random());
+            const shuffled = [...PURE_NATURE_POOL].sort(() => 0.5 - Math.random());
             const selectedUrls = shuffled.slice(0, 4);
             activeBgImages = await Promise.all(selectedUrls.map(url => loadImageAsync(url)));
         }
 
-        async function refreshCardBackgrounds() {
+        // 전체 카드 자연 배경 새로고침
+        async function refreshAllNatureBackgrounds() {
             const mode = document.getElementById('bgThemeSelect').value;
             if (mode === 'nature') {
-                showStatus("🌲 새로운 백패킹·자연 풍경 사진을 불러오는 중입니다...");
+                showStatus("🏔️ 4장의 카드 배경을 새로운 대자연 풍경으로 불러오는 중입니다...");
                 await loadRandomNatureBackgrounds();
-                showStatus("✅ 4장의 카드 배경이 새로운 자연 사진으로 교체되었습니다.");
-            } else if (mode === 'upload') {
-                if (uploadedImages.length === 0) {
-                    showStatus("⚠️ 첨부된 사진이 없어 기본 자연 배경을 유지합니다.", true);
-                } else {
-                    activeBgImages = [0, 1, 2, 3].map(i => uploadedImages[i % uploadedImages.length]);
-                }
-            } else {
+                showStatus("✅ 새로운 대자연 풍경 4장이 적용되었습니다.");
+            } else if (mode === 'minimal') {
                 activeBgImages = [null, null, null, null];
             }
-            if (currentPostData) renderCardsOnly(currentPostData);
+            for (let i = 0; i < 4; i++) redrawSingleCard(i);
         }
 
-        async function tryScrapeUrl(url) {
-            if (!url) return "";
-            try {
-                const res = await fetch(`https://r.jina.ai/${url}`, { headers: { 'Accept': 'text/plain' } });
-                if (!res.ok) return "";
-                const text = await res.text();
-                if (text.includes("보안 확인") || text.length < 80) return "";
-                return text.slice(0, 3500);
-            } catch (e) {
-                return "";
-            }
+        // 개별 카드 1장만 다른 자연 배경으로 랜덤 교체
+        async function changeSingleNatureBg(cardIndex) {
+            const randomUrl = PURE_NATURE_POOL[Math.floor(Math.random() * PURE_NATURE_POOL.length)];
+            const img = await loadImageAsync(randomUrl);
+            activeBgImages[cardIndex] = img;
+            redrawSingleCard(cardIndex);
+            showStatus(`✅ 카드 ${cardIndex === 0 ? '썸네일' : '소구점 ' + cardIndex}의 배경 사진이 교체되었습니다.`);
         }
 
+        // 개별 카드 1장에 내 사진 업로드
+        function uploadSingleCardBg(event, cardIndex) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = new Image();
+                img.onload = function() {
+                    activeBgImages[cardIndex] = img;
+                    redrawSingleCard(cardIndex);
+                    showStatus(`✅ 선택한 사진이 카드에 적용되었습니다.`);
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // 좌측 일괄 사진 업로드
+        function handleBulkImageUpload(event) {
+            const files = Array.from(event.target.files);
+            if (!files.length) return;
+            let loaded = [];
+            let count = 0;
+            files.forEach((f) => {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const img = new Image();
+                    img.onload = () => {
+                        loaded.push(img);
+                        count++;
+                        if (count === files.length) {
+                            activeBgImages = [0, 1, 2, 3].map(i => loaded[i % loaded.length]);
+                            for (let i = 0; i < 4; i++) redrawSingleCard(i);
+                            showStatus(`✅ 첨부하신 사진 ${loaded.length}장이 카드 배경에 적용되었습니다.`);
+                        }
+                    };
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(f);
+            });
+        }
+
+        /**
+         * 데이터 -> 각 카드 아래의 텍스트 수정 입력칸에 동기화
+         */
+        function syncCardInputsFromData(data) {
+            document.getElementById('cardBadge0').value = "GEAR REVIEW";
+            document.getElementById('cardTitle0').value = data.productName;
+            document.getElementById('cardSpec0').value = data.category || "FIELD SPEC ANALYSIS";
+
+            data.points.forEach((pt, idx) => {
+                const i = idx + 1;
+                document.getElementById(`cardBadge${i}`).value = pt.badge || `POINT 0${i}`;
+                document.getElementById(`cardTitle${i}`).value = pt.shortTitle || "";
+                document.getElementById(`cardSpec${i}`).value = pt.keySpec || "";
+            });
+        }
+
+        /**
+         * 개별 카드의 입력칸 값을 읽어서 해당 캔버스만 즉시 다시 그리기
+         */
+        function redrawSingleCard(index) {
+            const badge = document.getElementById(`cardBadge${index}`).value;
+            const title = document.getElementById(`cardTitle${index}`).value;
+            const spec = document.getElementById(`cardSpec${index}`).value;
+            const subHeader = index === 0 ? "JULYNIGHT ARCHIVE" : (currentPostData ? currentPostData.productName : "");
+
+            drawSpecCard(`cardCanvas${index}`, badge, title, spec, subHeader, activeBgImages[index]);
+        }
+
+        /**
+         * 핵심: 1단계(검색 및 초안 생성) -> 2단계(팩트체크 및 환각/어색한 약어 교차검증)
+         */
         async function generatePost() {
             const apiKey = document.getElementById('apiKey').value.trim();
             const modelName = document.getElementById('modelNameInput').value.trim() || "gemini-3.8-flash";
             const productName = document.getElementById('productNameInput').value.trim();
-            const productUrl = document.getElementById('productUrl').value.trim();
-            const manualInfo = document.getElementById('manualInfo').value.trim();
+            const toneAndPoints = document.getElementById('toneAndPointInput').value.trim();
 
             if (!productName) {
-                showStatus("⚠️ <strong>[정확한 브랜드 + 제품명]</strong> 칸에 제품 이름을 입력해 주세요!", true);
+                showStatus("⚠️ <strong>[정확한 브랜드 + 제품명]</strong>을 입력해 주세요!", true);
                 document.getElementById('productNameInput').focus();
                 return;
             }
@@ -490,80 +655,104 @@
                 return;
             }
 
-            showStatus(`🔍 1/3. <strong>'${productName}'</strong>의 실제 원단, 무게, 상세 스펙과 소구점을 검색하고 있습니다... (모델: ${modelName})`);
+            // STEP 1: 실시간 검색 및 초안 작성
+            showStatus(`🔍 <strong>[1/2단계: 스펙 리서치]</strong> '${productName}'의 실제 원단·무게·구조 데이터를 검색하여 초안을 작성 중입니다...`);
 
             if (document.getElementById('bgThemeSelect').value === 'nature') {
                 await loadRandomNatureBackgrounds();
             }
 
-            const scrapedText = await tryScrapeUrl(productUrl);
+            const step1Prompt = `
+당신은 아웃도어 기어 디자이너이자 백패커 블로거 '칠월밤(Julynight)'입니다.
+대상 제품명: "${productName}"
 
-            const prompt = `
-당신은 아웃도어 기어 디자이너이자 울트라라이트(UL) 백패커 블로거 '칠월밤(Julynight)'입니다.
-사용자가 요청한 제품명: "${productName}"
+[사용자 지정 어투 및 작성 방향성 - 최우선 준수]
+${toneAndPoints}
 
-[필수 수행 지침]
-1. "${productName}"의 **실제 제품 스펙(사용된 원단/소재명, 데니어, 방수/투습 사양, 정확한 무게 g, 용량 L, 구조적 특징 등)**을 정확히 파악하세요.
-2. 뻔한 문장을 쓰지 말고, 해당 제품만의 고유한 소재와 수치가 소구점과 본문에 명확히 드러나게 하세요.
-3. 문체는 반드시 담백하고 간결한 어투(~합니다, ~입니다)만 사용하며, 과장된 표현이나 이모지를 배제하세요.
+[초안 작성 지침]
+1. Google 검색을 통해 "${productName}"의 정확한 공식 스펙(소재, 데니어, 중량 g, 방수/투습 사양, 구조적 특징)을 찾아내세요.
+2. 확실하지 않은 수치나 맥락 없는 영문 약어(예: 'BRS 지향' 등 출처 불명의 조어)는 절대 지어내지 마세요.
 
-[추가 참고 정보]
-- 사용자 추가 메모: ${manualInfo || "없음"}
-- 링크 추출 텍스트: ${scrapedText || "없음"}
-
-반드시 아래 순수 JSON 형식으로만 응답하세요 (코드블록 없이 { 로 시작해서 } 로 끝낼 것):
+아래 JSON 구조로 응답하세요:
 {
   "productName": "${productName}",
-  "category": "제품의 실제 세부 카테고리 영문 대문자 (예: ULTRALIGHT SHELL JACKET)",
-  "title": "제품명과 핵심 기술/소재 키워드가 포함된 담백한 네이버 블로그 제목",
-  "intro": "해당 제품의 포지셔닝과 핵심 설계 특징을 요약하는 도입부 (3~4문장, ~합니다/입니다)",
+  "category": "제품 세부 카테고리 영문 대문자",
+  "title": "담백하고 검색 유입에 좋은 블로그 제목",
+  "intro": "도입부 (3~4문장)",
   "points": [
     {
       "badge": "POINT 01",
       "shortTitle": "소구점 1 핵심 요약 (16자 이내)",
-      "keySpec": "구체적인 소재명·원단·무게 등 실제 스펙 (24자 이내)",
-      "subHeading": "1. 첫 번째 핵심 소구점 상세 소제목",
-      "body": "해당 제품의 실제 소재/스펙에 기반한 분석적인 설명 (4~5문장, ~합니다/입니다)"
+      "keySpec": "구체적인 실제 소재/무게 스펙 (24자 이내)",
+      "subHeading": "1. 첫 번째 소구점 소제목",
+      "body": "소구점 1 상세 분석 (4~5문장)"
     },
     {
       "badge": "POINT 02",
       "shortTitle": "소구점 2 핵심 요약 (16자 이내)",
-      "keySpec": "구체적인 구조·패턴·기능 스펙 (24자 이내)",
-      "subHeading": "2. 두 번째 핵심 소구점 상세 소제목",
-      "body": "해당 제품의 구조적 디테일에 대한 분석 설명 (4~5문장, ~합니다/입니다)"
+      "keySpec": "구체적인 구조/기능 스펙 (24자 이내)",
+      "subHeading": "2. 두 번째 소구점 소제목",
+      "body": "소구점 2 상세 분석 (4~5문장)"
     },
     {
       "badge": "POINT 03",
       "shortTitle": "소구점 3 핵심 요약 (16자 이내)",
-      "keySpec": "수납성·필드 활용도 등 (24자 이내)",
-      "subHeading": "3. 세 번째 핵심 소구점 상세 소제목",
-      "body": "실제 필드 운용 시의 장점과 활용 환경 분석 설명 (4~5문장, ~합니다/입니다)"
+      "keySpec": "실사용 활용도/패킹/디테일 (24자 이내)",
+      "subHeading": "3. 세 번째 소구점 소제목",
+      "body": "소구점 3 상세 분석 (4~5문장)"
     }
   ],
-  "conclusion": "이 제품의 장단점 밸런스와 어떤 성향의 사용자에게 적합한지 정리하는 마무리 문단 (3~4문장)",
-  "hashtags": ["#제품명", "#브랜드명", "실제 검색량이 높은 제품 연관 해시태그 총 15개 배열"]
+  "conclusion": "총평 및 추천 대상 마무리 (3~4문장)",
+  "hashtags": ["#태그1", "#태그2", "연관 해시태그 15개 배열"]
 }
             `;
 
             try {
-                let response = await callGeminiApi(apiKey, modelName, prompt, true);
+                let step1Res = await callGeminiApi(apiKey, modelName, step1Prompt, true);
+                if (step1Res.error) {
+                    step1Res = await callGeminiApi(apiKey, modelName, step1Prompt, false);
+                }
+                if (step1Res.error) throw new Error(step1Res.error.message);
 
-                if (response.error) {
-                    console.warn("Search Grounding 폴백 실행:", response.error.message);
-                    response = await callGeminiApi(apiKey, modelName, prompt, false);
+                const draftText = step1Res.candidates[0].content.parts.map(p => p.text || "").join("");
+                const draftMatch = draftText.match(/\{[\s\S]*\}/);
+                if (!draftMatch) throw new Error("초안 JSON 생성 실패");
+
+                // STEP 2: 교차검증 (팩트체크 & 어색한 표현/환각 제거 & 문체 교정)
+                showStatus(`🛡️ <strong>[2/2단계: 팩트체크 및 교차검증]</strong> 작성된 초안에서 잘못된 스펙, 어색한 단어(예: 알 수 없는 약어), 문체 이탈 여부를 재검수하고 있습니다...`);
+
+                const step2VerificationPrompt = `
+당신은 아웃도어 전문 수석 에디터이자 팩트체커입니다.
+다음은 "${productName}"에 대해 작성된 블로그 원고 초안(JSON)입니다.
+
+[초안 데이터]
+${draftMatch[0]}
+
+[교차검증 및 교정 지침 - 엄격히 수행할 것]
+1. **팩트 및 용어 검증**: "${productName}"과 무관한 브랜드명(예: 뜬금없는 BRS 등), 한국 아웃도어 씬에서 쓰이지 않는 어색한 신조어나 번역투 표현, 검증되지 않은 허위 스펙이 있다면 즉시 삭제하거나 정확한 사실로 바로잡으세요.
+2. **사용자 요청 어투 완벽 반영**:
+${toneAndPoints}
+3. 문장이 자연스럽고 신뢰감 있게 읽히도록 매끄럽게 다듬어 최종 교정된 JSON만 출력하세요 (코드블록 없이 { 로 시작해서 } 로 끝낼 것).
+                `;
+
+                let step2Res = await callGeminiApi(apiKey, modelName, step2VerificationPrompt, true);
+                if (step2Res.error) {
+                    step2Res = await callGeminiApi(apiKey, modelName, step2VerificationPrompt, false);
                 }
 
-                if (response.error) throw new Error(response.error.message);
+                let finalJsonText = draftMatch[0];
+                if (!step2Res.error && step2Res.candidates) {
+                    const verifiedText = step2Res.candidates[0].content.parts.map(p => p.text || "").join("");
+                    const verifiedMatch = verifiedText.match(/\{[\s\S]*\}/);
+                    if (verifiedMatch) finalJsonText = verifiedMatch[0];
+                }
 
-                const rawText = response.candidates[0].content.parts.map(p => p.text || "").join("");
-                const jsonMatch = rawText.match(/\{[\s\S]*\}/);
-                if (!jsonMatch) throw new Error("응답 데이터 형식을 파싱하지 못했습니다.");
-
-                const parsed = JSON.parse(jsonMatch[0]);
+                const parsed = JSON.parse(finalJsonText);
                 currentPostData = parsed;
+                syncCardInputsFromData(parsed);
                 renderAll();
 
-                showStatus(`✅ <strong>'${productName}'</strong>의 실제 스펙 분석 원고와 백패킹 자연 배경 이미지 4장이 완성되었습니다!`);
+                showStatus(`✅ <strong>2단계 교차검증 완료!</strong> '${productName}'의 검증된 원고와 대자연 스펙 카드 4장이 완성되었습니다. 카드 아래 입력칸에서 문구를 직접 다듬으실 수도 있습니다.`);
             } catch (err) {
                 console.error(err);
                 showStatus(`❌ 생성 중 오류가 발생했습니다: ${err.message}`, true);
@@ -582,7 +771,6 @@
                 bodyPayload.generationConfig = { responseMimeType: "application/json" };
             }
 
-            // URL 파라미터와 헤더 양쪽 모두 지원하도록 구성 + gemini-3.8-flash 호출
             const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${cleanModel}:generateContent?key=${encodeURIComponent(apiKey)}`, {
                 method: 'POST',
                 headers: {
@@ -596,15 +784,8 @@
 
         function renderAll() {
             if (!currentPostData) return;
-            renderCardsOnly(currentPostData);
+            for (let i = 0; i < 4; i++) redrawSingleCard(i);
             renderBlogHtml(currentPostData);
-        }
-
-        function renderCardsOnly(data) {
-            drawSpecCard('cardCanvas0', 'GEAR REVIEW', data.productName, data.category || 'FIELD SPEC ANALYSIS', 'JULYNIGHT ARCHIVE', activeBgImages[0]);
-            data.points.forEach((pt, idx) => {
-                drawSpecCard(`cardCanvas${idx + 1}`, pt.badge, pt.shortTitle, pt.keySpec, data.productName, activeBgImages[idx + 1]);
-            });
         }
 
         function drawSpecCard(canvasId, badgeText, mainTitle, subSpec, productName, bgImg) {
@@ -623,10 +804,11 @@
                 const nh = bgImg.height * scale;
                 ctx.drawImage(bgImg, (W - nw) / 2, (H - nh) / 2, nw, nh);
 
+                // 자연 풍경이 잘 살아나면서도 글씨가 선명하도록 그라데이션 밸런스 조정
                 const overlay = ctx.createLinearGradient(0, 0, 0, H);
-                overlay.addColorStop(0, "rgba(18, 20, 22, 0.72)");
-                overlay.addColorStop(0.45, "rgba(18, 20, 22, 0.52)");
-                overlay.addColorStop(1, "rgba(14, 16, 18, 0.88)");
+                overlay.addColorStop(0, "rgba(15, 18, 20, 0.65)");
+                overlay.addColorStop(0.45, "rgba(15, 18, 20, 0.42)");
+                overlay.addColorStop(1, "rgba(12, 15, 17, 0.85)");
                 ctx.fillStyle = overlay;
                 ctx.fillRect(0, 0, W, H);
                 ctx.restore();
@@ -651,14 +833,14 @@
             ctx.fillStyle = "#cbd5e1";
             ctx.font = "600 24px -apple-system, BlinkMacSystemFont, sans-serif";
             ctx.textAlign = "left";
-            ctx.fillText(productName.slice(0, 28), 82, 188);
+            ctx.fillText((productName || "").slice(0, 28), 82, 188);
 
             ctx.save();
-            ctx.shadowColor = "rgba(0, 0, 0, 0.65)";
-            ctx.shadowBlur = 12;
+            ctx.shadowColor = "rgba(0, 0, 0, 0.75)";
+            ctx.shadowBlur = 14;
             ctx.fillStyle = "#ffffff";
             ctx.font = "800 50px -apple-system, BlinkMacSystemFont, sans-serif";
-            wrapText(ctx, mainTitle, 82, 280, W - 164, 66);
+            wrapText(ctx, mainTitle || "", 82, 280, W - 164, 66);
             ctx.restore();
 
             ctx.fillStyle = "#98e6be";
@@ -676,9 +858,9 @@
 
             ctx.fillStyle = "#f8fafc";
             ctx.font = "600 28px -apple-system, BlinkMacSystemFont, sans-serif";
-            ctx.fillText(subSpec.slice(0, 28), 112, 598);
+            ctx.fillText((subSpec || "").slice(0, 28), 112, 598);
 
-            ctx.fillStyle = "rgba(226, 232, 240, 0.75)";
+            ctx.fillStyle = "rgba(226, 232, 240, 0.8)";
             ctx.font = "600 19px -apple-system, BlinkMacSystemFont, sans-serif";
             ctx.textAlign = "right";
             ctx.fillText("JULYNIGHT GEAR ARCHIVE  |  @camper_julynight", W - 82, H - 74);
@@ -701,9 +883,15 @@
             ctx.fillText(line, x, y);
         }
 
+        /**
+         * 네이버 블로그 원고 렌더링
+         * - 이미지 삽입 위치 안내를 강렬한 빨간색(Red) 박스+굵은 텍스트로 처리하여 시인성 극대화
+         */
         function renderBlogHtml(data) {
             const hashtagString = data.hashtags.join(' ');
             window.currentHashtags = hashtagString;
+
+            const redGuideStyle = "color: #dc2626; background-color: #fef2f2; border: 2px dashed #ef4444; padding: 12px 16px; border-radius: 8px; font-size: 15px; font-weight: 800; text-align: center; margin: 22px 0;";
 
             const blogHtml = `
                 <div style="font-family: 'Nanum Gothic', 'Malgun Gothic', sans-serif; color: #222; line-height: 1.85; font-size: 16px;">
@@ -715,8 +903,8 @@
                         ${data.intro}
                     </p>
 
-                    <p style="color: #0f766e; font-size: 13px; font-weight: bold; margin-bottom: 28px;">
-                        [💡 여기에 상단 '썸네일 이미지'를 복사해 붙여넣으세요]
+                    <p style="${redGuideStyle}">
+                        🚨 [여기에 상단 '썸네일 이미지'를 복사해 붙여넣으세요 (붙여넣은 후 이 빨간 줄은 지워주세요)] 🚨
                     </p>
 
                     <hr style="border: 0; height: 1px; background: #e5e7eb; margin: 30px 0;">
@@ -735,8 +923,8 @@
                             <p style="margin-bottom: 16px; color: #333;">
                                 ${pt.body}
                             </p>
-                            <p style="color: #0f766e; font-size: 13px; font-weight: bold;">
-                                [💡 여기에 '소구점 ${i + 1} 이미지'를 복사해 붙여넣으세요]
+                            <p style="${redGuideStyle}">
+                                🚨 [여기에 '소구점 ${i + 1} 이미지'를 복사해 붙여넣으세요 (붙여넣은 후 이 빨간 줄은 지워주세요)] 🚨
                             </p>
                         </div>
                     `).join('')}
@@ -777,7 +965,7 @@
                         shortTitle: "134g 초경량 10데니어 원단",
                         keySpec: "10D 발리스틱 에어라이트 & 134g",
                         subHeading: "1. 10데니어 발리스틱 에어라이트 원단과 압도적인 경량성",
-                        body: "외피에는 극세사를 고밀도로 직조한 10데니어 발리스틱 에어라이트 나일론이 적용되어 있습니다. 평균 중량 134g으로 사과 반 개보다 가벼운 무게를 구현하여 배낭 내 기본 무게를 줄이는 데 큰 이점을 제공합니다."
+                        body: "외피에는 극세사를 고밀도로 직조한 10데니어 발리스틱 에어라이트 나일론이 적용되어 있습니다. 평균 중량 134g으로 배낭 내 기본 무게를 줄이는 데 큰 이점을 제공하며, 패킹 시 한 손에 들어오는 부피로 수납 효율이 좋은 편입니다."
                     },
                     {
                         badge: "POINT 02",
@@ -788,13 +976,13 @@
                     },
                     {
                         badge: "POINT 03",
-                        shortTitle: "피트집(Pit Zip)과 원단 절개 최소화",
+                        shortTitle: "피트집(Pit Zip)과 절개 최소화",
                         keySpec: "K-Mono Cut 패턴 및 벤틸레이션",
                         subHeading: "3. K-Mono Cut 패턴 설계와 빠른 열기 배출 구조",
-                        body: "독자적인 K-Mono Cut 패턴을 통해 봉제선 자체를 최소화함으로써 누수 가능성을 줄이고 내구성을 보완했습니다. 초경량 자켓에서는 생략되기 쉬운 겨드랑이 벤틸레이션이 적용되어 있습니다."
+                        body: "독자적인 K-Mono Cut 패턴을 통해 봉제선 자체를 최소화함으로써 누수 가능성을 줄이고 내구성을 보완했습니다. 초경량 자켓에서는 생략되기 쉬운 겨드랑이 벤틸레이션이 적용되어 있어 운행 중 체온 조절이 직관적입니다."
                     }
                 ],
-                conclusion: "경량성을 최우선으로 하는 쓰루하이킹, 트레일러닝, 3계절 백패킹에서 가장 높은 효율을 보여주는 레인쉘입니다. 좌측 입력창에 원하시는 제품명을 입력하시면 해당 제품의 실제 스펙으로 원고가 즉시 새로 작성됩니다.",
+                conclusion: "경량성을 최우선으로 하는 쓰루하이킹, 트레일러닝, 3계절 백패킹에서 높은 효율을 보여주는 레인쉘입니다. 좌측 입력창에 원하시는 제품명과 어투를 입력하시면 2단계 교차검증을 거쳐 원고가 새로 작성됩니다.",
                 hashtags: [
                     "#몬벨버사라이트", "#몬벨자켓", "#경량레인자켓", "#백패킹우의", "#UL백패킹",
                     "#고어텍스자켓", "#윈드스토퍼", "#트레일러닝자켓", "#하드쉘추천", "#몬벨",
@@ -810,7 +998,7 @@
                 const textBlob = new Blob([container.innerText], { type: 'text/plain' });
                 const item = new ClipboardItem({ 'text/html': htmlBlob, 'text/plain': textBlob });
                 await navigator.clipboard.write([item]);
-                showStatus("✅ <strong>원고가 복사되었습니다!</strong> 네이버 블로그에 붙여넣기(Ctrl+V) 하세요.");
+                showStatus("✅ <strong>원고가 복사되었습니다!</strong> 네이버 블로그에 붙여넣기(Ctrl+V) 후 빨간색 안내 줄 위치에 이미지를 넣어주세요.");
             } catch (err) {
                 const range = document.createRange();
                 range.selectNodeContents(container);
@@ -835,7 +1023,7 @@
                 try {
                     const item = new ClipboardItem({ 'image/png': blob });
                     await navigator.clipboard.write([item]);
-                    showStatus("✅ <strong>이미지가 복사되었습니다!</strong> 네이버 블로그에 붙여넣기(Ctrl+V) 하세요.");
+                    showStatus("✅ <strong>이미지가 복사되었습니다!</strong> 네이버 블로그의 빨간색 안내 문구 자리에 바로 붙여넣기(Ctrl+V) 하세요.");
                 } catch (err) {
                     const link = document.createElement('a');
                     link.download = `${canvasId}.png`;
