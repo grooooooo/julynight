@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Julynight bare foot sandal pattern</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        :root {
+            --bg-dark: #181a1b;
+            --card-bg: #242729;
+            --text-main: #f0f4f8;
+            --text-sub: #9aa5b1;
+            --mint-point: #98e6be;
+            --mint-hover: #7ad9a8;
+            --border-color: #383c40;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding: 24px 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 540px;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 28px 24px;
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 24px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 18px;
+        }
+
+        h1 {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--mint-point);
+            letter-spacing: -0.3px;
+            margin-bottom: 6px;
+        }
+
+        .subtitle {
+            font-size: 0.85rem;
+            color: var(--text-sub);
+        }
+
+        .preset-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-main);
+        }
+
+        select, input[type="number"] {
+            width: 100%;
+            background-color: var(--bg-dark);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 12px 14px;
+            border-radius: 8px;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        select:focus, input[type="number"]:focus {
+            border-color: var(--mint-point);
+        }
+
+        .input-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            margin-bottom: 18px;
+        }
+
+        .number-control {
+            display: flex;
+            align-items: center;
+            background-color: var(--bg-dark);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .number-control button {
+            background: none;
+            border: none;
+            color: var(--mint-point);
+            font-size: 1.2rem;
+            font-weight: bold;
+            width: 40px;
+            height: 44px;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+
+        .number-control button:hover {
+            background-color: rgba(152, 230, 190, 0.1);
+        }
+
+        .number-control input {
+            border: none;
+            text-align: center;
+            padding: 0;
+            height: 44px;
+            font-weight: 600;
+            -moz-appearance: textfield;
+        }
+
+        .number-control input::-webkit-outer-spin-button,
+        .number-control input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        .spec-box {
+            background-color: rgba(152, 230, 190, 0.07);
+            border-left: 3px solid var(--mint-point);
+            padding: 12px 14px;
+            border-radius: 6px;
+            font-size: 0.82rem;
+            color: var(--text-sub);
+            margin-bottom: 20px;
+        }
+
+        .spec-box strong {
+            color: var(--mint-point);
+        }
+
+        .preview-wrapper {
+            background-color: var(--bg-dark);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .preview-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.78rem;
+            color: var(--text-sub);
+            margin-bottom: 8px;
+        }
+
+        .badge {
+            background-color: rgba(152, 230, 190, 0.15);
+            color: var(--mint-point);
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 0.75rem;
+        }
+
+        canvas {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .btn-download {
+            width: 100%;
+            background-color: var(--mint-point);
+            color: #111415;
+            font-weight: 700;
+            font-size: 1rem;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.1s;
+            margin-bottom: 12px;
+        }
+
+        .btn-download:hover {
+            background-color: var(--mint-hover);
+        }
+
+        .btn-download:active {
+            transform: scale(0.99);
+        }
+
+        .guide-text {
+            font-size: 0.78rem;
+            color: var(--text-sub);
+            text-align: center;
+        }
+
+        footer {
+            margin-top: 24px;
+            text-align: center;
+            font-size: 0.82rem;
+            color: var(--text-sub);
+        }
+
+        footer a {
+            color: var(--mint-point);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>Julynight bare foot sandal pattern</h1>
+            <p class="subtitle">MYOG 맞춤형 베어풋 샌들 1:1 도안 생성기</p>
+        </header>
+
+        <div class="preset-group">
+            <label for="sizePreset">표준 사이즈 빠른 선택 (선택 시 아래 수치 자동 입력)</label>
+            <select id="sizePreset" onchange="applyPreset()">
+                <option value="">-- 직접 실측 수치 입력 --</option>
+                <optgroup label="Women's Sizes (여성 기준)">
+                    <option value="225,88">KR 225 (US 6 / EU 36-37)</option>
+                    <option value="230,90">KR 230 (US 6.5 / EU 37)</option>
+                    <option value="235,92">KR 235 (US 7 / EU 37-38)</option>
+                    <option value="241,94">KR 240 (US 8 / EU 38-39)</option>
+                    <option value="246,96">KR 245 (US 8.5 / EU 39)</option>
+                    <option value="251,98">KR 250 (US 9 / EU 39-40)</option>
+                </optgroup>
+                <optgroup label="Men's Sizes (남성 기준)">
+                    <option value="244,96">KR 245 (US 7 / EU 40)</option>
+                    <option value="254,99">KR 255 (US 8 / EU 41)</option>
+                    <option value="260,102">KR 260 (US 9 / EU 42)</option>
+                    <option value="267,104">KR 265 (US 9.5 / EU 42-43)</option>
+                    <option value="270,106">KR 270 (US 10 / EU 43)</option>
+                    <option value="273,108">KR 275 (US 10.5 / EU 43-44)</option>
+                    <option value="279,110">KR 280 (US 11 / EU 44)</option>
+                    <option value="286,112">KR 285 (US 12 / EU 45)</option>
+                </optgroup>
+            </select>
+        </div>
+
+        <div class="input-grid">
+            <div>
+                <label>실측 발 길이 (mm)</label>
+                <div class="number-control">
+                    <button type="button" onclick="adjustValue('footLength', -1)">-</button>
+                    <input type="number" id="footLength" value="260" min="200" max="310" oninput="updatePattern()">
+                    <button type="button" onclick="adjustValue('footLength', 1)">+</button>
+                </div>
+            </div>
+            <div>
+                <label>실측 발볼 너비 (mm)</label>
+                <div class="number-control">
+                    <button type="button" onclick="adjustValue('footWidth', -1)">-</button>
+                    <input type="number" id="footWidth" value="102" min="75" max="140" oninput="updatePattern()">
+                    <button type="button" onclick="adjustValue('footWidth', 1)">+</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="spec-box" id="specSummary"></div>
+
+        <div class="preview-wrapper">
+            <div class="preview-header">
+                <span>도안 쉐입 미리보기 (Left / Right)</span>
+                <span class="badge" id="pageModeBadge">A4 1장 양발 출력</span>
+            </div>
+            <canvas id="previewCanvas" width="460" height="320"></canvas>
+        </div>
+
+        <button class="btn-download" onclick="downloadPDF()">
+            1:1 실제 크기 PDF 도안 다운로드 (A4)
+        </button>
+        <p class="guide-text">
+            * 인쇄 시 프린터 설정에서 반드시 <strong>[실제 크기]</strong> 또는 <strong>[배율 100%]</strong>를 선택하세요.<br>
+            * 타공(구멍)은 출력 후 본인 발을 올리고 엄지·검지발가락 사이에 직접 표시하세요.
+        </p>
+    </div>
+
+    <footer>
+        Designed by <a href="https://instagram.com/camper_julynight" target="_blank">@camper_julynight</a> (칠월밤)
+    </footer>
+
+    <script>
+        /**
+         * 내측(엄지발가락~뒤꿈치) 라인이 과하게 좁아지지 않고 일자에 가깝게 뻗도록 보정한 곡선 함수
+         */
+        function getSandalCurves(L, W, isRight = true) {
+            const dir = isRight ? 1 : -1;
+
+            const mMax = W * 0.46;    // 엄지 쪽(내측) 최대 폭
+            const lMax = W * 0.54;    // 새끼 쪽(외측) 최대 폭
+            const archIn = W * 0.39;  // 내측 아치 폭 (과한 테이퍼링을 없애고 일자 라인 유지)
+            const archOut = W * 0.45; // 외측 허리 폭
+            const heelW = W * 0.34;   // 뒤꿈치 반폭
+
+            const start = { x: dir * (-W * 0.16), y: 0 };
+
+            const segments = [
+                // 1. 앞코 외곽 (엄지 끝 -> 새끼발가락 토박스 라운딩)
+                {
+                    cp1: { x: dir * (W * 0.14), y: 0 },
+                    cp2: { x: dir * (lMax * 0.94), y: L * 0.08 },
+                    end: { x: dir * lMax, y: L * 0.27 }
+                },
+                // 2. 바깥쪽 발볼 -> 센터부 외측 연결
+                {
+                    cp1: { x: dir * (lMax * 1.01), y: L * 0.40 },
+                    cp2: { x: dir * (archOut * 1.04), y: L * 0.54 },
+                    end: { x: dir * archOut, y: L * 0.67 }
+                },
+                // 3. 센터부 외측 -> 뒤꿈치 중앙 하단
+                {
+                    cp1: { x: dir * (heelW * 1.18), y: L * 0.81 },
+                    cp2: { x: dir * (heelW * 0.88), y: L },
+                    end: { x: 0, y: L }
+                },
+                // 4. 뒤꿈치 중앙 하단 -> 내측 뒤꿈치/아치 하단
+                {
+                    cp1: { x: dir * (-heelW * 0.88), y: L },
+                    cp2: { x: dir * (-heelW * 1.06), y: L * 0.86 },
+                    end: { x: dir * (-archIn * 0.96), y: L * 0.70 }
+                },
+                // 5. 내측 센터부 -> 엄지발가락 아래 볼 (거의 일자로 곧게 연결)
+                {
+                    cp1: { x: dir * (-archIn * 1.01), y: L * 0.54 },
+                    cp2: { x: dir * (-mMax * 0.99), y: L * 0.38 },
+                    end: { x: dir * (-mMax), y: L * 0.22 }
+                },
+                // 6. 안쪽 발볼 -> 엄지발가락 끝 복귀
+                {
+                    cp1: { x: dir * (-mMax * 1.01), y: L * 0.09 },
+                    cp2: { x: dir * (-W * 0.36), y: 0 },
+                    end: { x: start.x, y: start.y }
+                }
+            ];
+
+            return { start, segments };
+        }
+
+        function adjustValue(id, delta) {
+            const input = document.getElementById(id);
+            let val = parseInt(input.value || 0, 10) + delta;
+            val = Math.max(parseInt(input.min), Math.min(parseInt(input.max), val));
+            input.value = val;
+            document.getElementById('sizePreset').value = "";
+            updatePattern();
+        }
+
+        function applyPreset() {
+            const preset = document.getElementById('sizePreset').value;
+            if (!preset) return;
+            const [len, wid] = preset.split(',').map(Number);
+            document.getElementById('footLength').value = len;
+            document.getElementById('footWidth').value = wid;
+            updatePattern();
+        }
+
+        function updatePattern() {
+            const rawL = parseFloat(document.getElementById('footLength').value) || 260;
+            const rawW = parseFloat(document.getElementById('footWidth').value) || 100;
+
+            const patternL = rawL + 10;
+            const patternW = rawW + 6;
+
+            const isSinglePerPage = (patternL >= 285) || (patternW * 2 + 18 > 196);
+
+            const specBox = document.getElementById('specSummary');
+            specBox.innerHTML = `
+                • <strong>실측 입력값</strong> : 길이 ${rawL}mm / 발볼 ${rawW}mm<br>
+                • <strong>최종 도안 크기</strong> : <strong>길이 ${patternL}mm</strong> (앞·뒤 +5mm) / <strong>너비 ${patternW}mm</strong> (좌·우 +3mm)<br>
+                • <strong>출력 방식</strong> : ${isSinglePerPage ? 'A4 2장 분할 출력 (한 장에 한 짝씩 생성)' : 'A4 1장 양발 동시 출력 (왼발+오른발)'}
+            `;
+
+            const badge = document.getElementById('pageModeBadge');
+            badge.textContent = isSinglePerPage ? '285mm+ / 와이드: 1장 1짝 (총 2장)' : 'A4 1장 양발 동시 출력';
+
+            drawPreview(rawL, rawW, patternL, patternW);
+        }
+
+        function drawPreview(rawL, rawW, patternL, patternW) {
+            const canvas = document.getElementById('previewCanvas');
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const scale = Math.min(260 / patternL, 160 / patternW);
+
+            drawSingleFootCanvas(ctx, 135, 25, patternL, patternW, rawL, rawW, scale, false, "LEFT (왼발)");
+            drawSingleFootCanvas(ctx, 325, 25, patternL, patternW, rawL, rawW, scale, true, "RIGHT (오른발)");
+        }
+
+        function drawSingleFootCanvas(ctx, centerX, topY, pL, pW, rL, rW, scale, isRight, label) {
+            ctx.save();
+            ctx.translate(centerX, topY);
+
+            const outer = getSandalCurves(pL * scale, pW * scale, isRight);
+            ctx.beginPath();
+            ctx.moveTo(outer.start.x, outer.start.y);
+            outer.segments.forEach(seg => {
+                ctx.bezierCurveTo(seg.cp1.x, seg.cp1.y, seg.cp2.x, seg.cp2.y, seg.end.x, seg.end.y);
+            });
+            ctx.fillStyle = "rgba(152, 230, 190, 0.08)";
+            ctx.fill();
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = "#98e6be";
+            ctx.stroke();
+
+            const inner = getSandalCurves(rL * scale, rW * scale, isRight);
+            ctx.save();
+            ctx.translate(0, 5 * scale);
+            ctx.beginPath();
+            ctx.moveTo(inner.start.x, inner.start.y);
+            inner.segments.forEach(seg => {
+                ctx.bezierCurveTo(seg.cp1.x, seg.cp1.y, seg.cp2.x, seg.cp2.y, seg.end.x, seg.end.y);
+            });
+            ctx.setLineDash([4, 4]);
+            ctx.lineWidth = 1;
+            ctx.strokeStyle = "rgba(240, 244, 248, 0.45)";
+            ctx.stroke();
+            ctx.restore();
+
+            ctx.beginPath();
+            ctx.setLineDash([2, 3]);
+            ctx.moveTo(0, 0);
+            ctx.lineTo(0, pL * scale);
+            ctx.strokeStyle = "rgba(152, 230, 190, 0.25)";
+            ctx.stroke();
+
+            ctx.setLineDash([]);
+            ctx.fillStyle = "#9aa5b1";
+            ctx.font = "600 11px sans-serif";
+            ctx.textAlign = "center";
+            ctx.fillText(label, 0, pL * scale + 18);
+
+            ctx.restore();
+        }
+
+        function rotatePoint(x, y, cx, cy, angleRad) {
+            const cos = Math.cos(angleRad);
+            const sin = Math.sin(angleRad);
+            const dx = x - cx;
+            const dy = y - cy;
+            return {
+                x: cx + dx * cos - dy * sin,
+                y: cy + dx * sin + dy * cos
+            };
+        }
+
+        function drawFootOnPDF(doc, cx, topY, pL, pW, rL, rW, isRight, angleDeg = 0) {
+            const angleRad = (angleDeg * Math.PI) / 180;
+            const midY = topY + pL / 2;
+
+            const outer = getSandalCurves(pL, pW, isRight);
+            doc.setLineWidth(0.45);
+            doc.setDrawColor(20, 20, 20);
+            doc.setLineDashPattern([], 0);
+
+            let curr = rotatePoint(cx + outer.start.x, topY + outer.start.y, cx, midY, angleRad);
+            outer.segments.forEach(seg => {
+                const cp1 = rotatePoint(cx + seg.cp1.x, topY + seg.cp1.y, cx, midY, angleRad);
+                const cp2 = rotatePoint(cx + seg.cp2.x, topY + seg.cp2.y, cx, midY, angleRad);
+                const end = rotatePoint(cx + seg.end.x, topY + seg.end.y, cx, midY, angleRad);
+                doc.lines([[cp1.x - curr.x, cp1.y - curr.y, cp2.x - curr.x, cp2.y - curr.y, end.x - curr.x, end.y - curr.y]], curr.x, curr.y);
+                curr = end;
+            });
+
+            const inner = getSandalCurves(rL, rW, isRight);
+            const innerTopY = topY + 5;
+            doc.setLineWidth(0.25);
+            doc.setDrawColor(130, 130, 130);
+            doc.setLineDashPattern([2, 2], 0);
+
+            let currIn = rotatePoint(cx + inner.start.x, innerTopY + inner.start.y, cx, midY, angleRad);
+            inner.segments.forEach(seg => {
+                const cp1 = rotatePoint(cx + seg.cp1.x, innerTopY + seg.cp1.y, cx, midY, angleRad);
+                const cp2 = rotatePoint(cx + seg.cp2.x, innerTopY + seg.cp2.y, cx, midY, angleRad);
+                const end = rotatePoint(cx + seg.end.x, innerTopY + seg.end.y, cx, midY, angleRad);
+                doc.lines([[cp1.x - currIn.x, cp1.y - currIn.y, cp2.x - currIn.x, cp2.y - currIn.y, end.x - currIn.x, end.y - currIn.y]], currIn.x, currIn.y);
+                currIn = end;
+            });
+
+            doc.setLineDashPattern([1, 2], 0);
+            doc.setDrawColor(180, 180, 180);
+            const pTop = rotatePoint(cx, topY, cx, midY, angleRad);
+            const pBot = rotatePoint(cx, topY + pL, cx, midY, angleRad);
+            doc.line(pTop.x, pTop.y, pBot.x, pBot.y);
+
+            doc.setLineDashPattern([], 0);
+            doc.setFontSize(10);
+            doc.setTextColor(40, 40, 40);
+            const labelPos = rotatePoint(cx, topY + pL * 0.45, cx, midY, angleRad);
+            doc.text(isRight ? "RIGHT" : "LEFT", labelPos.x, labelPos.y, { align: "center" });
+            
+            doc.setFontSize(7.5);
+            doc.setTextColor(100, 100, 100);
+            doc.text(`Foot: ${rL}x${rW}mm`, labelPos.x, labelPos.y + 4.5, { align: "center" });
+            doc.text(`Cut: ${pL}x${pW}mm`, labelPos.x, labelPos.y + 8.5, { align: "center" });
+        }
+
+        function drawHeaderAndScaleBar(doc, rawL, rawW, patternL, patternW, pageInfo) {
+            doc.setFontSize(11);
+            doc.setTextColor(20, 20, 20);
+            doc.text("Julynight bare foot sandal pattern", 12, 12);
+
+            doc.setFontSize(8);
+            doc.setTextColor(80, 80, 80);
+            doc.text(`Input Foot: ${rawL}mm(L) x ${rawW}mm(W)  |  Pattern Cut Size: ${patternL}mm(L) x ${patternW}mm(W) (+5mm Front/Rear, +3mm Sides)`, 12, 17);
+            doc.text(`Page: ${pageInfo}  |  * Print at 100% Actual Size. Punch toe-post hole directly between your 1st & 2nd toes.`, 12, 21.5);
+
+            const scaleX = 148;
+            const scaleY = 12;
+            doc.setLineWidth(0.4);
+            doc.setDrawColor(0, 0, 0);
+            doc.setLineDashPattern([], 0);
+            doc.line(scaleX, scaleY, scaleX + 50, scaleY);
+            doc.line(scaleX, scaleY - 1.5, scaleX, scaleY + 1.5);
+            doc.line(scaleX + 25, scaleY - 1, scaleX + 25, scaleY + 1);
+            doc.line(scaleX + 50, scaleY - 1.5, scaleX + 50, scaleY + 1.5);
+            doc.setFontSize(7.5);
+            doc.text("50mm Scale Check (1:1)", scaleX + 25, scaleY + 4, { align: "center" });
+
+            doc.setFontSize(8);
+            doc.setTextColor(110, 110, 110);
+            doc.text("Instagram @camper_julynight  |  Solid Line: Cut Outsole  /  Dashed Line: Actual Foot Placement", 105, 291, { align: "center" });
+        }
+
+        function downloadPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF('p', 'mm', 'a4');
+
+            const rawL = parseFloat(document.getElementById('footLength').value) || 260;
+            const rawW = parseFloat(document.getElementById('footWidth').value) || 100;
+            const patternL = rawL + 10;
+            const patternW = rawW + 6;
+
+            const isSinglePerPage = (patternL >= 285) || (patternW * 2 + 12 > 196);
+
+            if (!isSinglePerPage) {
+                drawHeaderAndScaleBar(doc, rawL, rawW, patternL, patternW, "1/1 (Both Feet)");
+                const topY = Math.max(25, (297 - patternL) / 2 + 4);
+                const leftCenterX = 55;
+                const rightCenterX = 155;
+
+                drawFootOnPDF(doc, leftCenterX, topY, patternL, patternW, rawL, rawW, false, 0);
+                drawFootOnPDF(doc, rightCenterX, topY, patternL, patternW, rawL, rawW, true, 0);
+            } else {
+                const tiltAngle = patternL >= 285 ? 12 : 0;
+                const topY = (297 - patternL) / 2 + 2;
+
+                drawHeaderAndScaleBar(doc, rawL, rawW, patternL, patternW, "1/2 (LEFT FOOT)");
+                drawFootOnPDF(doc, 105, topY, patternL, patternW, rawL, rawW, false, tiltAngle);
+
+                doc.addPage();
+                drawHeaderAndScaleBar(doc, rawL, rawW, patternL, patternW, "2/2 (RIGHT FOOT)");
+                drawFootOnPDF(doc, 105, topY, patternL, patternW, rawL, rawW, true, -tiltAngle);
+            }
+
+            doc.save(`Julynight_Sandal_Pattern_${rawL}x${rawW}mm.pdf`);
+        }
+
+        window.onload = updatePattern;
+    </script>
+</body>
+</html>
