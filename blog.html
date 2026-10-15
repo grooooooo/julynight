@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Julynight BrandConnect Post Studio V2.2</title>
+    <title>Julynight BrandConnect Post Studio V2.3</title>
     <style>
         :root {
             --bg-dark: #141617;
@@ -69,13 +69,13 @@
             color: var(--text-sub);
         }
 
-        .form-group { margin-bottom: 16px; }
+        .form-group { margin-bottom: 15px; }
 
         label {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 0.84rem;
+            font-size: 0.83rem;
             font-weight: 600;
             margin-bottom: 6px;
             color: var(--text-main);
@@ -92,16 +92,16 @@
             background-color: var(--bg-dark);
             border: 1px solid var(--border);
             color: var(--text-main);
-            padding: 11px 13px;
+            padding: 10px 13px;
             border-radius: 8px;
-            font-size: 0.92rem;
+            font-size: 0.9rem;
             outline: none;
             transition: border-color 0.2s;
         }
 
         input:focus, select:focus, textarea:focus { border-color: var(--mint); }
 
-        textarea { resize: vertical; min-height: 80px; font-family: inherit; }
+        textarea { resize: vertical; min-height: 75px; font-family: inherit; }
 
         .btn {
             width: 100%;
@@ -240,11 +240,11 @@
 
     <header>
         <div>
-            <h1>Julynight BrandConnect Post Studio V2.2</h1>
+            <h1>Julynight BrandConnect Post Studio V2.3</h1>
             <p>실시간 제품 스펙 리서치 · 백패킹 자연 감성 카드 이미지 & 블로그 원고 생성기 (@camper_julynight)</p>
         </div>
-        <div style="font-size:0.8rem; color:var(--text-sub);">
-            최신 API 모델 반영 완료 | 실시간 웹 검색 반영
+        <div style="font-size:0.8rem; color:var(--mint); font-weight:700;">
+            ✅ V2.3 적용됨 (gemini-3.8-flash 탑재)
         </div>
     </header>
 
@@ -259,6 +259,13 @@
                     <a href="https://aistudio.google.com/app/apikey" target="_blank">무료 키 발급받기 ↗</a>
                 </label>
                 <input type="password" id="apiKey" placeholder="AQ.Ab8... 키를 붙여넣으세요 (자동 저장됨)" oninput="saveApiKey()">
+            </div>
+
+            <div class="form-group">
+                <label>
+                    <span>🤖 AI 모델명 (구글 권장 최신 모델 자동 세팅)</span>
+                </label>
+                <input type="text" id="modelNameInput" value="gemini-3.8-flash">
             </div>
 
             <div class="form-group">
@@ -466,6 +473,7 @@
 
         async function generatePost() {
             const apiKey = document.getElementById('apiKey').value.trim();
+            const modelName = document.getElementById('modelNameInput').value.trim() || "gemini-3.8-flash";
             const productName = document.getElementById('productNameInput').value.trim();
             const productUrl = document.getElementById('productUrl').value.trim();
             const manualInfo = document.getElementById('manualInfo').value.trim();
@@ -482,7 +490,7 @@
                 return;
             }
 
-            showStatus(`🔍 1/3. <strong>'${productName}'</strong>의 실제 원단, 무게, 상세 스펙과 소구점을 검색하고 있습니다...`);
+            showStatus(`🔍 1/3. <strong>'${productName}'</strong>의 실제 원단, 무게, 상세 스펙과 소구점을 검색하고 있습니다... (모델: ${modelName})`);
 
             if (document.getElementById('bgThemeSelect').value === 'nature') {
                 await loadRandomNatureBackgrounds();
@@ -538,10 +546,11 @@
             `;
 
             try {
-                let response = await callGeminiApi(apiKey, prompt, true);
+                let response = await callGeminiApi(apiKey, modelName, prompt, true);
 
                 if (response.error) {
-                    response = await callGeminiApi(apiKey, prompt, false);
+                    console.warn("Search Grounding 폴백 실행:", response.error.message);
+                    response = await callGeminiApi(apiKey, modelName, prompt, false);
                 }
 
                 if (response.error) throw new Error(response.error.message);
@@ -561,7 +570,8 @@
             }
         }
 
-        async function callGeminiApi(apiKey, promptText, useGoogleSearch = true) {
+        async function callGeminiApi(apiKey, modelName, promptText, useGoogleSearch = true) {
+            const cleanModel = modelName.replace(/^models\//, '');
             const bodyPayload = {
                 contents: [{ parts: [{ text: promptText }] }]
             };
@@ -572,8 +582,8 @@
                 bodyPayload.generationConfig = { responseMimeType: "application/json" };
             }
 
-            // 최신 안정 버전인 gemini-2.5 모델 엔드포인트 적용
-            const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5:generateContent`, {
+            // URL 파라미터와 헤더 양쪽 모두 지원하도록 구성 + gemini-3.8-flash 호출
+            const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${cleanModel}:generateContent?key=${encodeURIComponent(apiKey)}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
