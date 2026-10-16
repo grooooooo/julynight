@@ -6,7 +6,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#121415">
-    <title>Julynight Creator OS V2</title>
+    <title>Julynight Creator OS V3.0</title>
     <style>
         :root {
             --bg-dark: #121415;
@@ -16,6 +16,7 @@
             --text-sub: #8b98a9;
             --mint: #98e6be;
             --mint-dark: #6bc497;
+            --purple: #c084fc;
             --border: #2f3438;
         }
 
@@ -40,12 +41,7 @@
             border-bottom: 1px solid var(--border);
         }
 
-        .brand-title {
-            font-size: 1.15rem;
-            font-weight: 800;
-            color: var(--mint);
-            letter-spacing: -0.3px;
-        }
+        .brand-title { font-size: 1.15rem; font-weight: 800; color: var(--mint); }
 
         .top-btn {
             background: var(--panel-bg);
@@ -71,21 +67,30 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 12px;
+            flex-wrap: wrap;
+            gap: 6px;
         }
 
-        .section-title {
-            font-size: 0.96rem;
-            font-weight: 700;
-            color: var(--mint);
-        }
+        .section-title { font-size: 0.96rem; font-weight: 700; color: var(--mint); }
 
         .add-btn {
             background: rgba(152, 230, 190, 0.12);
             border: 1px solid rgba(152, 230, 190, 0.35);
             color: var(--mint);
-            padding: 4px 10px;
+            padding: 5px 10px;
             border-radius: 6px;
-            font-size: 0.76rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .pro-mini-btn {
+            background: rgba(192, 132, 252, 0.14);
+            border: 1px solid rgba(192, 132, 252, 0.4);
+            color: var(--purple);
+            padding: 5px 10px;
+            border-radius: 6px;
+            font-size: 0.75rem;
             font-weight: 700;
             cursor: pointer;
         }
@@ -104,12 +109,7 @@
 
         input:focus, textarea:focus, select:focus { border-color: var(--mint); }
 
-        /* 1. 멀티 D-Day 리스트 */
-        .dday-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
+        .dday-grid { display: flex; flex-direction: column; gap: 8px; }
 
         .dday-row {
             display: grid;
@@ -122,17 +122,8 @@
             border-radius: 10px;
         }
 
-        .dday-row input {
-            border: none;
-            background: transparent;
-            padding: 4px;
-            font-size: 0.86rem;
-        }
-
-        .dday-row input[type="date"] {
-            color: var(--text-sub);
-            font-size: 0.8rem;
-        }
+        .dday-row input { border: none; background: transparent; padding: 4px; font-size: 0.86rem; }
+        .dday-row input[type="date"] { color: var(--text-sub); font-size: 0.8rem; }
 
         .dday-badge {
             background-color: rgba(152, 230, 190, 0.15);
@@ -144,123 +135,51 @@
             text-align: center;
         }
 
-        .del-btn {
-            background: none;
-            border: none;
-            color: var(--text-sub);
-            font-size: 0.95rem;
-            cursor: pointer;
-            text-align: center;
-        }
+        .del-btn { background: none; border: none; color: var(--text-sub); font-size: 0.95rem; cursor: pointer; }
 
-        /* 2. 아웃도어 뉴스 브리핑 */
-        .news-list {
-            display: flex;
-            flex-direction: column;
+        .news-list { display: flex; flex-direction: column; gap: 8px; }
+        .news-item { background: var(--bg-dark); border: 1px solid var(--border); border-radius: 10px; padding: 12px; }
+        .news-tag { display: inline-block; font-size: 0.7rem; font-weight: 700; color: var(--mint); background: rgba(152, 230, 190, 0.12); padding: 2px 7px; border-radius: 4px; margin-bottom: 6px; }
+        .news-title { font-size: 0.88rem; font-weight: 700; margin-bottom: 4px; }
+        .news-summary { font-size: 0.8rem; color: var(--text-sub); margin-bottom: 8px; }
+        .news-use-btn { background: var(--panel-bg); border: 1px solid var(--border); color: var(--text-main); font-size: 0.74rem; padding: 5px 10px; border-radius: 6px; cursor: pointer; }
+
+        .voice-bar { display: flex; gap: 6px; margin-bottom: 8px; }
+        .mic-btn { flex: 1; background: rgba(248, 113, 113, 0.12); color: #fca5a5; border: 1px solid rgba(248, 113, 113, 0.35); padding: 9px; border-radius: 8px; font-weight: 700; font-size: 0.82rem; cursor: pointer; }
+        .mic-btn.recording { background: #ef4444; color: #fff; }
+
+        .dual-action-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
             gap: 8px;
-        }
-
-        .news-item {
-            background: var(--bg-dark);
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            padding: 12px;
-        }
-
-        .news-tag {
-            display: inline-block;
-            font-size: 0.7rem;
-            font-weight: 700;
-            color: var(--mint);
-            background: rgba(152, 230, 190, 0.12);
-            padding: 2px 7px;
-            border-radius: 4px;
-            margin-bottom: 6px;
-        }
-
-        .news-title {
-            font-size: 0.88rem;
-            font-weight: 700;
-            margin-bottom: 4px;
-            color: var(--text-main);
-        }
-
-        .news-summary {
-            font-size: 0.8rem;
-            color: var(--text-sub);
-            margin-bottom: 8px;
-        }
-
-        .news-use-btn {
-            background: var(--panel-bg);
-            border: 1px solid var(--border);
-            color: var(--text-main);
-            font-size: 0.74rem;
-            padding: 5px 10px;
-            border-radius: 6px;
-            cursor: pointer;
-        }
-
-        /* 3. 음성/메모 3채널 변환기 */
-        .voice-bar {
-            display: flex;
-            gap: 6px;
-            margin-bottom: 8px;
-        }
-
-        .mic-btn {
-            flex: 1;
-            background: rgba(248, 113, 113, 0.12);
-            color: #fca5a5;
-            border: 1px solid rgba(248, 113, 113, 0.35);
-            padding: 9px;
-            border-radius: 8px;
-            font-weight: 700;
-            font-size: 0.82rem;
-            cursor: pointer;
-        }
-
-        .mic-btn.recording {
-            background: #ef4444;
-            color: #fff;
-        }
-
-        .btn-primary {
-            width: 100%;
-            background: var(--mint);
-            color: #111415;
-            border: none;
-            padding: 12px;
-            border-radius: 9px;
-            font-weight: 800;
-            font-size: 0.9rem;
-            cursor: pointer;
             margin-top: 8px;
         }
 
-        .output-tabs {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 6px;
-            margin: 12px 0 8px 0;
-        }
-
-        .tab-btn {
-            background: var(--bg-dark);
-            border: 1px solid var(--border);
-            color: var(--text-sub);
-            padding: 8px 4px;
-            border-radius: 7px;
-            font-size: 0.78rem;
-            font-weight: 700;
+        .btn-primary {
+            background: var(--mint);
+            color: #111415;
+            border: none;
+            padding: 11px;
+            border-radius: 9px;
+            font-weight: 800;
+            font-size: 0.84rem;
             cursor: pointer;
         }
 
-        .tab-btn.active {
-            border-color: var(--mint);
-            color: var(--mint);
-            background: rgba(152, 230, 190, 0.12);
+        .btn-pro-action {
+            background: rgba(192, 132, 252, 0.15);
+            color: var(--purple);
+            border: 1px solid rgba(192, 132, 252, 0.45);
+            padding: 11px;
+            border-radius: 9px;
+            font-weight: 800;
+            font-size: 0.84rem;
+            cursor: pointer;
         }
+
+        .output-tabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin: 12px 0 8px 0; }
+        .tab-btn { background: var(--bg-dark); border: 1px solid var(--border); color: var(--text-sub); padding: 8px 4px; border-radius: 7px; font-size: 0.78rem; font-weight: 700; cursor: pointer; }
+        .tab-btn.active { border-color: var(--mint); color: var(--mint); background: rgba(152, 230, 190, 0.12); }
 
         .output-box {
             background: var(--bg-dark);
@@ -269,83 +188,27 @@
             padding: 12px;
             font-size: 0.85rem;
             white-space: pre-wrap;
-            min-height: 120px;
-            max-height: 300px;
+            min-height: 110px;
+            max-height: 280px;
             overflow-y: auto;
             margin-bottom: 8px;
         }
 
-        /* 4. 스프린트 보드 */
         .cat-block { margin-bottom: 14px; }
         .cat-block:last-child { margin-bottom: 0; }
+        .cat-header { display: flex; justify-content: space-between; align-items: center; font-size: 0.82rem; font-weight: 700; color: var(--text-sub); margin-bottom: 6px; }
 
-        .cat-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 0.82rem;
-            font-weight: 700;
-            color: var(--text-sub);
-            margin-bottom: 6px;
-        }
-
-        .task-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background: var(--bg-dark);
-            border: 1px solid var(--border);
-            padding: 8px 10px;
-            border-radius: 8px;
-            margin-bottom: 6px;
-        }
-
+        .task-item { display: flex; align-items: center; gap: 8px; background: var(--bg-dark); border: 1px solid var(--border); padding: 8px 10px; border-radius: 8px; margin-bottom: 6px; }
         .task-item.done { opacity: 0.45; }
         .task-item.done input[type="text"] { text-decoration: line-through; }
+        .task-checkbox { width: 18px; height: 18px; accent-color: var(--mint); cursor: pointer; }
+        .task-input { border: none !important; background: transparent !important; padding: 2px !important; }
 
-        .task-checkbox {
-            width: 18px;
-            height: 18px;
-            accent-color: var(--mint);
-            cursor: pointer;
-        }
+        .dm-row { display: grid; grid-template-columns: 1fr 1.2fr 82px 26px; gap: 6px; margin-bottom: 6px; align-items: center; }
+        .dm-row input, .dm-row select { padding: 7px 8px; font-size: 0.8rem; }
 
-        .task-input {
-            border: none !important;
-            background: transparent !important;
-            padding: 2px !important;
-        }
-
-        /* 5. DM/직거래 노트 */
-        .dm-row {
-            display: grid;
-            grid-template-columns: 1fr 1.2fr 82px 26px;
-            gap: 6px;
-            margin-bottom: 6px;
-            align-items: center;
-        }
-
-        .dm-row input, .dm-row select {
-            padding: 7px 8px;
-            font-size: 0.8rem;
-        }
-
-        /* 모달 (설정 & MYOG 계산기) */
-        .modal-panel {
-            display: none;
-            background: var(--card-bg);
-            border: 1px solid var(--mint);
-            border-radius: 14px;
-            padding: 16px;
-            margin-bottom: 16px;
-        }
-
-        .calc-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-top: 8px;
-        }
+        .modal-panel { display: none; background: var(--card-bg); border: 1px solid var(--mint); border-radius: 14px; padding: 16px; margin-bottom: 16px; }
+        .calc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 8px; }
 
         .status-toast {
             position: fixed;
@@ -364,7 +227,6 @@
             white-space: nowrap;
         }
 
-        /* 하단 고정 유틸리티 & 외부 툴 바 */
         .bottom-nav {
             position: fixed;
             bottom: 0;
@@ -381,20 +243,7 @@
             margin: 0 auto;
         }
 
-        .nav-item {
-            background: none;
-            border: none;
-            color: var(--text-sub);
-            font-size: 0.7rem;
-            font-weight: 600;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 3px;
-            cursor: pointer;
-            text-decoration: none;
-        }
-
+        .nav-item { background: none; border: none; color: var(--text-sub); font-size: 0.7rem; font-weight: 600; display: flex; flex-direction: column; align-items: center; gap: 3px; cursor: pointer; text-decoration: none; }
         .nav-item:hover, .nav-item.highlight { color: var(--mint); }
         .nav-icon { font-size: 1.1rem; }
     </style>
@@ -402,27 +251,31 @@
 <body>
 
     <header>
-        <div class="brand-title">JULYNIGHT OS</div>
+        <div class="brand-title">JULYNIGHT OS V3.0</div>
         <button class="top-btn" onclick="toggleModal('settingsModal')">⚙️ API 설정</button>
     </header>
 
-    <!-- [모달 1] API 설정 -->
+    <!-- API 설정 모달 -->
     <div id="settingsModal" class="modal-panel">
         <div class="section-header">
-            <span class="section-title">⚙️ API 및 모델 설정</span>
+            <span class="section-title">⚙️ API 키 (다중 키 로테이션 지원)</span>
             <button class="del-btn" onclick="toggleModal('settingsModal')">✕</button>
         </div>
         <div style="margin-bottom:10px;">
-            <label style="font-size:0.75rem; color:var(--text-sub);">🔑 Gemini API Key</label>
-            <input type="password" id="apiKey" placeholder="AQ.Ab8... 키 입력" oninput="saveConfig()">
+            <label style="font-size:0.75rem; color:var(--text-sub);">🔑 Gemini API Key (여러 개면 쉼표 , 로 구분)</label>
+            <input type="password" id="apiKey" placeholder="AQ.Ab8..." oninput="saveConfig()">
         </div>
         <div>
-            <label style="font-size:0.75rem; color:var(--text-sub);">🤖 AI 모델명</label>
-            <input type="text" id="modelName" value="gemini-3.8-flash" oninput="saveConfig()">
+            <label style="font-size:0.75rem; color:var(--text-sub);">🤖 기본 모델 (lite 모델이 무료 한도가 가장 넉넉합니다)</label>
+            <select id="modelName" onchange="saveConfig()">
+                <option value="gemini-3.8-flash-lite">gemini-3.8-flash-lite (추천 · 한도 넉넉)</option>
+                <option value="gemini-3.8-flash">gemini-3.8-flash</option>
+                <option value="gemini-2.0-flash-lite">gemini-2.0-flash-lite</option>
+            </select>
         </div>
     </div>
 
-    <!-- [모달 2] MYOG 원단·에너지젤 퀵 계산기 (하단바 연동) -->
+    <!-- MYOG 원단 계산기 모달 -->
     <div id="calcModal" class="modal-panel">
         <div class="section-header">
             <span class="section-title">📐 MYOG 원단 & 기어 스펙 퀵 변환기</span>
@@ -461,11 +314,14 @@
     <div class="card">
         <div class="section-header">
             <span class="section-title">📰 오늘의 아웃도어 · 기어 트렌드</span>
-            <button class="add-btn" onclick="fetchOutdoorNews()">🔄 실시간 뉴스 불러오기</button>
+            <div style="display:flex; gap:6px;">
+                <button class="add-btn" onclick="fetchOutdoorNews()">⚡ API 절약 브리핑</button>
+                <button class="pro-mini-btn" onclick="copyNewsProPrompt()">💎 프로 질문 복사</button>
+            </div>
         </div>
         <div id="newsContainer" class="news-list">
-            <div style="font-size:0.8rem; color:var(--text-sub); padding:6px 0;">
-                우측 상단 <strong>[🔄 실시간 뉴스 불러오기]</strong>를 누르면 오늘자 UL 기어·신소재·트레일 주요 이슈 3가지를 요약해 옵니다.
+            <div style="font-size:0.8rem; color:var(--text-sub); padding:4px 0;">
+                <strong>[⚡ API 절약 브리핑]</strong>을 누르거나, 한도 초과 시 <strong>[💎 프로 질문 복사]</strong>를 눌러 제미나이 채팅창에 물어보세요.
             </div>
         </div>
     </div>
@@ -491,9 +347,14 @@
 
         <textarea id="rawVoiceText" rows="3" placeholder="떠오른 생각이나 설명할 내용을 편하게 말하거나 적어주세요."></textarea>
 
-        <button class="btn-primary" onclick="convertVoiceToContents()">
-            ⚡ 유튜브 · 인스타 · 블로그 변환
-        </button>
+        <div class="dual-action-row">
+            <button class="btn-primary" onclick="convertVoiceToContents()">
+                ⚡ API 원클릭 변환
+            </button>
+            <button class="btn-pro-action" onclick="copyVoiceProPrompt()">
+                💎 제미나이 프로용 복사
+            </button>
+        </div>
 
         <div class="output-tabs">
             <button class="tab-btn active" id="tabBtn_yt" onclick="switchOutputTab('yt')">🎬 유튜브 대본</button>
@@ -505,7 +366,7 @@
         <button class="top-btn" style="width:100%; padding:9px;" onclick="copyCurrentOutput()">📋 현재 탭 내용 복사</button>
     </div>
 
-    <!-- 4. 스프린트 보드 (순수 목차만 유지) -->
+    <!-- 4. 스프린트 보드 -->
     <div class="card">
         <div class="section-header">
             <span class="section-title">🎯 스프린트 체크리스트</span>
@@ -548,7 +409,6 @@
 
     <div class="status-toast" id="toastMsg">알림</div>
 
-    <!-- 하단 고정 바: 불필요한 내부 스크롤 제거 -> 유틸리티 + 외부 페이지 이동으로 구성 -->
     <nav class="bottom-nav">
         <button class="nav-item" onclick="fetchOutdoorNews()">
             <span class="nav-icon">📰</span>
@@ -573,23 +433,15 @@
     </nav>
 
     <script>
-        // 군더더기 예시를 모두 비운 깔끔한 초기 구조
         const DEFAULT_STATE = {
-            ddays: [
-                { title: "하이커스 나이트", date: "2026-10-26" }
-            ],
-            tasks: {
-                myog: [],
-                content: [],
-                field: []
-            },
+            ddays: [{ title: "하이커스 나이트", date: "2026-10-26" }],
+            tasks: { myog: [], content: [], field: [] },
             bespoke: [],
             news: [],
             generatedOutputs: { yt: "", ig: "", blog: "" }
         };
 
         let appState = JSON.parse(localStorage.getItem('julynight_os_v2')) || DEFAULT_STATE;
-        // 이전 버전 호환 보정
         if (!appState.ddays) appState.ddays = [{ title: "하이커스 나이트", date: "2026-10-26" }];
         if (!appState.news) appState.news = [];
 
@@ -599,7 +451,8 @@
 
         window.onload = () => {
             document.getElementById('apiKey').value = localStorage.getItem('julynight_gemini_key') || '';
-            document.getElementById('modelName').value = localStorage.getItem('julynight_gemini_model') || 'gemini-3.8-flash';
+            const savedModel = localStorage.getItem('julynight_gemini_model') || 'gemini-3.8-flash-lite';
+            document.getElementById('modelName').value = savedModel;
 
             renderDdays();
             renderNews();
@@ -608,20 +461,17 @@
             switchOutputTab('yt');
         };
 
-        function saveState() {
-            localStorage.setItem('julynight_os_v2', JSON.stringify(appState));
-        }
-
+        function saveState() { localStorage.setItem('julynight_os_v2', JSON.stringify(appState)); }
         function saveConfig() {
             localStorage.setItem('julynight_gemini_key', document.getElementById('apiKey').value.trim());
-            localStorage.setItem('julynight_gemini_model', document.getElementById('modelName').value.trim());
+            localStorage.setItem('julynight_gemini_model', document.getElementById('modelName').value);
         }
 
         function showToast(msg) {
             const t = document.getElementById('toastMsg');
             t.textContent = msg;
             t.style.display = 'block';
-            setTimeout(() => { t.style.display = 'none'; }, 2400);
+            setTimeout(() => { t.style.display = 'none'; }, 2600);
         }
 
         function toggleModal(id) {
@@ -629,7 +479,36 @@
             el.style.display = (el.style.display === 'block') ? 'none' : 'block';
         }
 
-        /* 1. 멀티 D-Day 관리 */
+        /* 다중 키 로테이션 API 호출기 (유료 검색 도구 제거하여 쿼터 보호) */
+        async function callGeminiWithRotation(promptText) {
+            const rawKeys = document.getElementById('apiKey').value.trim();
+            const modelName = document.getElementById('modelName').value || 'gemini-3.8-flash-lite';
+            if (!rawKeys) throw new Error("API 키가 입력되지 않았습니다.");
+
+            const keys = rawKeys.split(',').map(k => k.trim()).filter(Boolean);
+            let lastErr = "";
+
+            for (let k of keys) {
+                try {
+                    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${encodeURIComponent(k)}`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json', 'x-goog-api-key': k },
+                        body: JSON.stringify({
+                            contents: [{ parts: [{ text: promptText }] }],
+                            generationConfig: { responseMimeType: "application/json" }
+                        })
+                    });
+                    const data = await res.json();
+                    if (data.error) throw new Error(data.error.message);
+                    return data;
+                } catch (e) {
+                    lastErr = e.message;
+                }
+            }
+            throw new Error(lastErr);
+        }
+
+        /* 1. 멀티 D-Day */
         function calcDdayString(dateStr) {
             if (!dateStr) return "D-?";
             const today = new Date();
@@ -657,92 +536,65 @@
         }
 
         function addDdayItem() {
-            const todayStr = new Date().toISOString().split('T')[0];
-            appState.ddays.push({ title: "", date: todayStr });
+            appState.ddays.push({ title: "", date: new Date().toISOString().split('T')[0] });
             saveState();
             renderDdays();
         }
-
         function updateDdayItem(idx, key, val) {
             appState.ddays[idx][key] = val;
             saveState();
-            if (key === 'date') {
-                document.getElementById(`ddayBadge_${idx}`).textContent = calcDdayString(val);
-            }
+            if (key === 'date') document.getElementById(`ddayBadge_${idx}`).textContent = calcDdayString(val);
         }
-
         function deleteDdayItem(idx) {
             appState.ddays.splice(idx, 1);
             saveState();
             renderDdays();
         }
 
-        /* 2. 오늘의 아웃도어 뉴스 브리핑 (실시간 구글 검색 연동) */
+        /* 2. 아웃도어 뉴스 브리핑 (무료 Jina 웹 리더 + 경량 호출) */
         async function fetchOutdoorNews() {
-            const apiKey = document.getElementById('apiKey').value.trim();
-            const modelName = document.getElementById('modelName').value.trim() || 'gemini-3.8-flash';
-
-            if (!apiKey) {
-                showToast("⚠️ 우측 상단 [⚙️ API 설정]에서 키를 먼저 입력해 주세요.");
-                toggleModal('settingsModal');
-                return;
-            }
-
             const container = document.getElementById('newsContainer');
-            container.innerHTML = `<div style="font-size:0.82rem; color:var(--mint); padding:10px 0;">🔍 실시간 아웃도어·UL 기어·트레일 소식을 검색하고 있습니다...</div>`;
+            container.innerHTML = `<div style="font-size:0.8rem; color:var(--mint); padding:8px 0;">🔍 무료 웹 리더로 최신 아웃도어·UL 기어 동향을 수집 중입니다...</div>`;
+
+            let webSnippet = "";
+            try {
+                const r = await fetch(`https://s.jina.ai/${encodeURIComponent("ultralight backpacking gear dyneema trail running news")}`, { headers: { 'Accept': 'text/plain' } });
+                if (r.ok) webSnippet = (await r.text()).slice(0, 3000);
+            } catch (e) {}
 
             const prompt = `
 당신은 아웃도어 기어 디자이너 및 장거리 하이커를 위한 전문 리서처입니다.
-Google 검색을 활용하여 최근 국내외 아웃도어 트렌드 및 하이커가 알아야 할 주요 소식 3가지를 선정해 요약하세요.
+참고 웹 트렌드: ${webSnippet || "최신 UL 기어 및 백패킹 트렌드 활용"}
 
-[카테고리 구성]
-1. 소재 & MYOG / UL 기어 트렌드 (다이니마, 울트라 원단, 경량 텐트/배낭/신발 등 글로벌 및 로컬 브랜드 소식)
-2. 장거리 하이킹 & 트레일러닝 주요 이슈 또는 시즌 장비 팁
-3. 국내 주요 산행지/국립공원/백패킹 필드 관련 최신 소식 또는 계절별 유의사항
-
-반드시 아래 순수 JSON 배열 형식으로만 응답하세요 (코드블록 없이 [ 로 시작해서 ] 로 끝낼 것):
+하이커와 MYOG 제작자가 흥미로워할 오늘의 아웃도어·기어 토픽 3가지를 선정해 순수 JSON 배열로 응답하세요:
 [
-  {
-    "tag": "GEAR & FABRIC",
-    "title": "핵심 헤드라인 제목",
-    "summary": "콘텐츠 소재로 활용할 수 있는 핵심 요약 (2문장, ~합니다 체)"
-  },
-  {
-    "tag": "TRAIL & LONG-DISTANCE",
-    "title": "핵심 헤드라인 제목",
-    "summary": "핵심 요약 (2문장, ~합니다 체)"
-  },
-  {
-    "tag": "FIELD ISSUE",
-    "title": "핵심 헤드라인 제목",
-    "summary": "핵심 요약 (2문장, ~합니다 체)"
-  }
-]
-            `;
+  { "tag": "GEAR & FABRIC", "title": "소재/기어 트렌드 제목", "summary": "핵심 내용 2문장 (~합니다 체)" },
+  { "tag": "LONG-DISTANCE", "title": "장거리 하이킹/트레일 팁 제목", "summary": "핵심 내용 2문장 (~합니다 체)" },
+  { "tag": "FIELD & MYOG", "title": "필드 운용/제작 아이디어 제목", "summary": "핵심 내용 2문장 (~합니다 체)" }
+]`;
 
             try {
-                const cleanModel = modelName.replace(/^models\//, '');
-                let res = await callGemini(apiKey, cleanModel, prompt, true);
-                if (res.error) res = await callGemini(apiKey, cleanModel, prompt, false);
-                if (res.error) throw new Error(res.error.message);
-
-                const rawText = res.candidates[0].content.parts.map(p => p.text || "").join("");
+                const data = await callGeminiWithRotation(prompt);
+                const rawText = data.candidates[0].content.parts.map(p => p.text || "").join("");
                 const match = rawText.match(/\[[\s\S]*\]/);
-                if (!match) throw new Error("뉴스 데이터 파싱 실패");
-
                 appState.news = JSON.parse(match[0]);
                 saveState();
                 renderNews();
-                showToast("✅ 오늘의 아웃도어 브리핑이 업데이트되었습니다!");
+                showToast("✅ 오늘의 브리핑 완료!");
             } catch (err) {
-                container.innerHTML = `<div style="font-size:0.8rem; color:#f87171;">❌ 오류: ${err.message}</div>`;
+                container.innerHTML = `<div style="font-size:0.8rem; color:#f87171;">❌ API 한도 초과: 우측 위 <strong>[💎 프로 질문 복사]</strong>를 눌러 제미나이 채팅창에 붙여넣으세요!</div>`;
             }
+        }
+
+        function copyNewsProPrompt() {
+            const p = `구글 실시간 검색을 통해 오늘 내가 알아야 할 1) 최신 아웃도어 기능성 원단/UL 백패킹 기어 신제품 소식, 2) 장거리 하이킹/트레일러닝 트렌드, 3) 국내 국립공원/트레일 주요 이슈 3가지를 찾아서 칠월밤 콘텐츠 소재로 쓸 수 있게 요약해줘.`;
+            navigator.clipboard.writeText(p);
+            showToast("💎 뉴스 브리핑 질문이 복사되었습니다! 제미나이 프로 채팅창에 붙여넣으세요.");
         }
 
         function renderNews() {
             const container = document.getElementById('newsContainer');
             if (!appState.news || appState.news.length === 0) return;
-
             container.innerHTML = '';
             appState.news.forEach((item, idx) => {
                 const div = document.createElement('div');
@@ -760,9 +612,9 @@ Google 검색을 활용하여 최근 국내외 아웃도어 트렌드 및 하이
         function sendNewsToVoice(idx) {
             const item = appState.news[idx];
             const box = document.getElementById('rawVoiceText');
-            box.value = `[이슈 브리핑: ${item.title}] ${item.summary}\n-> 이에 대한 내 생각과 실제 필드 경험: `;
+            box.value = `[트렌드 메모: ${item.title}] ${item.summary}\n-> 내 생각: `;
             box.focus();
-            showToast("✍️ 아래 입력칸에 주제가 입력되었습니다. 내 생각을 덧붙여 변환해 보세요!");
+            showToast("✍️ 아래 입력칸에 글감이 입력되었습니다!");
         }
 
         /* 3. 말로 쓰는 3채널 변환기 */
@@ -773,10 +625,7 @@ Google 검색을 활용하여 최근 국내외 아웃도어 트렌드 및 하이
                 return;
             }
             const btn = document.getElementById('webSpeechBtn');
-            if (isRecording && recognition) {
-                recognition.stop();
-                return;
-            }
+            if (isRecording && recognition) { recognition.stop(); return; }
             recognition = new SpeechRecognition();
             recognition.lang = 'ko-KR';
             recognition.continuous = true;
@@ -787,9 +636,7 @@ Google 검색을 활용하여 최근 국내외 아웃도어 트렌드 및 하이
             };
             recognition.onresult = (e) => {
                 let txt = '';
-                for (let i = e.resultIndex; i < e.results.length; i++) {
-                    txt += e.results[i][0].transcript + ' ';
-                }
+                for (let i = e.resultIndex; i < e.results.length; i++) txt += e.results[i][0].transcript + ' ';
                 const box = document.getElementById('rawVoiceText');
                 box.value = (box.value ? box.value + ' ' : '') + txt.trim();
             };
@@ -802,76 +649,51 @@ Google 검색을 활용하여 최근 국내외 아웃도어 트렌드 및 하이
         }
 
         async function convertVoiceToContents() {
-            const apiKey = document.getElementById('apiKey').value.trim();
-            const modelName = document.getElementById('modelName').value.trim() || 'gemini-3.8-flash';
             const rawText = document.getElementById('rawVoiceText').value.trim();
             const contextType = document.getElementById('voiceContextSelect').value;
-
-            if (!rawText) {
-                showToast("⚠️ 변환할 내용을 먼저 말하거나 입력해 주세요.");
-                return;
-            }
-            if (!apiKey) {
-                showToast("⚠️ API 키를 먼저 설정해 주세요.");
-                toggleModal('settingsModal');
-                return;
-            }
+            if (!rawText) { showToast("⚠️ 변환할 내용을 먼저 입력해 주세요."); return; }
 
             const outBox = document.getElementById('aiOutputBox');
             outBox.textContent = "⏳ 3가지 채널 원고로 변환 중입니다...";
 
             const prompt = `
-당신은 아웃도어 MYOG 디자이너이자 장거리 하이커 '칠월밤(@camper_julynight)'의 콘텐츠 파트너입니다.
+당신은 아웃도어 MYOG 디자이너이자 3대 500 스트렝스를 가진 장거리 하이커 '칠월밤(@camper_julynight)'의 콘텐츠 파트너입니다.
 주제 분류: ${contextType}
 입력 메모: "${rawText}"
 
-아래 3가지 포맷을 JSON으로 작성하세요:
-1. "yt": 카메라 앞에서 자연스럽게 이야기할 수 있는 원테이크 토크 대본 (구어체)
-2. "ig": 인스타그램 캡션 + 팔로워 질문 1개 + 해시태그 10개
-3. "blog": 담백하고 간결한 어투(~합니다, ~입니다)의 네이버 블로그 포스팅 초안
-
-순수 JSON만 출력하세요:
+아래 3가지 포맷을 순수 JSON으로 작성하세요:
 {
-  "yt": "...",
-  "ig": "...",
-  "blog": "..."
-}
-            `;
+  "yt": "카메라 앞에서 친구에게 말하듯 자연스럽게 이야기하는 원테이크 토크 대본 (구어체)",
+  "ig": "인스타그램 감성 캡션 + 팔로워 질문 1개 + 해시태그 10개",
+  "blog": "과장 없이 담백하고 간결한 어투(~합니다, ~입니다)의 네이버 블로그 포스팅 초안"
+}`;
 
             try {
-                const cleanModel = modelName.replace(/^models\//, '');
-                let res = await callGemini(apiKey, cleanModel, prompt, false);
-                if (res.error) throw new Error(res.error.message);
-
-                const text = res.candidates[0].content.parts.map(p => p.text || "").join("");
+                const data = await callGeminiWithRotation(prompt);
+                const text = data.candidates[0].content.parts.map(p => p.text || "").join("");
                 const match = text.match(/\{[\s\S]*\}/);
                 appState.generatedOutputs = JSON.parse(match[0]);
                 saveState();
                 switchOutputTab(currentTab);
                 showToast("✅ 3종 변환 완료!");
             } catch (err) {
-                outBox.textContent = `❌ 오류: ${err.message}`;
+                outBox.textContent = `❌ API 한도 초과: 옆의 [💎 제미나이 프로용 복사] 버튼을 눌러 제미나이 채팅창에 바로 붙여넣으세요!`;
             }
         }
 
-        async function callGemini(apiKey, cleanModel, promptText, useSearch) {
-            const payload = { contents: [{ parts: [{ text: promptText }] }] };
-            if (useSearch) payload.tools = [{ google_search: {} }];
-            else payload.generationConfig = { responseMimeType: "application/json" };
+        function copyVoiceProPrompt() {
+            const rawText = document.getElementById('rawVoiceText').value.trim();
+            const contextType = document.getElementById('voiceContextSelect').value;
+            if (!rawText) { showToast("⚠️ 먼저 음성이나 메모를 적어주세요!"); return; }
 
-            const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${cleanModel}:generateContent?key=${encodeURIComponent(apiKey)}`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json', 'x-goog-api-key': apiKey },
-                body: JSON.stringify(payload)
-            });
-            return await res.json();
+            const p = `[칠월밤 3채널 콘텐츠 변환 요청]\n카테고리: ${contextType}\n내가 방금 떠올린 날것의 생각: "${rawText}"\n\n이 내용을 바탕으로 내 페르소나(MYOG 기어 디자이너 + 3대 500 피지컬 + 무차량 장거리 하이커)를 살려서 아래 3가지로 각각 작성해줘:\n1. [유튜브 원테이크 토크 대본] (흡입력 있는 구어체)\n2. [인스타그램 캡션 & 스토리 질문 스티커 문구]\n3. [네이버 블로그 기술/경험 아카이브 초안] (~합니다, ~입니다 담백한 체)`;
+            navigator.clipboard.writeText(p);
+            showToast("💎 변환 명령어가 복사되었습니다! 제미나이 프로 채팅창에 바로 붙여넣으세요.");
         }
 
         function switchOutputTab(tab) {
             currentTab = tab;
-            ['yt', 'ig', 'blog'].forEach(t => {
-                document.getElementById(`tabBtn_${t}`).classList.toggle('active', t === tab);
-            });
+            ['yt', 'ig', 'blog'].forEach(t => document.getElementById(`tabBtn_${t}`).classList.toggle('active', t === tab));
             document.getElementById('aiOutputBox').textContent = appState.generatedOutputs[tab] || "";
         }
 
@@ -880,7 +702,7 @@ Google 검색을 활용하여 최근 국내외 아웃도어 트렌드 및 하이
             showToast("✅ 복사되었습니다!");
         }
 
-        /* 4. 스프린트 보드 관리 */
+        /* 4. 스프린트 보드 */
         function renderTasks() {
             let total = 0, done = 0;
             ['myog', 'content', 'field'].forEach(cat => {
@@ -903,27 +725,12 @@ Google 검색을 활용하여 최근 국내외 아웃도어 트렌드 및 하이
             document.getElementById('sprintPercent').textContent = `${pct}% (${done}/${total})`;
         }
 
-        function addTask(cat) {
-            appState.tasks[cat].push({ text: "", done: false });
-            saveState();
-            renderTasks();
-        }
-        function toggleTask(cat, idx) {
-            appState.tasks[cat][idx].done = !appState.tasks[cat][idx].done;
-            saveState();
-            renderTasks();
-        }
-        function editTask(cat, idx, val) {
-            appState.tasks[cat][idx].text = val;
-            saveState();
-        }
-        function deleteTask(cat, idx) {
-            appState.tasks[cat].splice(idx, 1);
-            saveState();
-            renderTasks();
-        }
+        function addTask(cat) { appState.tasks[cat].push({ text: "", done: false }); saveState(); renderTasks(); }
+        function toggleTask(cat, idx) { appState.tasks[cat][idx].done = !appState.tasks[cat][idx].done; saveState(); renderTasks(); }
+        function editTask(cat, idx, val) { appState.tasks[cat][idx].text = val; saveState(); }
+        function deleteTask(cat, idx) { appState.tasks[cat].splice(idx, 1); saveState(); renderTasks(); }
 
-        /* 5. DM / 직거래 리스트 관리 */
+        /* 5. DM 리스트 */
         function renderBespoke() {
             const container = document.getElementById('bespokeList');
             container.innerHTML = '';
@@ -944,62 +751,32 @@ Google 검색을 활용하여 최근 국내외 아웃도어 트렌드 및 하이
             });
         }
 
-        function addBespokeRow() {
-            appState.bespoke.push({ name: "", item: "", status: "대기" });
-            saveState();
-            renderBespoke();
-        }
-        function updateBespoke(idx, key, val) {
-            appState.bespoke[idx][key] = val;
-            saveState();
-        }
-        function deleteBespoke(idx) {
-            appState.bespoke.splice(idx, 1);
-            saveState();
-            renderBespoke();
-        }
+        function addBespokeRow() { appState.bespoke.push({ name: "", item: "", status: "대기" }); saveState(); renderBespoke(); }
+        function updateBespoke(idx, key, val) { appState.bespoke[idx][key] = val; saveState(); }
+        function deleteBespoke(idx) { appState.bespoke.splice(idx, 1); saveState(); renderBespoke(); }
 
-        /* 6. MYOG 원단 단위 변환기 (oz/yd² <-> g/m²) */
+        /* 6. 원단 변환기 */
         function convertFabric(type) {
-            const ozEl = document.getElementById('ozInput');
-            const gsmEl = document.getElementById('gsmInput');
-            if (type === 'oz') {
-                const v = parseFloat(ozEl.value);
-                gsmEl.value = isNaN(v) ? '' : (v * 33.9057).toFixed(1);
-            } else {
-                const v = parseFloat(gsmEl.value);
-                ozEl.value = isNaN(v) ? '' : (v / 33.9057).toFixed(2);
-            }
+            const ozEl = document.getElementById('ozInput'), gsmEl = document.getElementById('gsmInput');
+            if (type === 'oz') { const v = parseFloat(ozEl.value); gsmEl.value = isNaN(v) ? '' : (v * 33.9057).toFixed(1); }
+            else { const v = parseFloat(gsmEl.value); ozEl.value = isNaN(v) ? '' : (v / 33.9057).toFixed(2); }
         }
-
         function convertWeight(type) {
-            const ozEl = document.getElementById('weightOz');
-            const gEl = document.getElementById('weightG');
-            if (type === 'oz') {
-                const v = parseFloat(ozEl.value);
-                gEl.value = isNaN(v) ? '' : (v * 28.3495).toFixed(1);
-            } else {
-                const v = parseFloat(gEl.value);
-                ozEl.value = isNaN(v) ? '' : (v / 28.3495).toFixed(2);
-            }
+            const ozEl = document.getElementById('weightOz'), gEl = document.getElementById('weightG');
+            if (type === 'oz') { const v = parseFloat(ozEl.value); gEl.value = isNaN(v) ? '' : (v * 28.3495).toFixed(1); }
+            else { const v = parseFloat(gEl.value); ozEl.value = isNaN(v) ? '' : (v / 28.3495).toFixed(2); }
         }
 
-        /* 7. 기기 간 동기화 프롬프트 */
+        /* 7. 기기 동기화 */
         function syncPrompt() {
-            const choice = prompt("PC ↔ 휴대폰 데이터 동기화\n\n1: 현재 기기 데이터 복사하기 (카톡으로 보내기)\n2: 복사해둔 데이터 붙여넣어 덮어쓰기\n\n숫자 1 또는 2를 입력하세요:");
+            const choice = prompt("PC ↔ 휴대폰 데이터 동기화\n\n1: 현재 기기 데이터 복사하기\n2: 복사한 데이터 붙여넣기\n\n숫자 1 또는 2를 입력하세요:");
             if (choice === '1') {
                 navigator.clipboard.writeText(JSON.stringify(appState));
                 showToast("📤 현재 데이터가 클립보드에 복사되었습니다!");
             } else if (choice === '2') {
                 const code = prompt("복사한 데이터 코드를 붙여넣으세요:");
                 if (!code) return;
-                try {
-                    appState = JSON.parse(code);
-                    saveState();
-                    location.reload();
-                } catch (e) {
-                    alert("잘못된 코드입니다.");
-                }
+                try { appState = JSON.parse(code); saveState(); location.reload(); } catch (e) { alert("잘못된 코드입니다."); }
             }
         }
     </script>
