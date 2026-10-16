@@ -6,7 +6,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#121415">
-    <title>Julynight Creator OS V3.0</title>
+    <title>Julynight Creator OS V4.0</title>
     <style>
         :root {
             --bg-dark: #121415;
@@ -43,17 +43,6 @@
 
         .brand-title { font-size: 1.15rem; font-weight: 800; color: var(--mint); }
 
-        .top-btn {
-            background: var(--panel-bg);
-            border: 1px solid var(--border);
-            color: var(--text-main);
-            padding: 6px 11px;
-            border-radius: 8px;
-            font-size: 0.78rem;
-            font-weight: 600;
-            cursor: pointer;
-        }
-
         .card {
             background-color: var(--card-bg);
             border: 1px solid var(--border);
@@ -85,8 +74,8 @@
         }
 
         .pro-mini-btn {
-            background: rgba(192, 132, 252, 0.14);
-            border: 1px solid rgba(192, 132, 252, 0.4);
+            background: rgba(192, 132, 252, 0.16);
+            border: 1px solid rgba(192, 132, 252, 0.45);
             color: var(--purple);
             padding: 5px 10px;
             border-radius: 6px;
@@ -95,14 +84,14 @@
             cursor: pointer;
         }
 
-        input[type="text"], input[type="password"], input[type="number"], input[type="date"], textarea, select {
+        input[type="text"], input[type="number"], input[type="date"], textarea, select {
             width: 100%;
             background-color: var(--bg-dark);
             border: 1px solid var(--border);
             color: var(--text-main);
             padding: 10px 12px;
             border-radius: 8px;
-            font-size: 0.88rem;
+            font-size: 0.86rem;
             outline: none;
             font-family: inherit;
         }
@@ -110,34 +99,13 @@
         input:focus, textarea:focus, select:focus { border-color: var(--mint); }
 
         .dday-grid { display: flex; flex-direction: column; gap: 8px; }
-
-        .dday-row {
-            display: grid;
-            grid-template-columns: 1fr 130px 68px 28px;
-            gap: 6px;
-            align-items: center;
-            background: var(--bg-dark);
-            border: 1px solid var(--border);
-            padding: 8px 10px;
-            border-radius: 10px;
-        }
-
+        .dday-row { display: grid; grid-template-columns: 1fr 130px 68px 28px; gap: 6px; align-items: center; background: var(--bg-dark); border: 1px solid var(--border); padding: 8px 10px; border-radius: 10px; }
         .dday-row input { border: none; background: transparent; padding: 4px; font-size: 0.86rem; }
         .dday-row input[type="date"] { color: var(--text-sub); font-size: 0.8rem; }
-
-        .dday-badge {
-            background-color: rgba(152, 230, 190, 0.15);
-            color: var(--mint);
-            font-weight: 800;
-            font-size: 0.82rem;
-            padding: 5px 6px;
-            border-radius: 6px;
-            text-align: center;
-        }
-
+        .dday-badge { background-color: rgba(152, 230, 190, 0.15); color: var(--mint); font-weight: 800; font-size: 0.82rem; padding: 5px 6px; border-radius: 6px; text-align: center; }
         .del-btn { background: none; border: none; color: var(--text-sub); font-size: 0.95rem; cursor: pointer; }
 
-        .news-list { display: flex; flex-direction: column; gap: 8px; }
+        .news-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 10px; }
         .news-item { background: var(--bg-dark); border: 1px solid var(--border); border-radius: 10px; padding: 12px; }
         .news-tag { display: inline-block; font-size: 0.7rem; font-weight: 700; color: var(--mint); background: rgba(152, 230, 190, 0.12); padding: 2px 7px; border-radius: 4px; margin-bottom: 6px; }
         .news-title { font-size: 0.88rem; font-weight: 700; margin-bottom: 4px; }
@@ -148,50 +116,17 @@
         .mic-btn { flex: 1; background: rgba(248, 113, 113, 0.12); color: #fca5a5; border: 1px solid rgba(248, 113, 113, 0.35); padding: 9px; border-radius: 8px; font-weight: 700; font-size: 0.82rem; cursor: pointer; }
         .mic-btn.recording { background: #ef4444; color: #fff; }
 
-        .dual-action-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
-            margin-top: 8px;
-        }
-
-        .btn-primary {
-            background: var(--mint);
-            color: #111415;
-            border: none;
-            padding: 11px;
-            border-radius: 9px;
-            font-weight: 800;
-            font-size: 0.84rem;
-            cursor: pointer;
-        }
-
-        .btn-pro-action {
-            background: rgba(192, 132, 252, 0.15);
+        .btn-pro-full {
+            width: 100%;
+            background: rgba(192, 132, 252, 0.18);
             color: var(--purple);
-            border: 1px solid rgba(192, 132, 252, 0.45);
+            border: 1px solid rgba(192, 132, 252, 0.5);
             padding: 11px;
             border-radius: 9px;
             font-weight: 800;
-            font-size: 0.84rem;
+            font-size: 0.86rem;
             cursor: pointer;
-        }
-
-        .output-tabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin: 12px 0 8px 0; }
-        .tab-btn { background: var(--bg-dark); border: 1px solid var(--border); color: var(--text-sub); padding: 8px 4px; border-radius: 7px; font-size: 0.78rem; font-weight: 700; cursor: pointer; }
-        .tab-btn.active { border-color: var(--mint); color: var(--mint); background: rgba(152, 230, 190, 0.12); }
-
-        .output-box {
-            background: var(--bg-dark);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 12px;
-            font-size: 0.85rem;
-            white-space: pre-wrap;
-            min-height: 110px;
-            max-height: 280px;
-            overflow-y: auto;
-            margin-bottom: 8px;
+            margin-top: 8px;
         }
 
         .cat-block { margin-bottom: 14px; }
@@ -251,29 +186,9 @@
 <body>
 
     <header>
-        <div class="brand-title">JULYNIGHT OS V3.0</div>
-        <button class="top-btn" onclick="toggleModal('settingsModal')">⚙️ API 설정</button>
+        <div class="brand-title">JULYNIGHT OS V4.0</div>
+        <span style="font-size:0.75rem; color:var(--purple); font-weight:700;">💎 제미나이 프로 직결 모드</span>
     </header>
-
-    <!-- API 설정 모달 -->
-    <div id="settingsModal" class="modal-panel">
-        <div class="section-header">
-            <span class="section-title">⚙️ API 키 (다중 키 로테이션 지원)</span>
-            <button class="del-btn" onclick="toggleModal('settingsModal')">✕</button>
-        </div>
-        <div style="margin-bottom:10px;">
-            <label style="font-size:0.75rem; color:var(--text-sub);">🔑 Gemini API Key (여러 개면 쉼표 , 로 구분)</label>
-            <input type="password" id="apiKey" placeholder="AQ.Ab8..." oninput="saveConfig()">
-        </div>
-        <div>
-            <label style="font-size:0.75rem; color:var(--text-sub);">🤖 기본 모델 (lite 모델이 무료 한도가 가장 넉넉합니다)</label>
-            <select id="modelName" onchange="saveConfig()">
-                <option value="gemini-3.8-flash-lite">gemini-3.8-flash-lite (추천 · 한도 넉넉)</option>
-                <option value="gemini-3.8-flash">gemini-3.8-flash</option>
-                <option value="gemini-2.0-flash-lite">gemini-2.0-flash-lite</option>
-            </select>
-        </div>
-    </div>
 
     <!-- MYOG 원단 계산기 모달 -->
     <div id="calcModal" class="modal-panel">
@@ -310,23 +225,20 @@
         <div id="ddayList" class="dday-grid"></div>
     </div>
 
-    <!-- 2. 오늘의 아웃도어 & 기어 트렌드 뉴스 -->
+    <!-- 2. 오늘의 아웃도어 뉴스 (제미나이 프로 연동) -->
     <div class="card">
         <div class="section-header">
             <span class="section-title">📰 오늘의 아웃도어 · 기어 트렌드</span>
-            <div style="display:flex; gap:6px;">
-                <button class="add-btn" onclick="fetchOutdoorNews()">⚡ API 절약 브리핑</button>
-                <button class="pro-mini-btn" onclick="copyNewsProPrompt()">💎 프로 질문 복사</button>
-            </div>
+            <button class="pro-mini-btn" onclick="copyNewsProPrompt()">💎 1. 뉴스 검색 명령어 복사</button>
         </div>
-        <div id="newsContainer" class="news-list">
-            <div style="font-size:0.8rem; color:var(--text-sub); padding:4px 0;">
-                <strong>[⚡ API 절약 브리핑]</strong>을 누르거나, 한도 초과 시 <strong>[💎 프로 질문 복사]</strong>를 눌러 제미나이 채팅창에 물어보세요.
-            </div>
+        <div id="newsContainer" class="news-list"></div>
+        <div style="display:flex; gap:6px;">
+            <input type="text" id="newsJsonInput" placeholder="제미나이 프로가 출력한 뉴스 [ ... ] 코드를 여기에 붙여넣기" style="font-size:0.78rem; padding:7px 10px;">
+            <button class="add-btn" style="white-space:nowrap;" onclick="applyNewsJson()">2. 뉴스 반영</button>
         </div>
     </div>
 
-    <!-- 3. 말로 쓰는 3채널 콘텐츠 변환기 -->
+    <!-- 3. 말로 쓰는 3채널 콘텐츠 변환기 (제미나이 프로 연동) -->
     <div class="card">
         <div class="section-header">
             <span class="section-title">🎙️ 말로 쓰는 3채널 변환기</span>
@@ -345,25 +257,11 @@
             </select>
         </div>
 
-        <textarea id="rawVoiceText" rows="3" placeholder="떠오른 생각이나 설명할 내용을 편하게 말하거나 적어주세요."></textarea>
+        <textarea id="rawVoiceText" rows="3" placeholder="산을 걷거나 운동 쉬는 시간에 떠오른 생각을 편하게 말하거나 적어주세요."></textarea>
 
-        <div class="dual-action-row">
-            <button class="btn-primary" onclick="convertVoiceToContents()">
-                ⚡ API 원클릭 변환
-            </button>
-            <button class="btn-pro-action" onclick="copyVoiceProPrompt()">
-                💎 제미나이 프로용 복사
-            </button>
-        </div>
-
-        <div class="output-tabs">
-            <button class="tab-btn active" id="tabBtn_yt" onclick="switchOutputTab('yt')">🎬 유튜브 대본</button>
-            <button class="tab-btn" id="tabBtn_ig" onclick="switchOutputTab('ig')">📱 인스타 캡션</button>
-            <button class="tab-btn" id="tabBtn_blog" onclick="switchOutputTab('blog')">📝 블로그 초안</button>
-        </div>
-
-        <div class="output-box" id="aiOutputBox" contenteditable="true"></div>
-        <button class="top-btn" style="width:100%; padding:9px;" onclick="copyCurrentOutput()">📋 현재 탭 내용 복사</button>
+        <button class="btn-pro-full" onclick="copyVoiceProPrompt()">
+            💎 [유튜브·인스타·블로그 3종 변환 명령어 복사] ➔ 제미나이 프로에 붙여넣기
+        </button>
     </div>
 
     <!-- 4. 스프린트 보드 -->
@@ -410,9 +308,9 @@
     <div class="status-toast" id="toastMsg">알림</div>
 
     <nav class="bottom-nav">
-        <button class="nav-item" onclick="fetchOutdoorNews()">
+        <button class="nav-item" onclick="copyNewsProPrompt()">
             <span class="nav-icon">📰</span>
-            <span>오늘의뉴스</span>
+            <span>뉴스명령복사</span>
         </button>
         <button class="nav-item" onclick="toggleModal('calcModal')">
             <span class="nav-icon">📐</span>
@@ -437,35 +335,24 @@
             ddays: [{ title: "하이커스 나이트", date: "2026-10-26" }],
             tasks: { myog: [], content: [], field: [] },
             bespoke: [],
-            news: [],
-            generatedOutputs: { yt: "", ig: "", blog: "" }
+            news: []
         };
 
         let appState = JSON.parse(localStorage.getItem('julynight_os_v2')) || DEFAULT_STATE;
         if (!appState.ddays) appState.ddays = [{ title: "하이커스 나이트", date: "2026-10-26" }];
         if (!appState.news) appState.news = [];
 
-        let currentTab = 'yt';
         let recognition = null;
         let isRecording = false;
 
         window.onload = () => {
-            document.getElementById('apiKey').value = localStorage.getItem('julynight_gemini_key') || '';
-            const savedModel = localStorage.getItem('julynight_gemini_model') || 'gemini-3.8-flash-lite';
-            document.getElementById('modelName').value = savedModel;
-
             renderDdays();
             renderNews();
             renderTasks();
             renderBespoke();
-            switchOutputTab('yt');
         };
 
         function saveState() { localStorage.setItem('julynight_os_v2', JSON.stringify(appState)); }
-        function saveConfig() {
-            localStorage.setItem('julynight_gemini_key', document.getElementById('apiKey').value.trim());
-            localStorage.setItem('julynight_gemini_model', document.getElementById('modelName').value);
-        }
 
         function showToast(msg) {
             const t = document.getElementById('toastMsg');
@@ -477,35 +364,6 @@
         function toggleModal(id) {
             const el = document.getElementById(id);
             el.style.display = (el.style.display === 'block') ? 'none' : 'block';
-        }
-
-        /* 다중 키 로테이션 API 호출기 (유료 검색 도구 제거하여 쿼터 보호) */
-        async function callGeminiWithRotation(promptText) {
-            const rawKeys = document.getElementById('apiKey').value.trim();
-            const modelName = document.getElementById('modelName').value || 'gemini-3.8-flash-lite';
-            if (!rawKeys) throw new Error("API 키가 입력되지 않았습니다.");
-
-            const keys = rawKeys.split(',').map(k => k.trim()).filter(Boolean);
-            let lastErr = "";
-
-            for (let k of keys) {
-                try {
-                    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${encodeURIComponent(k)}`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json', 'x-goog-api-key': k },
-                        body: JSON.stringify({
-                            contents: [{ parts: [{ text: promptText }] }],
-                            generationConfig: { responseMimeType: "application/json" }
-                        })
-                    });
-                    const data = await res.json();
-                    if (data.error) throw new Error(data.error.message);
-                    return data;
-                } catch (e) {
-                    lastErr = e.message;
-                }
-            }
-            throw new Error(lastErr);
         }
 
         /* 1. 멀티 D-Day */
@@ -551,50 +409,34 @@
             renderDdays();
         }
 
-        /* 2. 아웃도어 뉴스 브리핑 (무료 Jina 웹 리더 + 경량 호출) */
-        async function fetchOutdoorNews() {
-            const container = document.getElementById('newsContainer');
-            container.innerHTML = `<div style="font-size:0.8rem; color:var(--mint); padding:8px 0;">🔍 무료 웹 리더로 최신 아웃도어·UL 기어 동향을 수집 중입니다...</div>`;
+        /* 2. 아웃도어 뉴스 브리핑 (제미나이 프로 직결) */
+        function copyNewsProPrompt() {
+            const p = `구글 실시간 검색을 통해 오늘 내가 알아야 할 1) 최신 아웃도어 기능성 원단/MYOG/UL 백패킹 기어 신제품 소식, 2) 장거리 하이킹/트레일러닝 트렌드, 3) 국내 국립공원/트레일 주요 이슈 3가지를 찾아서 아래 순수 JSON 배열 코드로만 출력해줘:\n[\n  { "tag": "GEAR & FABRIC", "title": "제목", "summary": "핵심 내용 2문장 (~합니다 체)" },\n  { "tag": "LONG-DISTANCE", "title": "제목", "summary": "핵심 내용 2문장 (~합니다 체)" },\n  { "tag": "FIELD ISSUE", "title": "제목", "summary": "핵심 내용 2문장 (~합니다 체)" }\n]`;
+            navigator.clipboard.writeText(p);
+            showToast("💎 뉴스 검색 명령어가 복사되었습니다! 제미나이 프로 채팅창에 붙여넣으세요.");
+        }
 
-            let webSnippet = "";
+        function applyNewsJson() {
+            const raw = document.getElementById('newsJsonInput').value.trim();
+            if (!raw) return;
             try {
-                const r = await fetch(`https://s.jina.ai/${encodeURIComponent("ultralight backpacking gear dyneema trail running news")}`, { headers: { 'Accept': 'text/plain' } });
-                if (r.ok) webSnippet = (await r.text()).slice(0, 3000);
-            } catch (e) {}
-
-            const prompt = `
-당신은 아웃도어 기어 디자이너 및 장거리 하이커를 위한 전문 리서처입니다.
-참고 웹 트렌드: ${webSnippet || "최신 UL 기어 및 백패킹 트렌드 활용"}
-
-하이커와 MYOG 제작자가 흥미로워할 오늘의 아웃도어·기어 토픽 3가지를 선정해 순수 JSON 배열로 응답하세요:
-[
-  { "tag": "GEAR & FABRIC", "title": "소재/기어 트렌드 제목", "summary": "핵심 내용 2문장 (~합니다 체)" },
-  { "tag": "LONG-DISTANCE", "title": "장거리 하이킹/트레일 팁 제목", "summary": "핵심 내용 2문장 (~합니다 체)" },
-  { "tag": "FIELD & MYOG", "title": "필드 운용/제작 아이디어 제목", "summary": "핵심 내용 2문장 (~합니다 체)" }
-]`;
-
-            try {
-                const data = await callGeminiWithRotation(prompt);
-                const rawText = data.candidates[0].content.parts.map(p => p.text || "").join("");
-                const match = rawText.match(/\[[\s\S]*\]/);
+                const match = raw.match(/\[[\s\S]*\]/);
                 appState.news = JSON.parse(match[0]);
                 saveState();
                 renderNews();
-                showToast("✅ 오늘의 브리핑 완료!");
-            } catch (err) {
-                container.innerHTML = `<div style="font-size:0.8rem; color:#f87171;">❌ API 한도 초과: 우측 위 <strong>[💎 프로 질문 복사]</strong>를 눌러 제미나이 채팅창에 붙여넣으세요!</div>`;
+                document.getElementById('newsJsonInput').value = '';
+                showToast("✅ 오늘의 뉴스가 반영되었습니다!");
+            } catch (e) {
+                alert("JSON 배열 형식을 확인해 주세요.");
             }
-        }
-
-        function copyNewsProPrompt() {
-            const p = `구글 실시간 검색을 통해 오늘 내가 알아야 할 1) 최신 아웃도어 기능성 원단/UL 백패킹 기어 신제품 소식, 2) 장거리 하이킹/트레일러닝 트렌드, 3) 국내 국립공원/트레일 주요 이슈 3가지를 찾아서 칠월밤 콘텐츠 소재로 쓸 수 있게 요약해줘.`;
-            navigator.clipboard.writeText(p);
-            showToast("💎 뉴스 브리핑 질문이 복사되었습니다! 제미나이 프로 채팅창에 붙여넣으세요.");
         }
 
         function renderNews() {
             const container = document.getElementById('newsContainer');
-            if (!appState.news || appState.news.length === 0) return;
+            if (!appState.news || appState.news.length === 0) {
+                container.innerHTML = `<div style="font-size:0.78rem; color:var(--text-sub);">우측 상단 <strong>[💎 1. 뉴스 검색 명령어 복사]</strong>를 눌러 제미나이 프로에 붙여넣으세요.</div>`;
+                return;
+            }
             container.innerHTML = '';
             appState.news.forEach((item, idx) => {
                 const div = document.createElement('div');
@@ -648,58 +490,14 @@
             recognition.start();
         }
 
-        async function convertVoiceToContents() {
-            const rawText = document.getElementById('rawVoiceText').value.trim();
-            const contextType = document.getElementById('voiceContextSelect').value;
-            if (!rawText) { showToast("⚠️ 변환할 내용을 먼저 입력해 주세요."); return; }
-
-            const outBox = document.getElementById('aiOutputBox');
-            outBox.textContent = "⏳ 3가지 채널 원고로 변환 중입니다...";
-
-            const prompt = `
-당신은 아웃도어 MYOG 디자이너이자 3대 500 스트렝스를 가진 장거리 하이커 '칠월밤(@camper_julynight)'의 콘텐츠 파트너입니다.
-주제 분류: ${contextType}
-입력 메모: "${rawText}"
-
-아래 3가지 포맷을 순수 JSON으로 작성하세요:
-{
-  "yt": "카메라 앞에서 친구에게 말하듯 자연스럽게 이야기하는 원테이크 토크 대본 (구어체)",
-  "ig": "인스타그램 감성 캡션 + 팔로워 질문 1개 + 해시태그 10개",
-  "blog": "과장 없이 담백하고 간결한 어투(~합니다, ~입니다)의 네이버 블로그 포스팅 초안"
-}`;
-
-            try {
-                const data = await callGeminiWithRotation(prompt);
-                const text = data.candidates[0].content.parts.map(p => p.text || "").join("");
-                const match = text.match(/\{[\s\S]*\}/);
-                appState.generatedOutputs = JSON.parse(match[0]);
-                saveState();
-                switchOutputTab(currentTab);
-                showToast("✅ 3종 변환 완료!");
-            } catch (err) {
-                outBox.textContent = `❌ API 한도 초과: 옆의 [💎 제미나이 프로용 복사] 버튼을 눌러 제미나이 채팅창에 바로 붙여넣으세요!`;
-            }
-        }
-
         function copyVoiceProPrompt() {
             const rawText = document.getElementById('rawVoiceText').value.trim();
             const contextType = document.getElementById('voiceContextSelect').value;
             if (!rawText) { showToast("⚠️ 먼저 음성이나 메모를 적어주세요!"); return; }
 
-            const p = `[칠월밤 3채널 콘텐츠 변환 요청]\n카테고리: ${contextType}\n내가 방금 떠올린 날것의 생각: "${rawText}"\n\n이 내용을 바탕으로 내 페르소나(MYOG 기어 디자이너 + 3대 500 피지컬 + 무차량 장거리 하이커)를 살려서 아래 3가지로 각각 작성해줘:\n1. [유튜브 원테이크 토크 대본] (흡입력 있는 구어체)\n2. [인스타그램 캡션 & 스토리 질문 스티커 문구]\n3. [네이버 블로그 기술/경험 아카이브 초안] (~합니다, ~입니다 담백한 체)`;
+            const p = `[칠월밤 3채널 콘텐츠 변환 요청 - 내 말투와 내용 100% 반영]\n카테고리: ${contextType}\n내가 방금 떠올린 날것의 생각: "${rawText}"\n\n위 내용에서 내가 말한 핵심 디테일과 관점을 절대 생략하지 말고, 내 페르소나(MYOG 기어 디자이너 + 3대 500 스트렝스 + 무차량 장거리 하이커)를 살려서 아래 3가지로 각각 작성해줘:\n\n1. [유튜브 원테이크 토크 대본] (카메라 앞에서 친구에게 설명하듯 흡입력 있는 구어체)\n2. [인스타그램 캡션 & 스토리 질문 스티커 문구]\n3. [네이버 블로그 기술/경험 아카이브 초안] (~합니다, ~입니다, ~편입니다 담백한 체)`;
             navigator.clipboard.writeText(p);
-            showToast("💎 변환 명령어가 복사되었습니다! 제미나이 프로 채팅창에 바로 붙여넣으세요.");
-        }
-
-        function switchOutputTab(tab) {
-            currentTab = tab;
-            ['yt', 'ig', 'blog'].forEach(t => document.getElementById(`tabBtn_${t}`).classList.toggle('active', t === tab));
-            document.getElementById('aiOutputBox').textContent = appState.generatedOutputs[tab] || "";
-        }
-
-        function copyCurrentOutput() {
-            navigator.clipboard.writeText(document.getElementById('aiOutputBox').innerText);
-            showToast("✅ 복사되었습니다!");
+            showToast("💎 3종 변환 명령어가 복사되었습니다! 제미나이 프로 채팅창에 바로 붙여넣으세요.");
         }
 
         /* 4. 스프린트 보드 */
