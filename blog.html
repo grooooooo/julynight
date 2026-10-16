@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Julynight BrandConnect Post Studio V3.0</title>
+    <title>Julynight BrandConnect Post Studio V4.0</title>
     <style>
         :root {
             --bg-dark: #141617;
@@ -13,6 +13,7 @@
             --text-sub: #94a3b8;
             --mint: #98e6be;
             --mint-dark: #6bc497;
+            --purple: #c084fc;
             --border: #363b3f;
             --red-alert: #ef4444;
         }
@@ -31,7 +32,7 @@
             max-width: 1280px;
             margin: 0 auto;
             display: grid;
-            grid-template-columns: 410px 1fr;
+            grid-template-columns: 430px 1fr;
             gap: 24px;
         }
 
@@ -43,7 +44,7 @@
             background-color: var(--card-bg);
             border: 1px solid var(--border);
             border-radius: 16px;
-            padding: 24px;
+            padding: 22px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.35);
         }
 
@@ -59,80 +60,83 @@
             padding-bottom: 16px;
         }
 
-        header h1 {
-            font-size: 1.35rem;
-            color: var(--mint);
-            font-weight: 700;
-        }
+        header h1 { font-size: 1.35rem; color: var(--mint); font-weight: 700; }
+        header p { font-size: 0.85rem; color: var(--text-sub); }
 
-        header p {
-            font-size: 0.85rem;
-            color: var(--text-sub);
-        }
-
-        .form-group { margin-bottom: 16px; }
+        .form-group { margin-bottom: 14px; }
 
         label {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 0.83rem;
+            font-size: 0.82rem;
             font-weight: 600;
             margin-bottom: 6px;
             color: var(--text-main);
         }
 
-        label a {
-            color: var(--mint);
-            font-size: 0.76rem;
-            text-decoration: none;
-        }
+        label a { color: var(--mint); font-size: 0.75rem; text-decoration: none; }
 
         input[type="text"], input[type="password"], select, textarea {
             width: 100%;
             background-color: var(--bg-dark);
             border: 1px solid var(--border);
             color: var(--text-main);
-            padding: 10px 13px;
+            padding: 10px 12px;
             border-radius: 8px;
-            font-size: 0.9rem;
+            font-size: 0.88rem;
             outline: none;
-            transition: border-color 0.2s;
             font-family: inherit;
         }
 
         input:focus, select:focus, textarea:focus { border-color: var(--mint); }
-
-        textarea { resize: vertical; min-height: 115px; line-height: 1.5; }
+        textarea { resize: vertical; min-height: 95px; line-height: 1.5; }
 
         .btn {
             width: 100%;
-            padding: 13px 16px;
+            padding: 12px 14px;
             border-radius: 10px;
             border: none;
             font-weight: 700;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             cursor: pointer;
             transition: all 0.15s;
         }
 
-        .btn-primary {
-            background-color: var(--mint);
-            color: #111415;
-            margin-bottom: 10px;
-        }
-
+        .btn-primary { background-color: var(--mint); color: #111415; margin-bottom: 8px; }
         .btn-primary:hover { background-color: var(--mint-dark); }
+
+        .btn-pro {
+            background: rgba(192, 132, 252, 0.15);
+            color: var(--purple);
+            border: 1px solid rgba(192, 132, 252, 0.45);
+            margin-bottom: 8px;
+        }
+        .btn-pro:hover { background: rgba(192, 132, 252, 0.25); }
 
         .btn-secondary {
             background-color: var(--panel-bg);
             color: var(--text-main);
             border: 1px solid var(--border);
-            font-size: 0.84rem;
-            padding: 9px 14px;
+            font-size: 0.82rem;
+            padding: 9px 12px;
+        }
+        .btn-secondary:hover { border-color: var(--mint); color: var(--mint); }
+
+        .pro-bridge-box {
+            background: rgba(192, 132, 252, 0.06);
+            border: 1px dashed rgba(192, 132, 252, 0.4);
+            border-radius: 10px;
+            padding: 12px;
+            margin-top: 10px;
         }
 
-        .btn-secondary:hover { border-color: var(--mint); color: var(--mint); }
+        .pro-bridge-title {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--purple);
+            margin-bottom: 6px;
+        }
 
         .status-msg {
             margin-top: 12px;
@@ -146,16 +150,9 @@
             word-break: keep-all;
         }
 
-        .action-bar {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 14px;
-            flex-wrap: wrap;
-        }
-
+        .action-bar { display: flex; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
         .action-bar .btn { width: auto; flex: 1; min-width: 160px; }
 
-        /* 2x2 개별 카드 편집 그리드 */
         .image-gallery {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -167,9 +164,7 @@
             border-radius: 12px;
         }
 
-        @media (max-width: 680px) {
-            .image-gallery { grid-template-columns: 1fr; }
-        }
+        @media (max-width: 680px) { .image-gallery { grid-template-columns: 1fr; } }
 
         .img-card {
             background-color: var(--card-bg);
@@ -181,12 +176,7 @@
             gap: 8px;
         }
 
-        .img-card canvas {
-            width: 100%;
-            height: auto;
-            border-radius: 6px;
-            display: block;
-        }
+        .img-card canvas { width: 100%; height: auto; border-radius: 6px; display: block; }
 
         .card-edit-inputs {
             display: flex;
@@ -198,24 +188,10 @@
             border: 1px solid var(--border);
         }
 
-        .card-edit-inputs input {
-            padding: 6px 9px;
-            font-size: 0.8rem;
-            border-radius: 5px;
-            background: var(--card-bg);
-        }
+        .card-edit-inputs input { padding: 6px 9px; font-size: 0.8rem; border-radius: 5px; background: var(--card-bg); }
+        .card-edit-label { font-size: 0.72rem; color: var(--text-sub); font-weight: 600; }
 
-        .card-edit-label {
-            font-size: 0.72rem;
-            color: var(--text-sub);
-            font-weight: 600;
-        }
-
-        .card-btn-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 6px;
-        }
+        .card-btn-row { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
 
         .img-card button, .img-card .upload-label-btn {
             width: 100%;
@@ -239,11 +215,6 @@
             padding: 9px;
         }
 
-        .img-card button:hover, .img-card .upload-label-btn:hover {
-            border-color: var(--mint);
-            color: var(--mint);
-        }
-
         .naver-preview-wrapper {
             background-color: #ffffff;
             color: #222222;
@@ -265,17 +236,6 @@
             margin-bottom: 10px;
         }
 
-        .file-upload-box {
-            width: 100%;
-            border: 1px dashed var(--border);
-            border-radius: 8px;
-            padding: 9px;
-            font-size: 0.78rem;
-            color: var(--text-sub);
-            cursor: pointer;
-            background: var(--bg-dark);
-        }
-
         .section-top-bar {
             display: flex;
             justify-content: space-between;
@@ -284,85 +244,86 @@
             flex-wrap: wrap;
             gap: 8px;
         }
-
-        .fact-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            font-size: 0.75rem;
-            color: #fbbf24;
-            background: rgba(251, 191, 36, 0.12);
-            padding: 3px 8px;
-            border-radius: 4px;
-            font-weight: 600;
-        }
     </style>
 </head>
 <body>
 
     <header>
         <div>
-            <h1>Julynight BrandConnect Post Studio V3.0</h1>
-            <p>2단계 교차검증(Fact-Check) · 대자연 배경 스펙 카드 개별 편집 & 원고 생성기 (@camper_julynight)</p>
+            <h1>Julynight BrandConnect Post Studio V4.0</h1>
+            <p>API 절약 1회 압축 엔진 + 제미나이 프로 무제한 브릿지 통합 에디션 (@camper_julynight)</p>
         </div>
-        <div style="display:flex; gap:10px; align-items:center;">
-            <span class="fact-badge">🛡️ 2단계 교차검증 탑재</span>
-            <span style="font-size:0.8rem; color:var(--mint); font-weight:700;">✅ V3.0 적용됨</span>
+        <div style="font-size:0.8rem; color:var(--mint); font-weight:700;">
+            ✅ V4.0 하이브리드 엔진 적용됨
         </div>
     </header>
 
     <div class="layout">
-        <!-- 좌측: 입력 컨트롤 패널 -->
+        <!-- 좌측 컨트롤 패널 -->
         <div class="card">
-            <span class="helper-badge">STEP 1. 제품명 및 나만의 어투/방향성 설정</span>
-
-            <div class="form-group">
-                <label>
-                    <span>🔑 Gemini API Key (자동 저장됨)</span>
-                    <a href="https://aistudio.google.com/app/apikey" target="_blank">무료 키 발급받기 ↗</a>
-                </label>
-                <input type="password" id="apiKey" placeholder="AQ.Ab8... 키를 붙여넣으세요" oninput="saveApiKey()">
-            </div>
-
-            <div class="form-group">
-                <label><span>🤖 AI 모델명</span></label>
-                <input type="text" id="modelNameInput" value="gemini-3.8-flash">
-            </div>
+            <span class="helper-badge">STEP 1. 제품명 및 어투 설정</span>
 
             <div class="form-group">
                 <label>
                     <span>🎯 정확한 브랜드 + 제품명 (필수)</span>
                 </label>
-                <input type="text" id="productNameInput" placeholder="예: 몬벨 버사라이트 자켓, 파란테 V2 배낭, 날진 수통 1L">
+                <input type="text" id="productNameInput" placeholder="예: 몬벨 버사라이트 자켓, 파란테 V2 배낭">
             </div>
 
             <div class="form-group">
                 <label>
-                    <span>✍️ 희망하는 어투 · 글의 느낌 · 강조할 스펙 (자유 수정)</span>
-                    <span style="font-size:0.7rem; color:var(--mint);">자동 반영됨</span>
+                    <span>✍️ 희망하는 어투 · 글의 방향성 · 강조 스펙</span>
                 </label>
-                <textarea id="toneAndPointInput">1. 어투: 칠월밤 블로그 특유의 담백하고 차분한 실사용자 분석 톤 (~합니다, ~입니다, ~편입니다). 과장된 수식어나 번역투 문장 배제.
-2. 방향성: 원단(소재), 무게, 패킹 부피, 실제 백패킹/트레킹 필드에서 체감되는 구조적 장점을 차분하게 짚어줄 것.
-3. 추가 강조 포인트: (특정 스펙이나 강조하고 싶은 내용이 있다면 여기에 추가로 적어주세요)</textarea>
+                <textarea id="toneAndPointInput">1. 어투: 칠월밤 블로그 특유의 담백하고 차분한 실사용자 분석 톤 (~합니다, ~입니다, ~편입니다). 과장된 수식어나 어색한 번역투/조어 절대 배제.
+2. 방향성: 원단(소재), 정확한 무게, 패킹 부피, 실제 백패킹/트레킹 필드에서 체감되는 구조적 장점을 차분하게 짚어줄 것.
+3. 추가 강조 포인트: (특정 스펙이나 강조하고 싶은 내용이 있다면 여기에 적어주세요)</textarea>
             </div>
 
             <div class="form-group">
                 <label><span>🏔️ 기본 카드 배경 스타일</span></label>
                 <select id="bgThemeSelect" onchange="refreshAllNatureBackgrounds()">
                     <option value="nature">웅장한 대자연·산악·숲 풍경 위주 (인물 배제 24종)</option>
-                    <option value="upload">내가 첨부한 사진으로 일괄 적용</option>
                     <option value="minimal">다크 차콜 미니멀 그리드 (사진 없음)</option>
                 </select>
             </div>
 
-            <div class="form-group">
-                <label><span>📷 사진 일괄 첨부 (선택 - 개별 카드에서도 변경 가능)</span></label>
-                <input type="file" id="productImageInput" accept="image/*" multiple class="file-upload-box" onchange="handleBulkImageUpload(event)">
+            <!-- 모드 1: API 절약 1회 압축 자동 생성 -->
+            <div style="border-top:1px solid var(--border); padding-top:14px; margin-top:14px;">
+                <span class="helper-badge">방법 A. API 원클릭 자동 생성 (할당량 80% 절약 모드)</span>
+                <div class="form-group">
+                    <label>
+                        <span>🔑 API 키 (쉼표로 여러 개 입력 시 자동 로테이션)</span>
+                        <a href="https://aistudio.google.com/app/apikey" target="_blank">키 발급 ↗</a>
+                    </label>
+                    <input type="password" id="apiKey" placeholder="AQ.Ab8... (여러 개면 쉼표 , 로 구분)" oninput="saveConfig()">
+                </div>
+                <div class="form-group">
+                    <label><span>🤖 모델 선택 (한도 초과 시 lite 모델 선택)</span></label>
+                    <select id="modelNameInput" onchange="saveConfig()">
+                        <option value="gemini-3.8-flash-lite">gemini-3.8-flash-lite (가장 넉넉한 무료 한도 · 추천)</option>
+                        <option value="gemini-3.8-flash">gemini-3.8-flash (표준 모델)</option>
+                        <option value="gemini-2.0-flash-lite">gemini-2.0-flash-lite (예비 경량 모델)</option>
+                    </select>
+                </div>
+                <button class="btn btn-primary" onclick="generatePostViaApi()">
+                    ⚡ API 절약 모드로 원클릭 생성하기 (1회 압축 호출)
+                </button>
             </div>
 
-            <button class="btn btn-primary" onclick="generatePost()">
-                🔍 스펙 검색 + 🛡️ 교차검증 후 원고 생성하기
-            </button>
+            <!-- 모드 2: 제미나이 프로 무제한 복붙 브릿지 -->
+            <div class="pro-bridge-box">
+                <div class="pro-bridge-title">💎 방법 B. 제미나이 프로(구독 계정) 무제한 연동</div>
+                <p style="font-size:0.76rem; color:var(--text-sub); margin-bottom:10px;">
+                    API 한도가 다 찼거나 최고 품질의 실시간 검색+팩트체크가 필요할 때 사용하세요. (API 소모 0%)
+                </p>
+                <button class="btn btn-pro" onclick="copyProPrompt()">
+                    1️⃣ 제미나이 프로 채팅창용 명령어 복사하기
+                </button>
+                <textarea id="proJsonInput" style="min-height:65px; font-size:0.78rem; margin-bottom:8px;" placeholder="제미나이 프로 채팅창에 붙여넣고 나온 { ... } 결과 코드를 복사해 여기에 붙여넣으세요."></textarea>
+                <button class="btn btn-secondary" style="width:100%;" onclick="applyProJson()">
+                    2️⃣ 붙여넣은 결과로 스펙 카드 4장 + 블로그 원고 완성하기
+                </button>
+            </div>
 
             <div id="statusBox" class="status-msg"></div>
         </div>
@@ -376,19 +337,18 @@
                 </button>
             </div>
             <p style="font-size:0.8rem; color:var(--text-sub); margin-bottom:12px;">
-                * 각 카드 아래의 입력칸에서 <strong>문구를 직접 고치면 이미지에 실시간 반영</strong>됩니다. 카드별로 배경 사진을 따로 바꿀 수도 있습니다.
+                * 각 카드 아래 입력칸에서 <strong>문구를 직접 고치면 이미지에 실시간 반영</strong>됩니다.
             </p>
 
-            <!-- 4개의 카드 개별 편집 그리드 -->
             <div class="image-gallery">
-                <!-- 카드 0: 썸네일 -->
+                <!-- 카드 0 -->
                 <div class="img-card">
                     <canvas id="cardCanvas0" width="800" height="800"></canvas>
                     <div class="card-edit-inputs">
-                        <span class="card-edit-label">✏️ 썸네일 문구 직접 수정</span>
-                        <input type="text" id="cardBadge0" value="GEAR REVIEW" oninput="redrawSingleCard(0)" placeholder="상단 뱃지">
-                        <input type="text" id="cardTitle0" value="" oninput="redrawSingleCard(0)" placeholder="메인 타이틀">
-                        <input type="text" id="cardSpec0" value="" oninput="redrawSingleCard(0)" placeholder="하단 핵심 스펙">
+                        <span class="card-edit-label">✏️ 썸네일 문구 수정</span>
+                        <input type="text" id="cardBadge0" value="GEAR REVIEW" oninput="redrawSingleCard(0)">
+                        <input type="text" id="cardTitle0" value="" oninput="redrawSingleCard(0)">
+                        <input type="text" id="cardSpec0" value="" oninput="redrawSingleCard(0)">
                     </div>
                     <div class="card-btn-row">
                         <button type="button" onclick="changeSingleNatureBg(0)">🔄 이 배경만 변경</button>
@@ -400,14 +360,14 @@
                     <button type="button" class="copy-btn" onclick="copyCanvasImage('cardCanvas0')">📋 썸네일 이미지 복사</button>
                 </div>
 
-                <!-- 카드 1: 소구점 1 -->
+                <!-- 카드 1 -->
                 <div class="img-card">
                     <canvas id="cardCanvas1" width="800" height="800"></canvas>
                     <div class="card-edit-inputs">
-                        <span class="card-edit-label">✏️ 소구점 1 문구 직접 수정</span>
-                        <input type="text" id="cardBadge1" value="POINT 01" oninput="redrawSingleCard(1)" placeholder="상단 뱃지">
-                        <input type="text" id="cardTitle1" value="" oninput="redrawSingleCard(1)" placeholder="소구점 1 제목">
-                        <input type="text" id="cardSpec1" value="" oninput="redrawSingleCard(1)" placeholder="하단 핵심 스펙">
+                        <span class="card-edit-label">✏️ 소구점 1 문구 수정</span>
+                        <input type="text" id="cardBadge1" value="POINT 01" oninput="redrawSingleCard(1)">
+                        <input type="text" id="cardTitle1" value="" oninput="redrawSingleCard(1)">
+                        <input type="text" id="cardSpec1" value="" oninput="redrawSingleCard(1)">
                     </div>
                     <div class="card-btn-row">
                         <button type="button" onclick="changeSingleNatureBg(1)">🔄 이 배경만 변경</button>
@@ -419,14 +379,14 @@
                     <button type="button" class="copy-btn" onclick="copyCanvasImage('cardCanvas1')">📋 소구점 1 이미지 복사</button>
                 </div>
 
-                <!-- 카드 2: 소구점 2 -->
+                <!-- 카드 2 -->
                 <div class="img-card">
                     <canvas id="cardCanvas2" width="800" height="800"></canvas>
                     <div class="card-edit-inputs">
-                        <span class="card-edit-label">✏️ 소구점 2 문구 직접 수정</span>
-                        <input type="text" id="cardBadge2" value="POINT 02" oninput="redrawSingleCard(2)" placeholder="상단 뱃지">
-                        <input type="text" id="cardTitle2" value="" oninput="redrawSingleCard(2)" placeholder="소구점 2 제목">
-                        <input type="text" id="cardSpec2" value="" oninput="redrawSingleCard(2)" placeholder="하단 핵심 스펙">
+                        <span class="card-edit-label">✏️ 소구점 2 문구 수정</span>
+                        <input type="text" id="cardBadge2" value="POINT 02" oninput="redrawSingleCard(2)">
+                        <input type="text" id="cardTitle2" value="" oninput="redrawSingleCard(2)">
+                        <input type="text" id="cardSpec2" value="" oninput="redrawSingleCard(2)">
                     </div>
                     <div class="card-btn-row">
                         <button type="button" onclick="changeSingleNatureBg(2)">🔄 이 배경만 변경</button>
@@ -438,14 +398,14 @@
                     <button type="button" class="copy-btn" onclick="copyCanvasImage('cardCanvas2')">📋 소구점 2 이미지 복사</button>
                 </div>
 
-                <!-- 카드 3: 소구점 3 -->
+                <!-- 카드 3 -->
                 <div class="img-card">
                     <canvas id="cardCanvas3" width="800" height="800"></canvas>
                     <div class="card-edit-inputs">
-                        <span class="card-edit-label">✏️ 소구점 3 문구 직접 수정</span>
-                        <input type="text" id="cardBadge3" value="POINT 03" oninput="redrawSingleCard(3)" placeholder="상단 뱃지">
-                        <input type="text" id="cardTitle3" value="" oninput="redrawSingleCard(3)" placeholder="소구점 3 제목">
-                        <input type="text" id="cardSpec3" value="" oninput="redrawSingleCard(3)" placeholder="하단 핵심 스펙">
+                        <span class="card-edit-label">✏️ 소구점 3 문구 수정</span>
+                        <input type="text" id="cardBadge3" value="POINT 03" oninput="redrawSingleCard(3)">
+                        <input type="text" id="cardTitle3" value="" oninput="redrawSingleCard(3)">
+                        <input type="text" id="cardSpec3" value="" oninput="redrawSingleCard(3)">
                     </div>
                     <div class="card-btn-row">
                         <button type="button" onclick="changeSingleNatureBg(3)">🔄 이 배경만 변경</button>
@@ -473,32 +433,31 @@
     </div>
 
     <script>
-        // 인물이 배제된 순수 대자연·산맥·원시림·능선·운해 고화질 풍경 24종
         const PURE_NATURE_POOL = [
-            "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=900&q=80", // 웅장한 산맥
-            "https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=900&q=80", // 밤하늘 설산
-            "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=900&q=80", // 짙은 녹음 원시림
-            "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=900&q=80", // 새벽 안개 능선
-            "https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=900&q=80", // 대자연 계곡과 햇살
-            "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=900&q=80", // 요세미티 계곡과 침엽수
-            "https://images.unsplash.com/photo-1454496522488-7a8e488e8606?auto=format&fit=crop&w=900&q=80", // 고산 암릉 봉우리
-            "https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?auto=format&fit=crop&w=900&q=80", // 알파인 산악 지형
-            "https://images.unsplash.com/photo-1533240332313-0db49b459ad6?auto=format&fit=crop&w=900&q=80", // 고요한 숲속 트레일
-            "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?auto=format&fit=crop&w=900&q=80", // 소나무 숲과 안개
-            "https://images.unsplash.com/photo-1426604966848-d7adac402bff?auto=format&fit=crop&w=900&q=80", // 바위 절벽과 초록 숲
-            "https://images.unsplash.com/photo-1472214103451-9374bd1c798e?auto=format&fit=crop&w=900&q=80", // 고원 초원과 능선
-            "https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=900&q=80", // 일출 산능선 운해
-            "https://images.unsplash.com/photo-1439853949127-fa647821eba0?auto=format&fit=crop&w=900&q=80", // 맑은 산정 호수와 침엽수
-            "https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?auto=format&fit=crop&w=900&q=80", // 깊은 숲길 야생화
-            "https://images.unsplash.com/photo-1511497584788-876760111969?auto=format&fit=crop&w=900&q=80", // 피톤치드 침엽수림
-            "https://images.unsplash.com/photo-1493246507139-91e8fad9978e?auto=format&fit=crop&w=900&q=80", // 알프스 초원과 빙하산
-            "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=900&q=80", // 신비로운 이끼 숲
-            "https://images.unsplash.com/photo-1447752875215-b2761acb3c5d?auto=format&fit=crop&w=900&q=80", // 숲속 나무 다리와 계곡
-            "https://images.unsplash.com/photo-1418065460487-3e41a6c84dc5?auto=format&fit=crop&w=900&q=80", // 침엽수림 상공 뷰
-            "https://images.unsplash.com/photo-1475924156734-496f6cac6ec1?auto=format&fit=crop&w=900&q=80", // 새벽 해안과 산맥
-            "https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?auto=format&fit=crop&w=900&q=80", // 안개 자욱한 전나무 숲
-            "https://images.unsplash.com/photo-1483728642387-6c3bdd6c93e5?auto=format&fit=crop&w=900&q=80", // 구름 위 산봉우리
-            "https://images.unsplash.com/photo-1502082553048-f009c37129b9?auto=format&fit=crop&w=900&q=80"  // 거대한 숲속 나무와 빛
+            "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=900&q=80",
+            "https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=900&q=80",
+            "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=900&q=80",
+            "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=900&q=80",
+            "https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=900&q=80",
+            "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=900&q=80",
+            "https://images.unsplash.com/photo-1454496522488-7a8e488e8606?auto=format&fit=crop&w=900&q=80",
+            "https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?auto=format&fit=crop&w=900&q=80",
+            "https://images.unsplash.com/photo-1533240332313-0db49b459ad6?auto=format&fit=crop&w=900&q=80",
+            "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?auto=format&fit=crop&w=900&q=80",
+            "https://images.unsplash.com/photo-1426604966848-d7adac402bff?auto=format&fit=crop&w=900&q=80",
+            "https://images.unsplash.com/photo-1472214103451-9374bd1c798e?auto=format&fit=crop&w=900&q=80",
+            "https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=900&q=80",
+            "https://images.unsplash.com/photo-1439853949127-fa647821eba0?auto=format&fit=crop&w=900&q=80",
+            "https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?auto=format&fit=crop&w=900&q=80",
+            "https://images.unsplash.com/photo-1511497584788-876760111969?auto=format&fit=crop&w=900&q=80",
+            "https://images.unsplash.com/photo-1493246507139-91e8fad9978e?auto=format&fit=crop&w=900&q=80",
+            "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=900&q=80",
+            "https://images.unsplash.com/photo-1447752875215-b2761acb3c5d?auto=format&fit=crop&w=900&q=80",
+            "https://images.unsplash.com/photo-1418065460487-3e41a6c84dc5?auto=format&fit=crop&w=900&q=80",
+            "https://images.unsplash.com/photo-1475924156734-496f6cac6ec1?auto=format&fit=crop&w=900&q=80",
+            "https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?auto=format&fit=crop&w=900&q=80",
+            "https://images.unsplash.com/photo-1483728642387-6c3bdd6c93e5?auto=format&fit=crop&w=900&q=80",
+            "https://images.unsplash.com/photo-1502082553048-f009c37129b9?auto=format&fit=crop&w=900&q=80"
         ];
 
         let activeBgImages = [null, null, null, null];
@@ -514,9 +473,9 @@
             renderAll();
         };
 
-        function saveApiKey() {
-            const key = document.getElementById('apiKey').value.trim();
-            localStorage.setItem('julynight_gemini_key', key);
+        function saveConfig() {
+            localStorage.setItem('julynight_gemini_key', document.getElementById('apiKey').value.trim());
+            localStorage.setItem('julynight_gemini_model', document.getElementById('modelNameInput').value);
         }
 
         function showStatus(msg, isError = false) {
@@ -538,77 +497,42 @@
 
         async function loadRandomNatureBackgrounds() {
             const shuffled = [...PURE_NATURE_POOL].sort(() => 0.5 - Math.random());
-            const selectedUrls = shuffled.slice(0, 4);
-            activeBgImages = await Promise.all(selectedUrls.map(url => loadImageAsync(url)));
+            activeBgImages = await Promise.all(shuffled.slice(0, 4).map(url => loadImageAsync(url)));
         }
 
-        // 전체 카드 자연 배경 새로고침
         async function refreshAllNatureBackgrounds() {
             const mode = document.getElementById('bgThemeSelect').value;
             if (mode === 'nature') {
                 showStatus("🏔️ 4장의 카드 배경을 새로운 대자연 풍경으로 불러오는 중입니다...");
                 await loadRandomNatureBackgrounds();
                 showStatus("✅ 새로운 대자연 풍경 4장이 적용되었습니다.");
-            } else if (mode === 'minimal') {
+            } else {
                 activeBgImages = [null, null, null, null];
             }
             for (let i = 0; i < 4; i++) redrawSingleCard(i);
         }
 
-        // 개별 카드 1장만 다른 자연 배경으로 랜덤 교체
         async function changeSingleNatureBg(cardIndex) {
             const randomUrl = PURE_NATURE_POOL[Math.floor(Math.random() * PURE_NATURE_POOL.length)];
-            const img = await loadImageAsync(randomUrl);
-            activeBgImages[cardIndex] = img;
+            activeBgImages[cardIndex] = await loadImageAsync(randomUrl);
             redrawSingleCard(cardIndex);
-            showStatus(`✅ 카드 ${cardIndex === 0 ? '썸네일' : '소구점 ' + cardIndex}의 배경 사진이 교체되었습니다.`);
         }
 
-        // 개별 카드 1장에 내 사진 업로드
         function uploadSingleCardBg(event, cardIndex) {
             const file = event.target.files[0];
             if (!file) return;
             const reader = new FileReader();
-            reader.onload = function(e) {
+            reader.onload = (e) => {
                 const img = new Image();
-                img.onload = function() {
+                img.onload = () => {
                     activeBgImages[cardIndex] = img;
                     redrawSingleCard(cardIndex);
-                    showStatus(`✅ 선택한 사진이 카드에 적용되었습니다.`);
                 };
                 img.src = e.target.result;
             };
             reader.readAsDataURL(file);
         }
 
-        // 좌측 일괄 사진 업로드
-        function handleBulkImageUpload(event) {
-            const files = Array.from(event.target.files);
-            if (!files.length) return;
-            let loaded = [];
-            let count = 0;
-            files.forEach((f) => {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    const img = new Image();
-                    img.onload = () => {
-                        loaded.push(img);
-                        count++;
-                        if (count === files.length) {
-                            activeBgImages = [0, 1, 2, 3].map(i => loaded[i % loaded.length]);
-                            for (let i = 0; i < 4; i++) redrawSingleCard(i);
-                            showStatus(`✅ 첨부하신 사진 ${loaded.length}장이 카드 배경에 적용되었습니다.`);
-                        }
-                    };
-                    img.src = e.target.result;
-                };
-                reader.readAsDataURL(f);
-            });
-        }
-
-        /**
-         * 데이터 -> 각 카드 아래의 텍스트 수정 입력칸에 동기화
-         */
         function syncCardInputsFromData(data) {
             document.getElementById('cardBadge0').value = "GEAR REVIEW";
             document.getElementById('cardTitle0').value = data.productName;
@@ -622,164 +546,188 @@
             });
         }
 
-        /**
-         * 개별 카드의 입력칸 값을 읽어서 해당 캔버스만 즉시 다시 그리기
-         */
         function redrawSingleCard(index) {
             const badge = document.getElementById(`cardBadge${index}`).value;
             const title = document.getElementById(`cardTitle${index}`).value;
             const spec = document.getElementById(`cardSpec${index}`).value;
             const subHeader = index === 0 ? "JULYNIGHT ARCHIVE" : (currentPostData ? currentPostData.productName : "");
-
             drawSpecCard(`cardCanvas${index}`, badge, title, spec, subHeader, activeBgImages[index]);
         }
 
-        /**
-         * 핵심: 1단계(검색 및 초안 생성) -> 2단계(팩트체크 및 환각/어색한 약어 교차검증)
-         */
-        async function generatePost() {
-            const apiKey = document.getElementById('apiKey').value.trim();
-            const modelName = document.getElementById('modelNameInput').value.trim() || "gemini-3.8-flash";
-            const productName = document.getElementById('productNameInput').value.trim();
-            const toneAndPoints = document.getElementById('toneAndPointInput').value.trim();
-
-            if (!productName) {
-                showStatus("⚠️ <strong>[정확한 브랜드 + 제품명]</strong>을 입력해 주세요!", true);
-                document.getElementById('productNameInput').focus();
-                return;
+        // 무료 외부 웹 검색기(Jina Search)로 구글 API 검색 쿼터 소모 없이 스펙 텍스트 수집
+        async function fetchFreeWebSearch(query) {
+            try {
+                const res = await fetch(`https://s.jina.ai/${encodeURIComponent(query + " 스펙 소재 무게 특징")}`, {
+                    headers: { 'Accept': 'text/plain' }
+                });
+                if (!res.ok) return "";
+                const text = await res.text();
+                return text.slice(0, 4000);
+            } catch (e) {
+                return "";
             }
+        }
 
-            if (!apiKey) {
-                showStatus("⚠️ <strong>Gemini API Key가 비어 있습니다!</strong>", true);
-                document.getElementById('apiKey').focus();
-                return;
-            }
+        function buildMasterPrompt(productName, toneAndPoints, webData) {
+            return `
+당신은 아웃도어 기어 디자이너이자 울트라라이트(UL) 백패커 블로거 '칠월밤(Julynight)'입니다.
+분석할 대상 제품명: "${productName}"
 
-            // STEP 1: 실시간 검색 및 초안 작성
-            showStatus(`🔍 <strong>[1/2단계: 스펙 리서치]</strong> '${productName}'의 실제 원단·무게·구조 데이터를 검색하여 초안을 작성 중입니다...`);
-
-            if (document.getElementById('bgThemeSelect').value === 'nature') {
-                await loadRandomNatureBackgrounds();
-            }
-
-            const step1Prompt = `
-당신은 아웃도어 기어 디자이너이자 백패커 블로거 '칠월밤(Julynight)'입니다.
-대상 제품명: "${productName}"
-
-[사용자 지정 어투 및 작성 방향성 - 최우선 준수]
+[사용자 지정 어투 및 방향성 - 최우선 준수]
 ${toneAndPoints}
 
-[초안 작성 지침]
-1. Google 검색을 통해 "${productName}"의 정확한 공식 스펙(소재, 데니어, 중량 g, 방수/투습 사양, 구조적 특징)을 찾아내세요.
-2. 확실하지 않은 수치나 맥락 없는 영문 약어(예: 'BRS 지향' 등 출처 불명의 조어)는 절대 지어내지 마세요.
+[참고할 웹 검색 스펙 데이터]
+${webData || "자체 보유한 정확한 공식 제품 스펙 지식을 활용하세요."}
 
-아래 JSON 구조로 응답하세요:
+[작성 및 자체 교차검증(Fact-Check) 통합 지침 - 매우 중요]
+1. 작성 전 내부적으로 팩트체크를 수행하세요: "${productName}"과 무관한 브랜드명(예: 뜬금없는 BRS 등), 출처 불명의 영문 약어, 한국 아웃도어 씬에서 쓰이지 않는 어색한 번역투 표현은 철저히 배제하세요.
+2. 확실하게 검증된 원단/소재명, 무게(g), 구조적 특징만 담백하게 서술하세요.
+
+반드시 아래 순수 JSON 구조로만 출력하세요 (마크다운 코드블록 없이 { 로 시작해서 } 로 끝낼 것):
 {
   "productName": "${productName}",
-  "category": "제품 세부 카테고리 영문 대문자",
-  "title": "담백하고 검색 유입에 좋은 블로그 제목",
-  "intro": "도입부 (3~4문장)",
+  "category": "제품 세부 카테고리 영문 대문자 (예: ULTRALIGHT SHELL JACKET)",
+  "title": "제품명과 핵심 소재/특징이 담긴 담백한 네이버 블로그 제목",
+  "intro": "도입부 (3~4문장, ~합니다/입니다)",
   "points": [
     {
       "badge": "POINT 01",
       "shortTitle": "소구점 1 핵심 요약 (16자 이내)",
-      "keySpec": "구체적인 실제 소재/무게 스펙 (24자 이내)",
+      "keySpec": "실제 소재/무게 등 핵심 스펙 (24자 이내)",
       "subHeading": "1. 첫 번째 소구점 소제목",
-      "body": "소구점 1 상세 분석 (4~5문장)"
+      "body": "소구점 1 상세 분석 (4~5문장, ~합니다/입니다)"
     },
     {
       "badge": "POINT 02",
       "shortTitle": "소구점 2 핵심 요약 (16자 이내)",
-      "keySpec": "구체적인 구조/기능 스펙 (24자 이내)",
+      "keySpec": "실제 구조/기능 핵심 스펙 (24자 이내)",
       "subHeading": "2. 두 번째 소구점 소제목",
-      "body": "소구점 2 상세 분석 (4~5문장)"
+      "body": "소구점 2 상세 분석 (4~5문장, ~합니다/입니다)"
     },
     {
       "badge": "POINT 03",
       "shortTitle": "소구점 3 핵심 요약 (16자 이내)",
       "keySpec": "실사용 활용도/패킹/디테일 (24자 이내)",
       "subHeading": "3. 세 번째 소구점 소제목",
-      "body": "소구점 3 상세 분석 (4~5문장)"
+      "body": "소구점 3 상세 분석 (4~5문장, ~합니다/입니다)"
     }
   ],
-  "conclusion": "총평 및 추천 대상 마무리 (3~4문장)",
-  "hashtags": ["#태그1", "#태그2", "연관 해시태그 15개 배열"]
-}
-            `;
+  "conclusion": "마무리 및 총평 (3~4문장, ~합니다/입니다)",
+  "hashtags": ["#태그1", "#태그2", "연관 해시태그 총 15개 배열"]
+}`.trim();
+        }
 
+        /**
+         * 방법 A: API 절약 1회 압축 호출 (외부 무료 검색 + 단일 JSON 생성 + 다중 키 로테이션)
+         */
+        async function generatePostViaApi() {
+            const rawKeys = document.getElementById('apiKey').value.trim();
+            const modelName = document.getElementById('modelNameInput').value;
+            const productName = document.getElementById('productNameInput').value.trim();
+            const toneAndPoints = document.getElementById('toneAndPointInput').value.trim();
+
+            if (!productName) {
+                showStatus("⚠️ <strong>[정확한 브랜드 + 제품명]</strong>을 입력해 주세요!", true);
+                return;
+            }
+            if (!rawKeys) {
+                showStatus("⚠️ API 키가 비어 있습니다. 키를 입력하시거나 아래 <strong>[방법 B. 제미나이 프로 무제한 연동]</strong>을 사용해 보세요!", true);
+                return;
+            }
+
+            const keyList = rawKeys.split(',').map(k => k.trim()).filter(Boolean);
+            showStatus(`🔍 1/2. 무료 외부 검색기로 <strong>'${productName}'</strong>의 스펙 정보를 수집 중입니다... (API 검색 쿼터 소모 0%)`);
+
+            if (document.getElementById('bgThemeSelect').value === 'nature') {
+                await loadRandomNatureBackgrounds();
+            }
+
+            const webData = await fetchFreeWebSearch(productName);
+            const prompt = buildMasterPrompt(productName, toneAndPoints, webData);
+
+            showStatus(`⚡ 2/2. 1회 압축 모드로 원고 작성 및 자체 교차검증을 수행 중입니다...`);
+
+            let lastError = "";
+            for (let i = 0; i < keyList.length; i++) {
+                const currentKey = keyList[i];
+                try {
+                    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${encodeURIComponent(currentKey)}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'x-goog-api-key': currentKey
+                        },
+                        body: JSON.stringify({
+                            contents: [{ parts: [{ text: prompt }] }],
+                            generationConfig: { responseMimeType: "application/json" }
+                        })
+                    });
+
+                    const data = await res.json();
+                    if (data.error) throw new Error(data.error.message);
+
+                    const rawText = data.candidates[0].content.parts.map(p => p.text || "").join("");
+                    const jsonMatch = rawText.match(/\{[\s\S]*\}/);
+                    if (!jsonMatch) throw new Error("JSON 파싱 실패");
+
+                    const parsed = JSON.parse(jsonMatch[0]);
+                    currentPostData = parsed;
+                    syncCardInputsFromData(parsed);
+                    renderAll();
+                    showStatus(`✅ <strong>성공!</strong> '${productName}'의 원고와 대자연 스펙 카드 4장이 완성되었습니다.`);
+                    return;
+                } catch (err) {
+                    lastError = err.message;
+                    console.warn(`키 ${i + 1} 호출 실패, 다음 키 시도:`, err.message);
+                }
+            }
+
+            showStatus(`❌ API 호출 한도 초과: ${lastError}<br>👉 바로 위 <strong>[💎 방법 B. 1️⃣ 제미나이 프로용 명령어 복사하기]</strong> 버튼을 눌러 제미나이 채팅창에 붙여넣으시면 한도 제한 없이 즉시 완성할 수 있습니다!`, true);
+        }
+
+        /**
+         * 방법 B-1: 제미나이 프로 채팅창용 명령어 복사
+         */
+        function copyProPrompt() {
+            const productName = document.getElementById('productNameInput').value.trim();
+            const toneAndPoints = document.getElementById('toneAndPointInput').value.trim();
+
+            if (!productName) {
+                showStatus("⚠️ 먼저 <strong>[정확한 브랜드 + 제품명]</strong> 칸에 제품 이름을 적어주세요!", true);
+                document.getElementById('productNameInput').focus();
+                return;
+            }
+
+            const proPrompt = `[제미나이 프로 실시간 검색 & 팩트체크 요청]\n구글 실시간 검색을 통해 "${productName}"의 정확한 실제 스펙을 찾고 교차검증한 뒤, 아래 지침에 맞춰 순수 JSON 코드만 출력해줘.\n\n` + buildMasterPrompt(productName, toneAndPoints, "");
+            navigator.clipboard.writeText(proPrompt);
+            showStatus("💎 <strong>제미나이 프로용 명령어가 복사되었습니다!</strong><br>지금 제미나이 프로 채팅창에 붙여넣기(Ctrl+V) 하신 후, 나온 <code>{ ... }</code> 결과를 아래 칸에 붙여넣어 주세요.");
+        }
+
+        /**
+         * 방법 B-2: 제미나이 프로에서 가져온 JSON 붙여넣어 즉시 렌더링
+         */
+        async function applyProJson() {
+            const raw = document.getElementById('proJsonInput').value.trim();
+            if (!raw) {
+                showStatus("⚠️ 제미나이 프로 채팅창에서 복사한 JSON 결과를 칸에 붙여넣어 주세요.", true);
+                return;
+            }
             try {
-                let step1Res = await callGeminiApi(apiKey, modelName, step1Prompt, true);
-                if (step1Res.error) {
-                    step1Res = await callGeminiApi(apiKey, modelName, step1Prompt, false);
-                }
-                if (step1Res.error) throw new Error(step1Res.error.message);
+                const match = raw.match(/\{[\s\S]*\}/);
+                if (!match) throw new Error("중괄호 { } 형식의 JSON 데이터를 찾을 수 없습니다.");
+                const parsed = JSON.parse(match[0]);
 
-                const draftText = step1Res.candidates[0].content.parts.map(p => p.text || "").join("");
-                const draftMatch = draftText.match(/\{[\s\S]*\}/);
-                if (!draftMatch) throw new Error("초안 JSON 생성 실패");
-
-                // STEP 2: 교차검증 (팩트체크 & 어색한 표현/환각 제거 & 문체 교정)
-                showStatus(`🛡️ <strong>[2/2단계: 팩트체크 및 교차검증]</strong> 작성된 초안에서 잘못된 스펙, 어색한 단어(예: 알 수 없는 약어), 문체 이탈 여부를 재검수하고 있습니다...`);
-
-                const step2VerificationPrompt = `
-당신은 아웃도어 전문 수석 에디터이자 팩트체커입니다.
-다음은 "${productName}"에 대해 작성된 블로그 원고 초안(JSON)입니다.
-
-[초안 데이터]
-${draftMatch[0]}
-
-[교차검증 및 교정 지침 - 엄격히 수행할 것]
-1. **팩트 및 용어 검증**: "${productName}"과 무관한 브랜드명(예: 뜬금없는 BRS 등), 한국 아웃도어 씬에서 쓰이지 않는 어색한 신조어나 번역투 표현, 검증되지 않은 허위 스펙이 있다면 즉시 삭제하거나 정확한 사실로 바로잡으세요.
-2. **사용자 요청 어투 완벽 반영**:
-${toneAndPoints}
-3. 문장이 자연스럽고 신뢰감 있게 읽히도록 매끄럽게 다듬어 최종 교정된 JSON만 출력하세요 (코드블록 없이 { 로 시작해서 } 로 끝낼 것).
-                `;
-
-                let step2Res = await callGeminiApi(apiKey, modelName, step2VerificationPrompt, true);
-                if (step2Res.error) {
-                    step2Res = await callGeminiApi(apiKey, modelName, step2VerificationPrompt, false);
+                if (document.getElementById('bgThemeSelect').value === 'nature') {
+                    await loadRandomNatureBackgrounds();
                 }
 
-                let finalJsonText = draftMatch[0];
-                if (!step2Res.error && step2Res.candidates) {
-                    const verifiedText = step2Res.candidates[0].content.parts.map(p => p.text || "").join("");
-                    const verifiedMatch = verifiedText.match(/\{[\s\S]*\}/);
-                    if (verifiedMatch) finalJsonText = verifiedMatch[0];
-                }
-
-                const parsed = JSON.parse(finalJsonText);
                 currentPostData = parsed;
                 syncCardInputsFromData(parsed);
                 renderAll();
-
-                showStatus(`✅ <strong>2단계 교차검증 완료!</strong> '${productName}'의 검증된 원고와 대자연 스펙 카드 4장이 완성되었습니다. 카드 아래 입력칸에서 문구를 직접 다듬으실 수도 있습니다.`);
+                showStatus("🎉 <strong>제미나이 프로 연동 완료!</strong> 스펙 카드 4장과 네이버 블로그 서식이 완벽하게 생성되었습니다.");
             } catch (err) {
-                console.error(err);
-                showStatus(`❌ 생성 중 오류가 발생했습니다: ${err.message}`, true);
+                showStatus(`❌ 결과 코드 읽기 오류: ${err.message}`, true);
             }
-        }
-
-        async function callGeminiApi(apiKey, modelName, promptText, useGoogleSearch = true) {
-            const cleanModel = modelName.replace(/^models\//, '');
-            const bodyPayload = {
-                contents: [{ parts: [{ text: promptText }] }]
-            };
-
-            if (useGoogleSearch) {
-                bodyPayload.tools = [{ google_search: {} }];
-            } else {
-                bodyPayload.generationConfig = { responseMimeType: "application/json" };
-            }
-
-            const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${cleanModel}:generateContent?key=${encodeURIComponent(apiKey)}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'x-goog-api-key': apiKey
-                },
-                body: JSON.stringify(bodyPayload)
-            });
-            return await res.json();
         }
 
         function renderAll() {
@@ -804,7 +752,6 @@ ${toneAndPoints}
                 const nh = bgImg.height * scale;
                 ctx.drawImage(bgImg, (W - nw) / 2, (H - nh) / 2, nw, nh);
 
-                // 자연 풍경이 잘 살아나면서도 글씨가 선명하도록 그라데이션 밸런스 조정
                 const overlay = ctx.createLinearGradient(0, 0, 0, H);
                 overlay.addColorStop(0, "rgba(15, 18, 20, 0.65)");
                 overlay.addColorStop(0.45, "rgba(15, 18, 20, 0.42)");
@@ -883,12 +830,8 @@ ${toneAndPoints}
             ctx.fillText(line, x, y);
         }
 
-        /**
-         * 네이버 블로그 원고 렌더링
-         * - 이미지 삽입 위치 안내를 강렬한 빨간색(Red) 박스+굵은 텍스트로 처리하여 시인성 극대화
-         */
         function renderBlogHtml(data) {
-            const hashtagString = data.hashtags.join(' ');
+            const hashtagString = (data.hashtags || []).join(' ');
             window.currentHashtags = hashtagString;
 
             const redGuideStyle = "color: #dc2626; background-color: #fef2f2; border: 2px dashed #ef4444; padding: 12px 16px; border-radius: 8px; font-size: 15px; font-weight: 800; text-align: center; margin: 22px 0;";
@@ -982,12 +925,8 @@ ${toneAndPoints}
                         body: "독자적인 K-Mono Cut 패턴을 통해 봉제선 자체를 최소화함으로써 누수 가능성을 줄이고 내구성을 보완했습니다. 초경량 자켓에서는 생략되기 쉬운 겨드랑이 벤틸레이션이 적용되어 있어 운행 중 체온 조절이 직관적입니다."
                     }
                 ],
-                conclusion: "경량성을 최우선으로 하는 쓰루하이킹, 트레일러닝, 3계절 백패킹에서 높은 효율을 보여주는 레인쉘입니다. 좌측 입력창에 원하시는 제품명과 어투를 입력하시면 2단계 교차검증을 거쳐 원고가 새로 작성됩니다.",
-                hashtags: [
-                    "#몬벨버사라이트", "#몬벨자켓", "#경량레인자켓", "#백패킹우의", "#UL백패킹",
-                    "#고어텍스자켓", "#윈드스토퍼", "#트레일러닝자켓", "#하드쉘추천", "#몬벨",
-                    "#백패킹장비", "#하이킹기어", "#방수자켓", "#초경량바람막이", "#아웃도어기어"
-                ]
+                conclusion: "경량성을 최우선으로 하는 쓰루하이킹, 트레일러닝, 3계절 백패킹에서 높은 효율을 보여주는 레인쉘입니다.",
+                hashtags: ["#몬벨버사라이트", "#몬벨자켓", "#경량레인자켓", "#백패킹우의", "#UL백패킹"]
             };
         }
 
@@ -996,9 +935,8 @@ ${toneAndPoints}
             try {
                 const htmlBlob = new Blob([container.innerHTML], { type: 'text/html' });
                 const textBlob = new Blob([container.innerText], { type: 'text/plain' });
-                const item = new ClipboardItem({ 'text/html': htmlBlob, 'text/plain': textBlob });
-                await navigator.clipboard.write([item]);
-                showStatus("✅ <strong>원고가 복사되었습니다!</strong> 네이버 블로그에 붙여넣기(Ctrl+V) 후 빨간색 안내 줄 위치에 이미지를 넣어주세요.");
+                await navigator.clipboard.write([new ClipboardItem({ 'text/html': htmlBlob, 'text/plain': textBlob })]);
+                showStatus("✅ <strong>원고가 복사되었습니다!</strong> 네이버 블로그에 붙여넣기(Ctrl+V) 하세요.");
             } catch (err) {
                 const range = document.createRange();
                 range.selectNodeContents(container);
@@ -1014,22 +952,20 @@ ${toneAndPoints}
         function copyHashtagsOnly() {
             if (!window.currentHashtags) return;
             navigator.clipboard.writeText(window.currentHashtags);
-            showStatus("✅ 해시태그 15개가 클립보드에 복사되었습니다!");
+            showStatus("✅ 해시태그가 복사되었습니다!");
         }
 
         function copyCanvasImage(canvasId) {
             const canvas = document.getElementById(canvasId);
             canvas.toBlob(async (blob) => {
                 try {
-                    const item = new ClipboardItem({ 'image/png': blob });
-                    await navigator.clipboard.write([item]);
-                    showStatus("✅ <strong>이미지가 복사되었습니다!</strong> 네이버 블로그의 빨간색 안내 문구 자리에 바로 붙여넣기(Ctrl+V) 하세요.");
+                    await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]);
+                    showStatus("✅ <strong>이미지가 복사되었습니다!</strong> 네이버 블로그에 붙여넣기(Ctrl+V) 하세요.");
                 } catch (err) {
                     const link = document.createElement('a');
                     link.download = `${canvasId}.png`;
                     link.href = canvas.toDataURL();
                     link.click();
-                    showStatus("💾 이미지가 다운로드되었습니다.");
                 }
             });
         }
