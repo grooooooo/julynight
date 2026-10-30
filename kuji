@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>모바일 이치방쿠지</title>
+  <style>
+    :root {
+      --bg: #f4f5f7;
+      --card: #ffffff;
+      --text: #1e293b;
+      --accent: #76b89d; /* 피스타치오 민트 포인트 */
+      --border: #e2e8f0;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", Roboto, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      padding-bottom: 60px;
+    }
+    header {
+      background: var(--card);
+      padding: 16px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    header h1 { font-size: 1.15rem; font-weight: 800; }
+    .mode-btn {
+      background: #f1f5f9;
+      border: 1px solid var(--border);
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .container { max-width: 540px; margin: 0 auto; padding: 16px; }
+    .hidden { display: none !important; }
+
+    /* 현황판 영역 */
+    .status-board {
+      background: var(--card);
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+    }
+    .status-title {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #64748b;
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+    }
+    .prize-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+    .prize-chip {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #fff;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    }
+    .prize-chip.empty { opacity: 0.35; text-decoration: line-through; }
+
+    /* 뽑기 티켓 그리드 */
+    .ticket-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+    .ticket {
+      aspect-ratio: 1;
+      background: linear-gradient(135deg, #2c3e50, #1a252f);
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      color: #fff;
+      font-weight: 800;
+      font-size: 1.1rem;
+      cursor: pointer;
+      position: relative;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.12);
+      transition: transform 0.1s;
+      border: 2px solid #3e5871;
+    }
+    .ticket:active { transform: scale(0.94); }
+    .ticket span { font-size: 0.65rem; font-weight: 500; opacity: 0.7; margin-top: 2px; }
+    .ticket.opened {
+      background: #e2e8f0;
+      border: 2px dashed #cbd5e1;
+      color: #64748b;
+      box-shadow: none;
+      cursor: default;
+    }
+    .ticket.opened .opened-badge {
+      font-size: 0.85rem;
+      font-weight: 800;
+      padding: 4px 8px;
+      border-radius: 6px;
+      color: #fff;
+    }
+
+    /* 관리자 페이지 */
+    .admin-card {
+      background: var(--card);
+      border-radius: 16px;
+      padding: 18px;
+      margin-bottom: 16px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+    }
+    .admin-row {
+      display: grid;
+      grid-template-columns: 44px 1fr 1.2fr 70px 36px;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .admin-row input[type="color"] {
+      width: 40px; height: 40px; border: none; border-radius: 8px; cursor: pointer; background: none;
+    }
+    .admin-row input[type="text"], .admin-row input[type="number"] {
+      width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 8px; font-size: 0.9rem;
+    }
+    .del-btn {
+      background: #fee2e2; color: #ef4444; border: none; width: 36px; height: 36px;
+      border-radius: 8px; font-weight: bold; cursor: pointer;
+    }
+    .btn-group { display: flex; flex-direction: column; gap: 10px; margin-top: 16px; }
+    .btn {
+      width: 100%; padding: 14px; border: none; border-radius: 12px;
+      font-size: 0.95rem; font-weight: 700; cursor: pointer;
+    }
+    .btn-add { background: #f1f5f9; color: #334155; }
+    .btn-primary { background: var(--accent); color: #fff; }
+    .btn-danger { background: #ef4444; color: #fff; }
+
+    /* 결과 발표 모달 */
+    .modal-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.75);
+      display: flex; justify-content: center; align-items: center; z-index: 100; padding: 20px;
+    }
+    .modal-box {
+      background: #fff; width: 100%; max-width: 340px; border-radius: 24px;
+      padding: 32px 24px; text-align: center; animation: pop 0.35s cubic-bezier(0.17, 0.89, 0.32, 1.28);
+    }
+    @keyframes pop {
+      0% { transform: scale(0.6); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .result-badge {
+      display: inline-block; padding: 12px 28px; border-radius: 999px;
+      color: #fff; font-size: 2rem; font-weight: 900; margin: 16px 0;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.18);
+    }
+    .result-desc { font-size: 1.15rem; font-weight: 700; color: #334155; margin-bottom: 24px; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1 id="pageTitle">LUCKY KUJI</h1>
+    <button class="mode-btn" onclick="toggleView()" id="toggleBtn">⚙️ 관리 설정</button>
+  </header>
+
+  <div class="container">
+    <!-- 1. 실제 뽑기 화면 -->
+    <div id="drawView">
+      <div class="status-board">
+        <div class="status-title">
+          <span>남은 경품 현황</span>
+          <span id="remainCount">0 / 0장</span>
+        </div>
+        <div class="prize-chips" id="statusChips"></div>
+      </div>
+
+      <div class="ticket-grid" id="ticketGrid"></div>
+    </div>
+
+    <!-- 2. 관리자 설정 화면 -->
+    <div id="adminView" class="hidden">
+      <div class="admin-card">
+        <h3 style="margin-bottom: 12px; font-size: 1rem;">경품 및 색상·수량 설정</h3>
+        <p style="font-size: 0.8rem; color: #64748b; margin-bottom: 16px;">
+          색상, 등급(A상 등), 상품명, 수량을 입력하세요. [저장 및 새 쿠지판 생성]을 누르면 티켓이 무작위로 섞여 배치됩니다.
+        </p>
+        <div id="prizeInputList"></div>
+        <div class="btn-group">
+          <button class="btn btn-add" onclick="addPrizeRow()">+ 등급 추가</button>
+          <button class="btn btn-primary" onclick="saveAndGenerate()">저장 및 새 쿠지판 생성 (셔플)</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 당첨 결과 모달 -->
+  <div id="resultModal" class="modal-overlay hidden" onclick="closeModal()">
+    <div class="modal-box" onclick="event.stopPropagation()">
+      <div style="font-size: 0.9rem; font-weight: 700; color: #64748b;">축하합니다!</div>
+      <div id="modalRank" class="result-badge">A상</div>
+      <div id="modalDesc" class="result-desc">상품명</div>
+      <button class="btn btn-primary" onclick="closeModal()">확인</button>
+    </div>
+  </div>
+
+  <script>
+    const STORAGE_KEY = 'mobile_ichiban_kuji_v1';
+
+    // 기본 샘플 데이터 (피스타치오, 민트, 코랄, 머스타드 등 시인성 좋은 컬러)
+    const defaultPrizes = [
+      { id: 'p1', rank: 'A상', desc: '메인 스페셜 기어', color: '#76b89d', count: 1 },
+      { id: 'p2', rank: 'B상', desc: '경량 파우치', color: '#4ea8de', count: 2 },
+      { id: 'p3', rank: 'C상', desc: '커스텀 스트랩', color: '#f4a261', count: 5 },
+      { id: 'p4', rank: 'D상', desc: '리미티드 스티커 팩', color: '#94a3b8', count: 12 }
+    ];
+
+    let state = {
+      prizes: [],
+      tickets: [] // { number, prizeId, rank, desc, color, opened }
+    };
+
+    function loadState() {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        state = JSON.parse(saved);
+      } else {
+        state.prizes = JSON.parse(JSON.stringify(defaultPrizes));
+        generateTickets();
+      }
+    }
+
+    function saveState() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
+
+    // 쿠지 티켓 생성 및 피셔-예이츠(Fisher-Yates) 셔플
+    function generateTickets() {
+      let pool = [];
+      state.prizes.forEach(p => {
+        const qty = parseInt(p.count, 10) || 0;
+        for (let i = 0; i < qty; i++) {
+          pool.push({
+            prizeId: p.id,
+            rank: p.rank,
+            desc: p.desc,
+            color: p.color,
+            opened: false
+          });
+        }
+      });
+
+      for (let i = pool.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [pool[i], pool[j]] = [pool[j], pool[i]];
+      }
+
+      state.tickets = pool.map((item, idx) => ({
+        number: idx + 1,
+        ...item
+      }));
+      saveState();
+    }
+
+    // 뽑기 화면 렌더링
+    function renderDrawView() {
+      const statusChips = document.getElementById('statusChips');
+      const ticketGrid = document.getElementById('ticketGrid');
+      const remainCount = document.getElementById('remainCount');
+
+      // 남은 수량 계산
+      const total = state.tickets.length;
+      const remainTotal = state.tickets.filter(t => !t.opened).length;
+      remainCount.textContent = `남은 수량 ${remainTotal} / ${total}장`;
+
+      // 상단 칩 렌더링
+      statusChips.innerHTML = '';
+      state.prizes.forEach(p => {
+        const left = state.tickets.filter(t => t.prizeId === p.id && !t.opened).length;
+        const chip = document.createElement('div');
+        chip.className = `prize-chip ${left === 0 ? 'empty' : ''}`;
+        chip.style.backgroundColor = p.color;
+        chip.textContent = `${p.rank} (${left}/${p.count})`;
+        statusChips.appendChild(chip);
+      });
+
+      // 티켓 그리드 렌더링
+      ticketGrid.innerHTML = '';
+      state.tickets.forEach((t, idx) => {
+        const card = document.createElement('div');
+        if (t.opened) {
+          card.className = 'ticket opened';
+          card.innerHTML = `<div class="opened-badge" style="background:${t.color}">${t.rank}</div>`;
+        } else {
+          card.className = 'ticket';
+          card.innerHTML = `${t.number}<span>PULL</span>`;
+          card.onclick = () => pickTicket(idx);
+        }
+        ticketGrid.appendChild(card);
+      });
+    }
+
+    // 티켓 클릭 이벤트
+    function pickTicket(index) {
+      const ticket = state.tickets[index];
+      if (ticket.opened) return;
+
+      ticket.opened = true;
+      saveState();
+      renderDrawView();
+
+      // 결과 모달 띄우기
+      const modal = document.getElementById('resultModal');
+      const modalRank = document.getElementById('modalRank');
+      const modalDesc = document.getElementById('modalDesc');
+
+      modalRank.textContent = ticket.rank;
+      modalRank.style.backgroundColor = ticket.color;
+      modalDesc.textContent = ticket.desc || '축하합니다!';
+      modal.classList.remove('hidden');
+    }
+
+    function closeModal() {
+      document.getElementById('resultModal').classList.add('hidden');
+    }
+
+    // 관리자 화면 렌더링
+    function renderAdminView() {
+      const list = document.getElementById('prizeInputList');
+      list.innerHTML = '';
+      state.prizes.forEach((p, idx) => {
+        const row = document.createElement('div');
+        row.className = 'admin-row';
+        row.innerHTML = `
+          <input type="color" value="${p.color}" onchange="updatePrize(${idx}, 'color', this.value)">
+          <input type="text" placeholder="등급 (예: A상)" value="${p.rank}" oninput="updatePrize(${idx}, 'rank', this.value)">
+          <input type="text" placeholder="상품 설명" value="${p.desc}" oninput="updatePrize(${idx}, 'desc', this.value)">
+          <input type="number" min="1" max="500" value="${p.count}" oninput="updatePrize(${idx}, 'count', this.value)">
+          <button class="del-btn" onclick="removePrizeRow(${idx})">✕</button>
+        `;
+        list.appendChild(row);
+      });
+    }
+
+    function updatePrize(idx, key, val) {
+      state.prizes[idx][key] = key === 'count' ? parseInt(val, 10) || 0 : val;
+    }
+
+    function addPrizeRow() {
+      const randomColors = ['#76b89d', '#4ea8de', '#f4a261', '#e76f51', '#a855f7', '#64748b'];
+      const nextChar = String.fromCharCode(65 + state.prizes.length);
+      state.prizes.push({
+        id: 'p_' + Date.now(),
+        rank: `${nextChar}상`,
+        desc: '상품명 입력',
+        color: randomColors[state.prizes.length % randomColors.length],
+        count: 1
+      });
+      renderAdminView();
+    }
+
+    function removePrizeRow(idx) {
+      if (state.prizes.length <= 1) {
+        alert('최소 1개의 등급은 있어야 합니다.');
+        return;
+      }
+      state.prizes.splice(idx, 1);
+      renderAdminView();
+    }
+
+    function saveAndGenerate() {
+      if (!confirm('새로운 쿠지판을 생성하면 기존 뽑기 진행 내역이 초기화되고 다시 섞입니다. 계속할까요?')) return;
+      generateTickets();
+      renderDrawView();
+      toggleView();
+    }
+
+    function toggleView() {
+      const drawView = document.getElementById('drawView');
+      const adminView = document.getElementById('adminView');
+      const toggleBtn = document.getElementById('toggleBtn');
+      const isDraw = !drawView.classList.contains('hidden');
+
+      if (isDraw) {
+        renderAdminView();
+        drawView.classList.add('hidden');
+        adminView.classList.remove('hidden');
+        toggleBtn.textContent = '🎯 뽑기 화면으로';
+      } else {
+        renderDrawView();
+        adminView.classList.add('hidden');
+        drawView.classList.remove('hidden');
+        toggleBtn.textContent = '⚙️ 관리 설정';
+      }
+    }
+
+    // 초기화 실행
+    loadState();
+    renderDrawView();
+  </script>
+</body>
+</html>
+
