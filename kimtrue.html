@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>가챠 랜덤뽑기</title>
+  <style>
+    :root {
+      --navy: #0f2942;
+      --yellow: #fde047;
+      --mint: #76b89d;
+      --coral: #ff6b6b;
+      --cream: #fdfbf7;
+      --border: #1e293b;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", Roboto, sans-serif;
+      background-color: var(--navy);
+      color: #1e293b;
+      min-height: 100vh;
+      padding-bottom: 60px;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* 전체 배경 (bg.png 우선 적용, 없으면 산너미.png 적용) */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image: url('bg.png'), url('산너미.png');
+      background-size: cover;
+      background-position: center;
+      opacity: 0.22;
+      filter: blur(3px);
+      z-index: -1;
+    }
+
+    header {
+      background: rgba(15, 41, 66, 0.9);
+      backdrop-filter: blur(8px);
+      padding: 12px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid rgba(255,255,255,0.15);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+    }
+    header h1 {
+      font-size: 1rem;
+      font-weight: 900;
+      color: var(--yellow);
+      letter-spacing: -0.3px;
+    }
+    .mode-btn {
+      background: #ffffff;
+      color: var(--navy);
+      border: 2px solid var(--border);
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 2px 0 var(--border);
+    }
+    .mode-btn:active { transform: translateY(2px); box-shadow: none; }
+
+    .container { max-width: 500px; margin: 0 auto; padding: 14px; }
+    .hidden { display: none !important; }
+
+    /* 상단 메인 배너 */
+    .hero-banner {
+      width: 100%;
+      border-radius: 20px;
+      overflow: hidden;
+      border: 3px solid var(--border);
+      box-shadow: 0 6px 0 rgba(0,0,0,0.35);
+      margin-bottom: 16px;
+      background: var(--cream);
+    }
+    .hero-banner img {
+      width: 100%;
+      display: block;
+      height: auto;
+    }
+
+    /* 남은 경품 현황판 */
+    .status-board {
+      background: rgba(253, 251, 247, 0.96);
+      border: 3px solid var(--border);
+      border-radius: 18px;
+      padding: 14px 16px;
+      margin-bottom: 18px;
+      box-shadow: 0 5px 0 rgba(0,0,0,0.3);
+    }
+    .status-title {
+      font-size: 0.85rem;
+      font-weight: 800;
+      color: var(--navy);
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .prize-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+    .prize-chip {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 800;
+      color: #fff;
+      border: 2px solid var(--border);
+      box-shadow: 0 2px 0 var(--border);
+      text-shadow: 0 1px 2px rgba(0,0,0,0.35);
+    }
+    .prize-chip.empty {
+      opacity: 0.35;
+      text-decoration: line-through;
+      box-shadow: none;
+    }
+
+    /* 뽑기 버튼 그리드 */
+    .ticket-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+    .ticket {
+      aspect-ratio: 1 / 1.12;
+      background: #ffffff;
+      border-radius: 16px;
+      border: 3px solid var(--border);
+      box-shadow: 0 5px 0 var(--border);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      padding: 6px;
+      cursor: pointer;
+      position: relative;
+      transition: transform 0.1s, box-shadow 0.1s;
+      overflow: hidden;
+    }
+    .ticket:active {
+      transform: translateY(4px);
+      box-shadow: 0 1px 0 var(--border);
+    }
+    .ticket-num {
+      align-self: flex-start;
+      background: var(--yellow);
+      color: var(--navy);
+      font-size: 0.72rem;
+      font-weight: 900;
+      padding: 2px 7px;
+      border-radius: 999px;
+      border: 1.5px solid var(--border);
+      line-height: 1.1;
+    }
+    .ticket-logo {
+      width: 78%;
+      height: 62%;
+      object-fit: contain;
+      margin: auto 0;
+      transition: transform 0.2s;
+    }
+    .ticket:hover .ticket-logo { transform: scale(1.07) rotate(-3deg); }
+    .ticket-label {
+      font-size: 0.68rem;
+      font-weight: 900;
+      color: var(--navy);
+      background: #f1f5f9;
+      width: 100%;
+      text-align: center;
+      border-radius: 6px;
+      padding: 2px 0;
+    }
+
+    /* 이미 뽑힌 티켓 */
+    .ticket.opened {
+      background: rgba(226, 232, 240, 0.82);
+      border: 2px dashed #64748b;
+      box-shadow: none;
+      cursor: default;
+      justify-content: center;
+    }
+    .ticket.opened:active { transform: none; }
+    .opened-num {
+      font-size: 0.7rem;
+      color: #64748b;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .opened-badge {
+      font-size: 0.85rem;
+      font-weight: 900;
+      padding: 5px 10px;
+      border-radius: 999px;
+      color: #fff;
+      border: 2px solid var(--border);
+      text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+    }
+
+    /* 관리자 설정 화면 */
+    .admin-card {
+      background: #ffffff;
+      border: 3px solid var(--border);
+      border-radius: 20px;
+      padding: 18px;
+      box-shadow: 0 6px 0 rgba(0,0,0,0.35);
+    }
+    .title-input-box {
+      margin-bottom: 16px;
+      padding-bottom: 14px;
+      border-bottom: 2px dashed #e2e8f0;
+    }
+    .title-input-box label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 800;
+      color: var(--navy);
+      margin-bottom: 6px;
+    }
+    .title-input-box input {
+      width: 100%;
+      padding: 10px;
+      border: 2px solid #cbd5e1;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+    .admin-row {
+      display: grid;
+      grid-template-columns: 42px 1fr 1.2fr 64px 34px;
+      gap: 6px;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .admin-row input[type="color"] {
+      width: 38px; height: 38px; border: 2px solid var(--border); border-radius: 8px; cursor: pointer; background: none;
+    }
+    .admin-row input[type="text"], .admin-row input[type="number"] {
+      width: 100%; padding: 9px; border: 2px solid #cbd5e1; border-radius: 8px; font-size: 0.85rem; font-weight: 600;
+    }
+    .del-btn {
+      background: #fee2e2; color: #ef4444; border: 2px solid #ef4444; width: 34px; height: 38px;
+      border-radius: 8px; font-weight: 900; cursor: pointer;
+    }
+    .btn-group { display: flex; flex-direction: column; gap: 10px; margin-top: 16px; }
+    .btn {
+      width: 100%; padding: 14px; border: 2px solid var(--border); border-radius: 12px;
+      font-size: 0.95rem; font-weight: 900; cursor: pointer;
+      box-shadow: 0 4px 0 var(--border);
+    }
+    .btn:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--border); }
+    .btn-add { background: #f1f5f9; color: #1e293b; }
+    .btn-primary { background: var(--mint); color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,0.25); }
+
+    /* 모달 공통 (카운트다운 + 결과창) */
+    .modal-overlay {
+      position: fixed; inset: 0; background: rgba(15, 41, 66, 0.88);
+      backdrop-filter: blur(5px);
+      display: flex; justify-content: center; align-items: center; z-index: 100; padding: 20px;
+    }
+    .modal-box {
+      background: #ffffff;
+      width: 100%;
+      max-width: 340px;
+      border-radius: 28px;
+      border: 4px solid var(--border);
+      box-shadow: 0 10px 0 var(--border);
+      padding: 28px 22px;
+      text-align: center;
+      position: relative;
+    }
+
+    /* 카운트다운 애니메이션 */
+    .count-logo {
+      width: 130px;
+      height: 130px;
+      object-fit: contain;
+      margin: 0 auto 8px;
+      animation: wiggle 0.4s infinite ease-in-out;
+    }
+    @keyframes wiggle {
+      0%, 100% { transform: rotate(-10deg) scale(1.05); }
+      50% { transform: rotate(10deg) scale(0.95); }
+    }
+    .count-number {
+      font-size: 4.5rem;
+      font-weight: 900;
+      color: var(--coral);
+      line-height: 1;
+      margin: 8px 0;
+      text-shadow: 3px 3px 0 var(--border);
+      animation: pulsePop 1s infinite;
+    }
+    @keyframes pulsePop {
+      0% { transform: scale(0.5); opacity: 0.3; }
+      50% { transform: scale(1.15); opacity: 1; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .count-sub {
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: var(--navy);
+    }
+
+    /* 당첨 결과 연출 */
+    .result-pop {
+      animation: popIn 0.4s cubic-bezier(0.17, 0.89, 0.32, 1.28);
+    }
+    @keyframes popIn {
+      0% { transform: scale(0.5); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .result-logo {
+      width: 95px;
+      height: 95px;
+      object-fit: contain;
+      margin-bottom: 4px;
+    }
+    .result-badge {
+      display: inline-block;
+      padding: 12px 30px;
+      border-radius: 999px;
+      color: #fff;
+      font-size: 2.1rem;
+      font-weight: 900;
+      margin: 12px 0;
+      border: 3px solid var(--border);
+      box-shadow: 0 5px 0 var(--border);
+      text-shadow: 0 2px 3px rgba(0,0,0,0.3);
+    }
+    .result-desc {
+      font-size: 1.2rem;
+      font-weight: 900;
+      color: var(--navy);
+      margin-bottom: 22px;
+      word-break: keep-all;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1 id="headerTitle">⚡ 가챠 랜덤뽑기</h1>
+    <button class="mode-btn" onclick="toggleView()" id="toggleBtn">⚙️ 관리 설정</button>
+  </header>
+
+  <div class="container">
+    <!-- 1. 실제 뽑기 화면 -->
+    <div id="drawView">
+      <!-- 상단 배너 (bg.png 우선, 없으면 산너미.png) -->
+      <div class="hero-banner">
+        <img src="bg.png" onerror="this.onerror=null; this.src='산너미.png';" alt="메인 배너">
+      </div>
+
+      <!-- 남은 수량 보드 -->
+      <div class="status-board">
+        <div class="status-title">
+          <span>🎁 남은 경품 현황</span>
+          <span id="remainCount">0 / 0장</span>
+        </div>
+        <div class="prize-chips" id="statusChips"></div>
+      </div>
+
+      <!-- 뽑기 티켓 그리드 -->
+      <div class="ticket-grid" id="ticketGrid"></div>
+    </div>
+
+    <!-- 2. 관리자 설정 화면 -->
+    <div id="adminView" class="hidden">
+      <div class="admin-card">
+        <div class="title-input-box">
+          <label>📌 상단 페이지 제목 설정</label>
+          <input type="text" id="titleInput" placeholder="예: 산너미 가챠 랜덤뽑기" oninput="updateTitle(this.value)">
+        </div>
+
+        <h3 style="margin-bottom: 8px; font-size: 1.05rem; color: var(--navy);">🎨 색상 · 등급 · 수량 설정</h3>
+        <p style="font-size: 0.8rem; color: #64748b; margin-bottom: 16px; line-height: 1.4;">
+          색상과 상 이름(A상, B상 등), 상품명, 수량을 입력하세요.<br>
+          <strong>[저장 및 새 가챠판 생성]</strong>을 누르면 티켓들이 무작위로 섞입니다.
+        </p>
+        <div id="prizeInputList"></div>
+        <div class="btn-group">
+          <button class="btn btn-add" onclick="addPrizeRow()">+ 새로운 상 추가</button>
+          <button class="btn btn-primary" onclick="saveAndGenerate()">🎲 저장 및 새 가챠판 생성 (셔플)</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 카운트다운(3, 2, 1) & 당첨 결과 모달 -->
+  <div id="resultModal" class="modal-overlay hidden">
+    <!-- 3, 2, 1 카운트다운 박스 -->
+    <div id="countdownBox" class="modal-box">
+      <img class="count-logo" src="logo.png" onerror="this.onerror=null; this.src='진실님.png';" alt="로고">
+      <div id="countNum" class="count-number">3</div>
+      <div class="count-sub">두구두구... 어떤 상이 나올까?!</div>
+    </div>
+
+    <!-- 결과 공개 박스 -->
+    <div id="resultBox" class="modal-box result-pop hidden" onclick="event.stopPropagation()">
+      <div id="pickedTicketNum" style="font-size: 0.85rem; font-weight: 800; color: #64748b; margin-bottom: 4px;">NO. 1</div>
+      <img class="result-logo" src="logo.png" onerror="this.onerror=null; this.src='진실님.png';" alt="당첨 로고">
+      <div style="font-size: 0.95rem; font-weight: 900; color: var(--coral);">🎉 축하합니다! 🎉</div>
+      <div id="modalRank" class="result-badge">A상</div>
+      <div id="modalDesc" class="result-desc">경품명</div>
+      <button class="btn btn-primary" onclick="closeModal()">확인 완료</button>
+    </div>
+  </div>
+
+  <script>
+    // 파일 경로(이름)마다 데이터가 따로 저장되도록 설정 (기존 kuji.html과 충돌 방지)
+    const STORAGE_KEY = 'gacha_storage_' + window.location.pathname;
+
+    const defaultPrizes = [
+      { id: 'p1', rank: 'A상', desc: '스페셜 기어', color: '#76b89d', count: 2 },
+      { id: 'p2', rank: 'B상', desc: '경량 아이템', color: '#38bdf8', count: 3 },
+      { id: 'p3', rank: 'C상', desc: '커스텀 굿즈', color: '#fb7185', count: 5 },
+      { id: 'p4', rank: 'D상', desc: '참가 기프트', color: '#64748b', count: 10 }
+    ];
+
+    let state = {
+      title: '⚡ 가챠 랜덤뽑기',
+      prizes: [],
+      tickets: []
+    };
+
+    let isDrawing = false;
+
+    function loadState() {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        state = JSON.parse(saved);
+        if (!state.title) state.title = '⚡ 가챠 랜덤뽑기';
+      } else {
+        state.prizes = JSON.parse(JSON.stringify(defaultPrizes));
+        generateTickets();
+      }
+      applyTitle();
+    }
+
+    function saveState() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
+
+    function updateTitle(val) {
+      state.title = val || '⚡ 가챠 랜덤뽑기';
+      applyTitle();
+      saveState();
+    }
+
+    function applyTitle() {
+      document.getElementById('headerTitle').textContent = state.title;
+      document.title = state.title;
+    }
+
+    // 티켓 생성 및 셔플
+    function generateTickets() {
+      let pool = [];
+      state.prizes.forEach(p => {
+        const qty = parseInt(p.count, 10) || 0;
+        for (let i = 0; i < qty; i++) {
+          pool.push({
+            prizeId: p.id,
+            rank: p.rank,
+            desc: p.desc,
+            color: p.color,
+            opened: false
+          });
+        }
+      });
+
+      for (let i = pool.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [pool[i], pool[j]] = [pool[j], pool[i]];
+      }
+
+      state.tickets = pool.map((item, idx) => ({
+        number: idx + 1,
+        ...item
+      }));
+      saveState();
+    }
+
+    // 뽑기 화면 렌더링
+    function renderDrawView() {
+      const statusChips = document.getElementById('statusChips');
+      const ticketGrid = document.getElementById('ticketGrid');
+      const remainCount = document.getElementById('remainCount');
+
+      const total = state.tickets.length;
+      const remainTotal = state.tickets.filter(t => !t.opened).length;
+      remainCount.textContent = `남은 수량 ${remainTotal} / ${total}개`;
+
+      statusChips.innerHTML = '';
+      state.prizes.forEach(p => {
+        const left = state.tickets.filter(t => t.prizeId === p.id && !t.opened).length;
+        const chip = document.createElement('div');
+        chip.className = `prize-chip ${left === 0 ? 'empty' : ''}`;
+        chip.style.backgroundColor = p.color;
+        chip.textContent = `${p.rank} (${left}/${p.count})`;
+        statusChips.appendChild(chip);
+      });
+
+      ticketGrid.innerHTML = '';
+      state.tickets.forEach((t, idx) => {
+        const card = document.createElement('div');
+
+        if (t.opened) {
+          card.className = 'ticket opened';
+          card.innerHTML = `
+            <div class="opened-num">#${t.number}</div>
+            <div class="opened-badge" style="background:${t.color}">${t.rank}</div>
+          `;
+        } else {
+          card.className = 'ticket';
+          card.innerHTML = `
+            <span class="ticket-num">#${t.number}</span>
+            <img class="ticket-logo" src="logo.png" onerror="this.onerror=null; this.src='진실님.png';" alt="뽑기 버튼">
+            <span class="ticket-label">터치!</span>
+          `;
+          card.onclick = () => pickTicket(idx);
+        }
+        ticketGrid.appendChild(card);
+      });
+    }
+
+    // 티켓 선택 시 3, 2, 1 카운트다운 후 결과 발표
+    function pickTicket(index) {
+      if (isDrawing) return;
+      const ticket = state.tickets[index];
+      if (ticket.opened) return;
+
+      isDrawing = true;
+      ticket.opened = true;
+      saveState();
+
+      const modal = document.getElementById('resultModal');
+      const countdownBox = document.getElementById('countdownBox');
+      const resultBox = document.getElementById('resultBox');
+      const countNum = document.getElementById('countNum');
+
+      let count = 3;
+      countNum.textContent = count;
+      countdownBox.classList.remove('hidden');
+      resultBox.classList.add('hidden');
+      modal.classList.remove('hidden');
+
+      const timer = setInterval(() => {
+        count--;
+        if (count > 0) {
+          countNum.textContent = count;
+          countNum.style.animation = 'none';
+          void countNum.offsetWidth;
+          countNum.style.animation = 'pulsePop 1s infinite';
+        } else {
+          clearInterval(timer);
+          countdownBox.classList.add('hidden');
+          document.getElementById('pickedTicketNum').textContent = `선택 번호 #${ticket.number}`;
+          const modalRank = document.getElementById('modalRank');
+          modalRank.textContent = ticket.rank;
+          modalRank.style.backgroundColor = ticket.color;
+          document.getElementById('modalDesc').textContent = ticket.desc || '축하합니다!';
+          
+          resultBox.classList.remove('hidden');
+          renderDrawView();
+          isDrawing = false;
+        }
+      }, 1000);
+    }
+
+    function closeModal() {
+      if (isDrawing) return;
+      document.getElementById('resultModal').classList.add('hidden');
+    }
+
+    // 관리자 화면 렌더링
+    function renderAdminView() {
+      document.getElementById('titleInput').value = state.title;
+      const list = document.getElementById('prizeInputList');
+      list.innerHTML = '';
+      state.prizes.forEach((p, idx) => {
+        const row = document.createElement('div');
+        row.className = 'admin-row';
+        row.innerHTML = `
+          <input type="color" value="${p.color}" onchange="updatePrize(${idx}, 'color', this.value)">
+          <input type="text" placeholder="등급 (예: A상)" value="${p.rank}" oninput="updatePrize(${idx}, 'rank', this.value)">
+          <input type="text" placeholder="상품 설명" value="${p.desc}" oninput="updatePrize(${idx}, 'desc', this.value)">
+          <input type="number" min="1" max="500" value="${p.count}" oninput="updatePrize(${idx}, 'count', this.value)">
+          <button class="del-btn" onclick="removePrizeRow(${idx})">✕</button>
+        `;
+        list.appendChild(row);
+      });
+    }
+
+    function updatePrize(idx, key, val) {
+      state.prizes[idx][key] = key === 'count' ? parseInt(val, 10) || 0 : val;
+    }
+
+    function addPrizeRow() {
+      const palette = ['#76b89d', '#38bdf8', '#fb7185', '#f59e0b', '#a855f7', '#64748b'];
+      const nextChar = String.fromCharCode(65 + state.prizes.length);
+      state.prizes.push({
+        id: 'p_' + Date.now(),
+        rank: `${nextChar}상`,
+        desc: '상품명 입력',
+        color: palette[state.prizes.length % palette.length],
+        count: 1
+      });
+      renderAdminView();
+    }
+
+    function removePrizeRow(idx) {
+      if (state.prizes.length <= 1) {
+        alert('최소 1개의 등급은 있어야 합니다.');
+        return;
+      }
+      state.prizes.splice(idx, 1);
+      renderAdminView();
+    }
+
+    function saveAndGenerate() {
+      if (!confirm('새로운 가챠판을 생성하면 기존 뽑기 기록이 초기화되고 다시 섞입니다. 진행할까요?')) return;
+      generateTickets();
+      renderDrawView();
+      toggleView();
+    }
+
+    function toggleView() {
+      if (isDrawing) return;
+      const drawView = document.getElementById('drawView');
+      const adminView = document.getElementById('adminView');
+      const toggleBtn = document.getElementById('toggleBtn');
+      const isDraw = !drawView.classList.contains('hidden');
+
+      if (isDraw) {
+        renderAdminView();
+        drawView.classList.add('hidden');
+        adminView.classList.remove('hidden');
+        toggleBtn.textContent = '🎯 뽑기 화면으로';
+      } else {
+        renderDrawView();
+        adminView.classList.add('hidden');
+        drawView.classList.remove('hidden');
+        toggleBtn.textContent = '⚙️ 관리 설정';
+      }
+    }
+
+    loadState();
+    renderDrawView();
+  </script>
+</body>
+</html>
