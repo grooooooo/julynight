@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>칠월밤의 다이니마지갑 가챠 랜덤뽑기</title>
+  <title>가챠 랜덤뽑기</title>
   <style>
     :root {
       --navy: #0f2942;
@@ -25,15 +25,13 @@
       overflow-x: hidden;
     }
 
-    /* 첨부한 가챠 이미지를 전체 배경에 은은하게 적용 */
-    body::before {
-      content: "";
+    /* 전체 배경 (자동으로 찾은 배경 이미지 적용) */
+    #bgBlurLayer {
       position: fixed;
       inset: 0;
-      background-image: url('bg.png'), url('1000088718.png');
       background-size: cover;
       background-position: center;
-      opacity: 0.18;
+      opacity: 0.22;
       filter: blur(3px);
       z-index: -1;
     }
@@ -72,7 +70,7 @@
     .container { max-width: 500px; margin: 0 auto; padding: 14px; }
     .hidden { display: none !important; }
 
-    /* 상단 메인 가챠 일러스트 배너 */
+    /* 상단 메인 배너 */
     .hero-banner {
       width: 100%;
       border-radius: 20px;
@@ -126,7 +124,7 @@
       box-shadow: none;
     }
 
-    /* 고양이 뽑기 버튼 그리드 */
+    /* 뽑기 버튼 그리드 */
     .ticket-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -163,14 +161,14 @@
       border: 1.5px solid var(--border);
       line-height: 1.1;
     }
-    .ticket-cat {
+    .ticket-logo {
       width: 78%;
       height: 62%;
       object-fit: contain;
       margin: auto 0;
       transition: transform 0.2s;
     }
-    .ticket:hover .ticket-cat { transform: scale(1.07) rotate(-3deg); }
+    .ticket:hover .ticket-logo { transform: scale(1.07) rotate(-3deg); }
     .ticket-label {
       font-size: 0.68rem;
       font-weight: 900;
@@ -215,6 +213,26 @@
       padding: 18px;
       box-shadow: 0 6px 0 rgba(0,0,0,0.35);
     }
+    .title-input-box {
+      margin-bottom: 16px;
+      padding-bottom: 14px;
+      border-bottom: 2px dashed #e2e8f0;
+    }
+    .title-input-box label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 800;
+      color: var(--navy);
+      margin-bottom: 6px;
+    }
+    .title-input-box input {
+      width: 100%;
+      padding: 10px;
+      border: 2px solid #cbd5e1;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
     .admin-row {
       display: grid;
       grid-template-columns: 42px 1fr 1.2fr 64px 34px;
@@ -242,7 +260,7 @@
     .btn-add { background: #f1f5f9; color: #1e293b; }
     .btn-primary { background: var(--mint); color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,0.25); }
 
-    /* 모달 공통 (카운트다운 + 결과창) */
+    /* 모달 공통 */
     .modal-overlay {
       position: fixed; inset: 0; background: rgba(15, 41, 66, 0.88);
       backdrop-filter: blur(5px);
@@ -261,7 +279,7 @@
     }
 
     /* 카운트다운 애니메이션 */
-    .count-cat {
+    .count-logo {
       width: 130px;
       height: 130px;
       object-fit: contain;
@@ -300,7 +318,7 @@
       0% { transform: scale(0.5); opacity: 0; }
       100% { transform: scale(1); opacity: 1; }
     }
-    .result-cat {
+    .result-logo {
       width: 95px;
       height: 95px;
       object-fit: contain;
@@ -329,20 +347,20 @@
 </head>
 <body>
 
+  <div id="bgBlurLayer"></div>
+
   <header>
-    <h1>⚡ 칠월밤의 가챠 랜덤뽑기</h1>
+    <h1 id="headerTitle">⚡ 가챠 랜덤뽑기</h1>
     <button class="mode-btn" onclick="toggleView()" id="toggleBtn">⚙️ 관리 설정</button>
   </header>
 
   <div class="container">
     <!-- 1. 실제 뽑기 화면 -->
     <div id="drawView">
-      <!-- 상단 배너 (첨부한 가챠 배경 이미지 표시) -->
       <div class="hero-banner">
-        <img src="bg.png" onerror="this.onerror=null; this.src='1000088718.png';" alt="칠월밤의 다이니마지갑 가챠 랜덤뽑기">
+        <img id="heroBannerImg" alt="메인 배너">
       </div>
 
-      <!-- 남은 수량 보드 -->
       <div class="status-board">
         <div class="status-title">
           <span>🎁 남은 경품 현황</span>
@@ -351,297 +369,15 @@
         <div class="prize-chips" id="statusChips"></div>
       </div>
 
-      <!-- 고양이 뽑기 티켓 그리드 -->
       <div class="ticket-grid" id="ticketGrid"></div>
     </div>
 
     <!-- 2. 관리자 설정 화면 -->
     <div id="adminView" class="hidden">
       <div class="admin-card">
-        <h3 style="margin-bottom: 8px; font-size: 1.05rem; color: var(--navy);">🎨 색상 · 등급 · 수량 설정</h3>
-        <p style="font-size: 0.8rem; color: #64748b; margin-bottom: 16px; line-height: 1.4;">
-          원하는 색상과 상 이름(A상, B상 등), 지갑 색상/모델명, 수량을 입력하세요.<br>
-          <strong>[저장 및 새 가챠판 생성]</strong>을 누르면 고양이 티켓들이 무작위로 섞입니다.
-        </p>
-        <div id="prizeInputList"></div>
-        <div class="btn-group">
-          <button class="btn btn-add" onclick="addPrizeRow()">+ 새로운 상 추가</button>
-          <button class="btn btn-primary" onclick="saveAndGenerate()">🎲 저장 및 새 가챠판 생성 (셔플)</button>
+        <div class="title-input-box">
+          <label>📌 상단 페이지 제목 설정</label>
+          <input type="text" id="titleInput" placeholder="예: 산너미 가챠 랜덤뽑기" oninput="updateTitle(this.value)">
         </div>
-      </div>
-    </div>
-  </div>
 
-  <!-- 카운트다운(3, 2, 1) & 당첨 결과 모달 -->
-  <div id="resultModal" class="modal-overlay hidden">
-    <!-- 3, 2, 1 카운트다운 박스 -->
-    <div id="countdownBox" class="modal-box">
-      <img id="countCatImg" class="count-cat" src="cat1.jpg" onerror="this.onerror=null; this.src='1000088720.jpg';" alt="고양이">
-      <div id="countNum" class="count-number">3</div>
-      <div class="count-sub">두구두구... 어떤 지갑이 나올까?!</div>
-    </div>
-
-    <!-- 결과 공개 박스 -->
-    <div id="resultBox" class="modal-box result-pop hidden" onclick="event.stopPropagation()">
-      <div id="pickedTicketNum" style="font-size: 0.85rem; font-weight: 800; color: #64748b; margin-bottom: 4px;">NO. 1</div>
-      <img id="resultCatImg" class="result-cat" src="cat1.jpg" onerror="this.onerror=null; this.src='1000088720.jpg';" alt="당첨 고양이">
-      <div style="font-size: 0.95rem; font-weight: 900; color: var(--coral);">🎉 축하합니다! 🎉</div>
-      <div id="modalRank" class="result-badge">A상</div>
-      <div id="modalDesc" class="result-desc">다이니마 지갑</div>
-      <button class="btn btn-primary" onclick="closeModal()">확인 완료</button>
-    </div>
-  </div>
-
-  <script>
-    const STORAGE_KEY = 'julynight_dyneema_gacha_v2';
-
-    // 기본 세팅 (다이니마 지갑 테마 샘플)
-    const defaultPrizes = [
-      { id: 'p1', rank: 'A상', desc: '다이니마 지갑 (피스타치오)', color: '#76b89d', count: 2 },
-      { id: 'p2', rank: 'B상', desc: '다이니마 지갑 (민트)', color: '#38bdf8', count: 3 },
-      { id: 'p3', rank: 'C상', desc: '다이니마 지갑 (코랄)', color: '#fb7185', count: 5 },
-      { id: 'p4', rank: 'D상', desc: '다이니마 지갑 (블랙/그레이)', color: '#64748b', count: 10 }
-    ];
-
-    let state = {
-      prizes: [],
-      tickets: []
-    };
-
-    let isDrawing = false; // 카운트다운 중 중복 클릭 방지
-
-    function loadState() {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved) {
-        state = JSON.parse(saved);
-      } else {
-        state.prizes = JSON.parse(JSON.stringify(defaultPrizes));
-        generateTickets();
-      }
-    }
-
-    function saveState() {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-    }
-
-    // 번호에 따라 검은 머리띠 고양이(cat1)와 흰 머리띠 고양이(cat2) 번갈아 반환
-    function getCatImageInfo(num) {
-      if (num % 2 === 1) {
-        return { primary: 'cat1.jpg', fallback: '1000088720.jpg' };
-      } else {
-        return { primary: 'cat2.jpg', fallback: '1000088719.jpg' };
-      }
-    }
-
-    // 티켓 생성 및 셔플
-    function generateTickets() {
-      let pool = [];
-      state.prizes.forEach(p => {
-        const qty = parseInt(p.count, 10) || 0;
-        for (let i = 0; i < qty; i++) {
-          pool.push({
-            prizeId: p.id,
-            rank: p.rank,
-            desc: p.desc,
-            color: p.color,
-            opened: false
-          });
-        }
-      });
-
-      // 무작위 섞기 (Fisher-Yates)
-      for (let i = pool.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [pool[i], pool[j]] = [pool[j], pool[i]];
-      }
-
-      state.tickets = pool.map((item, idx) => ({
-        number: idx + 1,
-        ...item
-      }));
-      saveState();
-    }
-
-    // 뽑기 화면 렌더링
-    function renderDrawView() {
-      const statusChips = document.getElementById('statusChips');
-      const ticketGrid = document.getElementById('ticketGrid');
-      const remainCount = document.getElementById('remainCount');
-
-      const total = state.tickets.length;
-      const remainTotal = state.tickets.filter(t => !t.opened).length;
-      remainCount.textContent = `남은 수량 ${remainTotal} / ${total}개`;
-
-      // 상단 경품 칩
-      statusChips.innerHTML = '';
-      state.prizes.forEach(p => {
-        const left = state.tickets.filter(t => t.prizeId === p.id && !t.opened).length;
-        const chip = document.createElement('div');
-        chip.className = `prize-chip ${left === 0 ? 'empty' : ''}`;
-        chip.style.backgroundColor = p.color;
-        chip.textContent = `${p.rank} (${left}/${p.count})`;
-        statusChips.appendChild(chip);
-      });
-
-      // 고양이 티켓 그리드
-      ticketGrid.innerHTML = '';
-      state.tickets.forEach((t, idx) => {
-        const card = document.createElement('div');
-        const catImg = getCatImageInfo(t.number);
-
-        if (t.opened) {
-          card.className = 'ticket opened';
-          card.innerHTML = `
-            <div class="opened-num">#${t.number}</div>
-            <div class="opened-badge" style="background:${t.color}">${t.rank}</div>
-          `;
-        } else {
-          card.className = 'ticket';
-          card.innerHTML = `
-            <span class="ticket-num">#${t.number}</span>
-            <img class="ticket-cat" src="${catImg.primary}" onerror="this.onerror=null; this.src='${catImg.fallback}';" alt="고양이 뽑기 버튼">
-            <span class="ticket-label">터치!</span>
-          `;
-          card.onclick = () => pickTicket(idx);
-        }
-        ticketGrid.appendChild(card);
-      });
-    }
-
-    // 티켓 선택 시 3, 2, 1 카운트다운 후 결과 발표
-    function pickTicket(index) {
-      if (isDrawing) return;
-      const ticket = state.tickets[index];
-      if (ticket.opened) return;
-
-      isDrawing = true;
-      ticket.opened = true;
-      saveState();
-
-      const modal = document.getElementById('resultModal');
-      const countdownBox = document.getElementById('countdownBox');
-      const resultBox = document.getElementById('resultBox');
-      const countNum = document.getElementById('countNum');
-      const countCatImg = document.getElementById('countCatImg');
-      const resultCatImg = document.getElementById('resultCatImg');
-
-      // 선택한 번호의 고양이 이미지 세팅
-      const catImg = getCatImageInfo(ticket.number);
-      countCatImg.src = catImg.primary;
-      countCatImg.onerror = function() { this.onerror = null; this.src = catImg.fallback; };
-      resultCatImg.src = catImg.primary;
-      resultCatImg.onerror = function() { this.onerror = null; this.src = catImg.fallback; };
-
-      // 카운트다운 시작 (3 -> 2 -> 1)
-      let count = 3;
-      countNum.textContent = count;
-      countdownBox.classList.remove('hidden');
-      resultBox.classList.add('hidden');
-      modal.classList.remove('hidden');
-
-      const timer = setInterval(() => {
-        count--;
-        if (count > 0) {
-          countNum.textContent = count;
-          // 애니메이션 재실행 트릭
-          countNum.style.animation = 'none';
-          void countNum.offsetWidth;
-          countNum.style.animation = 'pulsePop 1s infinite';
-        } else {
-          clearInterval(timer);
-          // 3초 후 결과 화면 표시
-          countdownBox.classList.add('hidden');
-          document.getElementById('pickedTicketNum').textContent = `선택 번호 #${ticket.number}`;
-          const modalRank = document.getElementById('modalRank');
-          modalRank.textContent = ticket.rank;
-          modalRank.style.backgroundColor = ticket.color;
-          document.getElementById('modalDesc').textContent = ticket.desc || '축하합니다!';
-          
-          resultBox.classList.remove('hidden');
-          renderDrawView();
-          isDrawing = false;
-        }
-      }, 1000);
-    }
-
-    function closeModal() {
-      if (isDrawing) return;
-      document.getElementById('resultModal').classList.add('hidden');
-    }
-
-    // 관리자 화면 렌더링
-    function renderAdminView() {
-      const list = document.getElementById('prizeInputList');
-      list.innerHTML = '';
-      state.prizes.forEach((p, idx) => {
-        const row = document.createElement('div');
-        row.className = 'admin-row';
-        row.innerHTML = `
-          <input type="color" value="${p.color}" onchange="updatePrize(${idx}, 'color', this.value)">
-          <input type="text" placeholder="등급 (예: A상)" value="${p.rank}" oninput="updatePrize(${idx}, 'rank', this.value)">
-          <input type="text" placeholder="상품 설명" value="${p.desc}" oninput="updatePrize(${idx}, 'desc', this.value)">
-          <input type="number" min="1" max="500" value="${p.count}" oninput="updatePrize(${idx}, 'count', this.value)">
-          <button class="del-btn" onclick="removePrizeRow(${idx})">✕</button>
-        `;
-        list.appendChild(row);
-      });
-    }
-
-    function updatePrize(idx, key, val) {
-      state.prizes[idx][key] = key === 'count' ? parseInt(val, 10) || 0 : val;
-    }
-
-    function addPrizeRow() {
-      const palette = ['#76b89d', '#38bdf8', '#fb7185', '#f59e0b', '#a855f7', '#64748b'];
-      const nextChar = String.fromCharCode(65 + state.prizes.length);
-      state.prizes.push({
-        id: 'p_' + Date.now(),
-        rank: `${nextChar}상`,
-        desc: '다이니마 지갑',
-        color: palette[state.prizes.length % palette.length],
-        count: 1
-      });
-      renderAdminView();
-    }
-
-    function removePrizeRow(idx) {
-      if (state.prizes.length <= 1) {
-        alert('최소 1개의 등급은 있어야 합니다.');
-        return;
-      }
-      state.prizes.splice(idx, 1);
-      renderAdminView();
-    }
-
-    function saveAndGenerate() {
-      if (!confirm('새로운 가챠판을 생성하면 기존 뽑기 기록이 초기화되고 다시 섞입니다. 진행할까요?')) return;
-      generateTickets();
-      renderDrawView();
-      toggleView();
-    }
-
-    function toggleView() {
-      if (isDrawing) return;
-      const drawView = document.getElementById('drawView');
-      const adminView = document.getElementById('adminView');
-      const toggleBtn = document.getElementById('toggleBtn');
-      const isDraw = !drawView.classList.contains('hidden');
-
-      if (isDraw) {
-        renderAdminView();
-        drawView.classList.add('hidden');
-        adminView.classList.remove('hidden');
-        toggleBtn.textContent = '🎯 뽑기 화면으로';
-      } else {
-        renderDrawView();
-        adminView.classList.add('hidden');
-        drawView.classList.remove('hidden');
-        toggleBtn.textContent = '⚙️ 관리 설정';
-      }
-    }
-
-    loadState();
-    renderDrawView();
-  </script>
-</body>
-</html>
+        <h3 style="margin-bottom: 8px;
